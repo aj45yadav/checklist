@@ -1,0 +1,18 @@
+<mat-toolbar style="background: white">
+    <h1>Checklist-Logo</h1>
+    <div class="perfonal-info">
+        <div class="profile-img">
+          <img class="media-md" src="{{authentication?.user?.photoUrl}}" alt="profile-pic">
+          <img class="media-sm" src="{{authentication?.user?.photoUrl}}" [matMenuTriggerFor]="menu" alt="profile-pic">
+        </div>
+        <div class="name-drop">
+          <button mat-button [matMenuTriggerFor]="menu">{{authentication?.user?.name}} <i class="material-icons">
+              keyboard_arrow_down
+            </i></button>
+          <mat-menu #menu="matMenu">
+            <button mat-menu-item (click)="logOut()"> <mat-icon aria-hidden="false" aria-label="Example home icon">power_settings_new</mat-icon> Log Out</button>
+          </mat-menu>
+        </div>
+    
+      </div>
+  </mat-toolbar>

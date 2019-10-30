@@ -1,0 +1,38 @@
+<mat-card-header>
+  <mat-card-title>{{data.editMode ? 'Edit' : 'Create'}} Question Category </mat-card-title>
+  <mat-icon aria-hidden="false" aria-label="Example home icon" (click)="dialogRef.close()">cancel</mat-icon>
+</mat-card-header>
+<mat-dialog-content class="mat-typography">
+  <mat-card>
+
+    <mat-form-field appearance="outline">
+      <mat-label *ngIf="!data.viewMode">Enter Category Name</mat-label>
+      <input hidden [(ngModel)]="data.id" name="id">
+      <input hidden [value]="data.editMode" name="editMode">
+      <input hidden [value]="data.viewMode" name="viewMode">
+      
+      <input [(ngModel)]="data.name" name="name" matInput placeholder="category name" #category [disabled]="data.viewMode">
+      <mat-hint>Validation Msg</mat-hint>
+      <mat-hint align="end">{{category.value?.length || 0}}</mat-hint>
+    </mat-form-field>
+    <!-- <mat-form-field appearance="outline">
+      <mat-label>Enter Category Description</mat-label>
+      <textarea matInput placeholder="Category Description" formControlName="description" #categorydesc
+        rows="4"></textarea>
+      <mat-hint>Validation Msg</mat-hint>
+      <mat-hint align="end">{{categorydesc.value?.length || 0}}</mat-hint>
+    </mat-form-field> -->
+
+  </mat-card>
+  <div class="mdc-chip-set" *ngIf="!data.viewMode">
+
+    <button type="button" class="mdc-chip" style="background-color: #F44336" (click)="dialogRef.close()">
+      <img src="../../assets/img/Group 142.svg" alt="icon">
+      <span class="mdc-chip__text">Cancel</span>
+    </button>
+    <button class="mdc-chip" [mat-dialog-close]="data">
+      <img src="../../assets/img/Group 142.svg" alt="icon">
+      <span class="mdc-chip__text">Add Category</span>
+    </button>
+  </div>
+</mat-dialog-content>

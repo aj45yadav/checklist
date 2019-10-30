@@ -1,0 +1,63 @@
+/* header page css start here */
+.header {
+    margin: 1% 0 3% 0;
+}
+.logo {
+    display: inline;
+    /* display: inline-flex;
+    align-items: center; */
+}
+
+.perfonal-info {
+    display: inline-flex;
+    /* align-items: center; */
+    float: right;
+    justify-content: flex-end;
+}
+.name-drop .mat-button {
+color: #707070;
+}
+
+.profile-img {
+    display: flex;
+    justify-content: center;
+}
+
+.profile-img img {
+    border-radius: 50%;
+    width: 40%;
+    border: 3px solid #e9e0e0;
+}
+.profile-img .media-sm {
+    display: none;
+}
+/* media query */
+@media only screen and (max-width: 600px) {
+    .header {
+        margin: 3% 0 3% 0;
+        display: flex;
+    }
+    .logo {
+    width: 30%
+    }
+    .perfonal-info {
+    width: 70%
+    }
+    .profile-img {
+        justify-content: inherit;
+    }
+    .name-drop {
+        display: none;
+    }
+    .profile-img .media-md {
+        display: none;
+    }
+    .profile-img .media-sm {
+        display: block;
+        cursor: pointer;
+    }
+    }
+
+    .mat-toolbar-row, .mat-toolbar-single-row {
+        justify-content: space-between;
+    }

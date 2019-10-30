@@ -1,0 +1,37 @@
+.page-container {
+    margin: 20px;
+}
+.p-heading {
+    font-size: 20px;
+    line-height: 40px;
+    font-weight: 600;
+}
+.project {
+    display: flex;
+    justify-content: space-between;
+    margin: 10px 0 10px 0;
+}
+.p-list {
+display: flex;
+flex-wrap: wrap;
+}
+.p-list mat-card {
+    width: 260px;
+    height: 260px;
+    margin: 10px;
+}
+.q-info {
+    display: flex;
+    justify-content: space-between; 
+}
+.p-header {
+    display: flex;
+    justify-content: space-between;
+}
+.p-header .mat-button {
+min-width: 0px;
+padding: 0px;
+}
+mat-card-content {
+    margin: 50px 0 50px 0;
+}

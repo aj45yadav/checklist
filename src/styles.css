@@ -1,0 +1,25 @@
+/* You can add global styles to this file, and also import other style files */
+@import url('https://fonts.googleapis.com/css?family=Poppins');
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+@import "~@material/chips/dist/mdc.chips.css";
+body {
+    margin: 0;
+    padding: 1% 0% 1% 0%;
+    font-family:'Poppins'
+  }
+  .main-content {
+    background-color: #FBF8FF;
+    padding: 1%;
+}
+.mdc-chip__text {
+    font-family:'Poppins';
+}
+.mat-button, .mat-flat-button, .mat-icon-button, .mat-stroked-button {
+    font-family:'Poppins';
+}
+.mat-expansion-panel-content {
+    font-family: 'Poppins';
+}
+.mat-expansion-panel-header-title {
+    font-family: 'Poppins';
+}

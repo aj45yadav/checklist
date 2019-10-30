@@ -1,0 +1,30 @@
+<mat-card-header>
+    <mat-card-title>Select Existing Category </mat-card-title>
+    <mat-icon aria-hidden="false" aria-label="Example home icon" (click)="dialogRef.close()">cancel</mat-icon>
+  </mat-card-header>
+  <mat-dialog-content class="mat-typography">
+    <mat-card>
+  
+      <mat-form-field appearance="outline">
+        <mat-label>Enter Category Name to filter Category Data</mat-label>
+        <input type="text" placeholder="Pick one" aria-label="Number" matInput [formControl]="myControl" [matAutocomplete]="auto">
+        <mat-hint>Validation Msg</mat-hint>
+        <mat-autocomplete #auto="matAutocomplete">
+          <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+            {{option}}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+    </mat-card>
+    <div class="mdc-chip-set">
+  
+      <button type="button" class="mdc-chip" style="background-color: #F44336" (click)="dialogRef.close()">
+        <img src="../../assets/img/Group 142.svg" alt="icon">
+        <span class="mdc-chip__text">Cancel</span>
+      </button>
+      <button class="mdc-chip" [mat-dialog-close]="data">
+        <img src="../../assets/img/Group 142.svg" alt="icon">
+        <span class="mdc-chip__text">Add Category</span>
+      </button>
+    </div>
+  </mat-dialog-content>

@@ -1,0 +1,32 @@
+<!-- <mat-toolbar color="primary">
+  <h1>Checklist</h1>
+</mat-toolbar> -->
+<div class="main-content">
+  <form #buForm="ngForm">
+<div class="form-field">
+  <div class="input-fields">
+  <mat-form-field appearance="outline">
+    <mat-label>Select Business Unit</mat-label>
+    <mat-select placeholder="Business" name="businessUnit" [(ngModel)]="buData.businessUnit">
+      <mat-option value="Google">Google</mat-option>
+      <mat-option value="Non Google">Non Google</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Select Sub Business Unit</mat-label>
+    <mat-select placeholder="Business" name="subBusinessUnit" [(ngModel)]="buData.subBusinessUnit">
+      <mat-option value="Google">Google</mat-option>
+      <mat-option value="Non Google">Non Google</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Enter Project Name</mat-label>
+    <input matInput placeholder="Project name" name="projectName" [(ngModel)]="buData.projectName">
+  </mat-form-field>
+  <button mat-raised-button color="primary" (click)="onNext()">Next</button>
+  </div>
+</div>
+</form>
+</div>
