@@ -89,7 +89,7 @@ export function provideConfig() {
     SocialLoginModule
   ],
   entryComponents: [TestDialogComponent, CreateCategoryComponent, CreateQuestionsComponent,
-     ExistingCategoryComponent],
+     ExistingCategoryComponent, BusinessComponent],
   providers: [
     {
       provide: AuthServiceConfig,

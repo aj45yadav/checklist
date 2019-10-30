@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { ChecklistComponent } from './checklist/checklist.component';
-import { BusinessComponent } from './business/business.component';
+// import { BusinessComponent } from './business/business.component';
 import { TestcomponentComponent } from './testcomponent/testcomponent.component';
 import { LoginComponent } from './login/login.component';
 import { QuestionsComponent } from './questions/questions.component';
@@ -28,10 +28,10 @@ const routes: Routes = [
   {
     path: '',
     component: AdminComponent, children: [
-      {
-        path: 'business-unit',
-        component: BusinessComponent
-      },
+      // {
+      //   path: 'business-unit',
+      //   component: BusinessComponent
+      // },
       {
         path: 'questions/:id',
         component: QuestionsComponent

@@ -1,5 +1,5 @@
 
-.input-fields {
+/* .input-fields {
     margin: 0 10% 0 10%;
 }
 mat-form-field {
@@ -11,4 +11,48 @@ mat-form-field {
     width: 180px;
     height: 50px;
     font-size: 25px;
+} */
+
+
+mat-card {
+    margin: 10px 0 10px 0;
 }
+.mat-card-header {
+    justify-content: space-between;
+}
+mat-card-header mat-icon {
+    cursor: pointer;
+}
+
+mat-form-field {
+    width: 100%;
+}
+
+.mdc-chip {
+    border-radius: 20px;
+    color: white;
+    background-color: #7ED321;
+    padding: 0px 4px;
+    height: 40px;
+    font-size: 14px;
+    line-height: 21px;
+}
+.mdc-chip img{
+    width: 25px;
+    background-color: white;
+    border-radius: 50%;
+}
+.mdc-chip span {
+    margin: 0 15px 0 15px;
+}
+.mdc-chip-set {
+    flex-direction: row-reverse;
+    flex-wrap: nowrap;
+}
+
+
+    @media only screen and (max-width: 600px) {
+        .mdc-chip span {
+            margin: 0px;
+        }
+      }

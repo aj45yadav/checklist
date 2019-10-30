@@ -1,7 +1,7 @@
 <!-- <mat-toolbar color="primary">
   <h1>Checklist</h1>
 </mat-toolbar> -->
-<div class="main-content">
+<!-- <div class="main-content">
   <form #buForm="ngForm">
 <div class="form-field">
   <div class="input-fields">
@@ -29,4 +29,72 @@
   </div>
 </div>
 </form>
-</div>
+</div> -->
+
+
+
+<mat-card-header>
+  <mat-card-title> {{action}} Poject </mat-card-title>
+  <mat-icon aria-hidden="false" aria-label="Example home icon" (click)="closeDialog()">cancel</mat-icon>
+</mat-card-header>
+<mat-dialog-content class="mat-typography">
+  <mat-card *ngIf="action != 'Delete'; else elseTemplate">
+
+    <form #buForm="ngForm">
+      <div class="form-field">
+        <div class="input-fields">
+          <mat-form-field appearance="outline">
+            <mat-label>Select Business Unit</mat-label>
+            <mat-select placeholder="Business" name="businessUnit" [(ngModel)]="emitedData.businessUnit">
+              <mat-option value="Google">Google</mat-option>
+              <mat-option value="Non Google">Non Google</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Select Sub Business Unit</mat-label>
+            <mat-select placeholder="Business" name="subBusinessUnit" [(ngModel)]="emitedData.subBusinessUnit">
+              <mat-option value="Google">Google</mat-option>
+              <mat-option value="Non Google">Non Google</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Enter Project Name</mat-label>
+            <input matInput placeholder="Project name" name="projectName" [(ngModel)]="emitedData.projectName">
+          </mat-form-field>
+        </div>
+      </div>
+    </form>
+
+  </mat-card>
+  <ng-template #elseTemplate>
+    <mat-card>
+        Are you sure to delete this <b>{{emitedData.projectName}}</b> ?
+    </mat-card>
+  </ng-template>
+  <ng-template>
+    <mat-card>
+
+    </mat-card>
+  </ng-template>
+  <div class="mdc-chip-set">
+
+      <button type="button" class="mdc-chip" style="background-color: #F44336" (click)="closeDialog()">
+        <img src="../../assets/img/Group 142.svg" alt="icon">
+        <span class="mdc-chip__text">Cancel</span>
+      </button>
+      <!-- <button class="mdc-chip" *ngIf="action == 'Add'">
+        <img src="../../assets/img/Group 142.svg" alt="icon">
+        <span class="mdc-chip__text" (click)="onNext()">{{action}} Project</span>
+      </button> -->
+      <!-- <button class="mdc-chip" *ngIf="action != 'Add'">
+          <img src="../../assets/img/Group 142.svg" alt="icon">
+          <span class="mdc-chip__text" (click)="doAction()">{{action}} Project</span>
+        </button> -->
+        <button class="mdc-chip">
+            <img src="../../assets/img/Group 142.svg" alt="icon">
+            <span class="mdc-chip__text" (click)="doAction()">{{action}} Project</span>
+          </button>
+    </div>
+</mat-dialog-content>
