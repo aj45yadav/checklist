@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { SocialLoginService } from '../services/social-login.service';
 import { Router } from '@angular/router';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -11,8 +12,10 @@ export class LoginComponent implements OnInit {
   title = 'Checklist';
   unsubscribe = [];
   errors: { non_field_errors: Array<string>, email: string, password: string };
-  constructor(public authentication: SocialLoginService, public route: Router) { }
+  loginData;
+  constructor(public authentication: SocialLoginService, public route: Router, public authService: AuthService) { }
   ngOnInit() {
+    this.signData();
   }
   loginWithGoogle() {
     // let attempt = 0;
@@ -20,7 +23,8 @@ export class LoginComponent implements OnInit {
       .subscribe((user) => {
         if (user) {
           if (user.email.indexOf('regalix-inc') !== -1) {
-            this.route.navigate(['/business-unit']);
+            // this.route.navigate(['/projects']);
+            this.signIn();
             // this.authentication.makeServerSocialLoginCall('/rest-auth/google/', { access_token: user.token })
             //   .subscribe(
             //     (data) => {
@@ -56,6 +60,25 @@ export class LoginComponent implements OnInit {
         }
       });
     this.unsubscribe.push(g);
+  }
+  signIn() {
+    const data = {
+      email : this.authentication.user.email
+    };
+    this.authService.login(data).subscribe(
+      // tslint:disable-next-line:no-shadowed-variable
+      (data) => {
+        this.loginData.push(data);
+      }
+    );
+  }
+  signData() {
+    this.authService.getLoginData().subscribe(
+      (data) => {
+        this.loginData = data;
+        console.log(this.loginData);
+      }
+    );
   }
   signOut() {
     this.authentication.signOut();
