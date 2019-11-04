@@ -28,8 +28,8 @@ emitedData: any;
     this.dialogRef.close({ event: 'Cancel' });
   }
   onNext() {
-    const id = this.buService.business_id;
-    // this.buData = { id: id, businessUnit: '', subBusinessUnit: '', projectName: '' };
+    const id = this.emitedData.id;
+    this.buData = { id: id, businessUnit: '', subBusinessUnit: '', projectName: '' };
     const serialized = JSON.stringify(this.buData);
     localStorage.setItem('bTemp', serialized);
     this.router.navigate(['/questions', id]);

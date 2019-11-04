@@ -38,7 +38,7 @@
   <mat-icon aria-hidden="false" aria-label="Example home icon" (click)="closeDialog()">cancel</mat-icon>
 </mat-card-header>
 <mat-dialog-content class="mat-typography">
-  <mat-card *ngIf="action != 'Delete'; else elseTemplate">
+  <mat-card *ngIf="action == 'Add' || action == 'Update'">
 
     <form #buForm="ngForm">
       <div class="form-field">
@@ -68,33 +68,45 @@
     </form>
 
   </mat-card>
-  <ng-template #elseTemplate>
-    <mat-card>
-        Are you sure to delete this <b>{{emitedData.projectName}}</b> ?
-    </mat-card>
-  </ng-template>
-  <ng-template>
-    <mat-card>
 
-    </mat-card>
-  </ng-template>
+  <mat-card *ngIf="action == 'Delete'">
+    Are you sure to delete this <b>{{emitedData.projectName}}</b> ?
+  </mat-card>
+  <mat-card *ngIf="action == 'Share'">
+    <h4>Share This Project Via mail</h4>
+    <mat-form-field appearance="outline">
+      <mat-label>To</mat-label>
+      <input matInput placeholder="Search For People">
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Subject</mat-label>
+      <input matInput name="projectName" [(ngModel)]="emitedData.projectName">
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Message</mat-label>
+      <textarea matInput placeholder="message"></textarea>
+    </mat-form-field>
+  </mat-card>
+  <mat-card *ngIf="action == 'Status'">
+    Change Status
+  </mat-card>
   <div class="mdc-chip-set">
 
-      <button type="button" class="mdc-chip" style="background-color: #F44336" (click)="closeDialog()">
-        <img src="../../assets/img/Group 142.svg" alt="icon">
-        <span class="mdc-chip__text">Cancel</span>
-      </button>
-      <!-- <button class="mdc-chip" *ngIf="action == 'Add'">
+    <button type="button" class="mdc-chip" style="background-color: #F44336" (click)="closeDialog()">
+      <img src="../../assets/img/Group 142.svg" alt="icon">
+      <span class="mdc-chip__text">Cancel</span>
+    </button>
+    <!-- <button class="mdc-chip" *ngIf="action == 'Add'">
         <img src="../../assets/img/Group 142.svg" alt="icon">
         <span class="mdc-chip__text" (click)="onNext()">{{action}} Project</span>
       </button> -->
-      <!-- <button class="mdc-chip" *ngIf="action != 'Add'">
+    <!-- <button class="mdc-chip" *ngIf="action != 'Add'">
           <img src="../../assets/img/Group 142.svg" alt="icon">
           <span class="mdc-chip__text" (click)="doAction()">{{action}} Project</span>
         </button> -->
-        <button class="mdc-chip">
-            <img src="../../assets/img/Group 142.svg" alt="icon">
-            <span class="mdc-chip__text" (click)="doAction()">{{action}} Project</span>
-          </button>
-    </div>
+    <button class="mdc-chip">
+      <img src="../../assets/img/Group 142.svg" alt="icon">
+      <span class="mdc-chip__text" (click)="doAction()">{{action}} Project</span>
+    </button>
+  </div>
 </mat-dialog-content>
