@@ -18,8 +18,8 @@ export class AuthService {
     const url = this.apiBaseUrl + 'login/';
     return this.http.post(url, data);
   }
-  getLoginData() {
-    const url = this.apiBaseUrl +  'login/';
-    return this.http.get(url);
-  }
+  // getLoginData() {
+  //   const url = this.apiBaseUrl +  'login/';
+  //   return this.http.get(url);
+  // }
 }

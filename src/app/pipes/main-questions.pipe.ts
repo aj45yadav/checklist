@@ -8,7 +8,9 @@ import { Question } from '../questions/questions.component';
 export class MainQuestionsPipe implements PipeTransform {
 
   transform(value: Question[]): any[] {
-    return value ? value.filter((x) => x.parentId === -1) : [];
+    const ques = value ? value.filter((x) => x.parentid === '') : [];
+    console.log(ques);
+    return ques;
   }
 
 }

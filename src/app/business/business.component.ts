@@ -1,5 +1,7 @@
 import { Component, OnInit, Optional, Inject } from '@angular/core';
 import { BuService, BuData } from '../services/bu.service';
+import { ProjectData, ProjectService } from '../services/project.service';
+
 import { Router } from '@angular/router';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 
@@ -9,20 +11,24 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
   styleUrls: ['./business.component.css']
 })
 export class BusinessComponent implements OnInit {
-action: string;
-emitedData: any;
-
+  action: string;
+  emitedData: any;
+  buDwData;
+  subBuDwData;
+  dwdata;
   buData: BuData = {} as BuData;
-  constructor(public buService: BuService, public router: Router, public dialogRef: MatDialogRef<BusinessComponent>,
-    @Optional() @Inject(MAT_DIALOG_DATA) public data: BuData) {
-      console.log(data);
-      this.emitedData = { ...data };
-      this.action = this.emitedData.action;
-     }
+  constructor(public buService: BuService, public router: Router, public projectService: ProjectService,
+    public dialogRef: MatDialogRef<BusinessComponent>,
+    @Optional() @Inject(MAT_DIALOG_DATA) public data: ProjectData) {
+    this.emitedData = { ...data };
+    console.log(this.emitedData);
+    this.action = this.emitedData.action;
+  }
   ngOnInit() {
+    this.getBudata();
   }
   doAction() {
-    this.dialogRef.close({event: this.action, data: this.emitedData});
+    this.dialogRef.close({ event: this.action, data: this.emitedData });
   }
   closeDialog() {
     this.dialogRef.close({ event: 'Cancel' });
@@ -34,5 +40,28 @@ emitedData: any;
     localStorage.setItem('bTemp', serialized);
     this.router.navigate(['/questions', id]);
     this.closeDialog();
+  }
+  // subbucahnge(bu_id,data) {
+  //   this.subBuDwData = data[bu_id];
+  // }
+  getBudata() {
+    this.projectService.getBudata().subscribe(
+      (data: any) => {
+        this.buDwData = data;
+        // console.log(JSON.parse(this.buDwData));
+        this.dwdata = JSON.parse(this.buDwData);
+        if (this.action === 'Update') {
+          this.onBuChange();
+        }
+      },
+      (error) => {
+
+      }
+    );
+  }
+
+  onBuChange() {
+    this.subBuDwData = this.dwdata.subbu.filter(x => x.parent === this.emitedData.bu_id);
+    console.log(this.subBuDwData);
   }
 }

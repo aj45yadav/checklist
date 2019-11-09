@@ -7,7 +7,7 @@ import { Question } from '../questions/questions.component';
 })
 export class SubQuestionsPipe implements PipeTransform {
 
-  transform(value: Question[], parentId: number): any[] {
-    return value.filter((x) => x.parentId !== -1 && x.parentId === parentId);
+  transform(value: Question[], parentId: string): any[] {
+    return value.filter((x) => x.parentid !== '' && x.parentid === parentId);
   }
 }

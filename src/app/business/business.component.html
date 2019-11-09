@@ -37,31 +37,43 @@
   <mat-card-title> {{action}} Poject </mat-card-title>
   <mat-icon aria-hidden="false" aria-label="Example home icon" (click)="closeDialog()">cancel</mat-icon>
 </mat-card-header>
+
 <mat-dialog-content class="mat-typography">
   <mat-card *ngIf="action == 'Add' || action == 'Update'">
 
     <form #buForm="ngForm">
       <div class="form-field">
         <div class="input-fields">
-          <mat-form-field appearance="outline">
+          <!-- <mat-form-field appearance="outline">
             <mat-label>Select Business Unit</mat-label>
             <mat-select placeholder="Business" name="businessUnit" [(ngModel)]="emitedData.businessUnit">
               <mat-option value="Google">Google</mat-option>
               <mat-option value="Non Google">Non Google</mat-option>
             </mat-select>
-          </mat-form-field>
+          </mat-form-field> -->
+          <mat-form-field appearance="outline">
+              <mat-label>Select Business Unit</mat-label>
+              <mat-select placeholder="Business" name="bu_id"  [(ngModel)]="emitedData.bu_id" (selectionChange)="onBuChange()" required>
+                <mat-option *ngFor="let bu of dwdata?.bu" [value]="bu.id">{{bu.name}}</mat-option>
+              </mat-select>
+              <mat-error>Business unit is required</mat-error>
+            </mat-form-field>
 
           <mat-form-field appearance="outline">
             <mat-label>Select Sub Business Unit</mat-label>
-            <mat-select placeholder="Business" name="subBusinessUnit" [(ngModel)]="emitedData.subBusinessUnit">
-              <mat-option value="Google">Google</mat-option>
-              <mat-option value="Non Google">Non Google</mat-option>
+            <mat-select placeholder="Business" name="sub_bu_id"  [(ngModel)]="emitedData.sub_bu_id" required>
+              <mat-option *ngFor="let sub of subBuDwData" [value]="sub.id">{{sub.name}}</mat-option>
+              <!-- <mat-option value="Non Google">Non Google</mat-option> -->
             </mat-select>
+            <mat-error>Sub Business unit is required</mat-error>
           </mat-form-field>
+
 
           <mat-form-field appearance="outline">
             <mat-label>Enter Project Name</mat-label>
-            <input matInput placeholder="Project name" name="projectName" [(ngModel)]="emitedData.projectName">
+            <input matInput placeholder="Project name" name="name" #projectname [(ngModel)]="emitedData.name" required>
+            <mat-error>Name is required</mat-error>
+            <mat-hint align="end">{{projectname.value?.length || 0}}</mat-hint>
           </mat-form-field>
         </div>
       </div>
@@ -70,7 +82,7 @@
   </mat-card>
 
   <mat-card *ngIf="action == 'Delete'">
-    Are you sure to delete this <b>{{emitedData.projectName}}</b> ?
+    Are you sure to delete this <b>{{emitedData.name}}</b> ?
   </mat-card>
   <mat-card *ngIf="action == 'Share'">
     <h4>Share This Project Via mail</h4>

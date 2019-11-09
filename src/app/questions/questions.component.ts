@@ -9,13 +9,14 @@ import { CreateCategoryComponent } from './create-category/create-category.compo
 import { CreateQuestionsComponent } from './create-questions/create-questions.component';
 import { Constants } from '../constants';
 import { ExistingCategoryComponent } from './existing-category/existing-category.component';
+import { ProjectService } from '../services/project.service';
 @Component({
   selector: 'app-questions',
   templateUrl: './questions.component.html',
   styleUrls: ['./questions.component.css']
 })
 export class QuestionsComponent implements OnInit {
-
+  projectId: number;
   buData: BuData = {} as BuData;
   addCategory = false;
   addQuestionForm = false;
@@ -28,7 +29,11 @@ export class QuestionsComponent implements OnInit {
   options: string[] = ['One', 'Two', 'Three'];
   filteredOptions: Observable<string[]>;
   mode: string;
-  constructor(public activatedRoute: ActivatedRoute, public buService: BuService, public dialog: MatDialog) { }
+
+
+  projectData;
+  constructor(public activatedRoute: ActivatedRoute, public buService: BuService, public dialog: MatDialog,
+     public projectService: ProjectService) { }
 
   private _filter(value: string): string[] {
     const filterValue = value.toLowerCase();
@@ -87,7 +92,7 @@ export class QuestionsComponent implements OnInit {
     if (edit) {
       this.mode = 'edit',
         dialogRef = this.dialog.open(CreateQuestionsComponent, {
-          data: { parentId: subQues.parentId, ansId: subQues.ansId, question: subQues.question, id: subQues.id, editMode: 'true' }
+          data: { parentId: subQues.parentid, ansId: subQues.ansId, question: subQues.question, id: subQues.id, editMode: 'true' }
         });
 
     } else {
@@ -141,6 +146,7 @@ export class QuestionsComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.getProjectData();
     this.filteredOptions = this.myControl.valueChanges
       .pipe(
         startWith(''),
@@ -161,18 +167,39 @@ export class QuestionsComponent implements OnInit {
     console.log(this.buData);
   }
 
+  getProjectData() {
+    this.activatedRoute.paramMap.subscribe(
+      (param) => {
+        this.projectId = param['params'].id;
+        this.projectService.getCategory(this.projectId).subscribe((data) => {
+          this.projectData = data;
+        });
+      },
+      (error) => {
+      }
+    );
+  }
+
+addCategoryDataa(cat_data) {
+ const data = {
+   project_id: this.activatedRoute.snapshot.params['id'],
+   name: cat_data.name
+  };
+  this.projectService.addCategory(data).subscribe(
+    () => {
+      this.getProjectData();
+  });
+}
   setCurrentCategory(category: Category) {
     this.currentCategory = category;
     // console.log(category);
   }
 
   addCategoryData() {
-    // console.log(this.categoryForm);
-    const id = this.buService.generateId();
+    // const id = this.buService.generateId();
     const category = this.categoryForm.value;
-    category.id = id;
-    // this.currentCategory = category;
-    this.dataOfCategory.push(category);
+    // category.id = id;
+    this.addCategoryDataa(category);
     this.categoryForm.reset();
     console.log(this.dataOfCategory);
     this.addCategory = false;
@@ -211,22 +238,24 @@ export interface Category {
   userId: number;
   name: string;
   questions: Question[];
+  viewMode: boolean;
+  editMode: boolean;
 }
 export interface Question {
   id: number;
   projectId: number;
   categoryId: number;
-  parentId: number;
+  parentid: string;
   ansId: number;
   qLevel: number;
   question: string;
   weightage: number;
-  yesScore: number;
-  noScore: number;
+  score: number;
   hasTooltip: boolean;
-  tooltipInfo: string;
+  tooltip: string;
   createdDate: Date;
   userId: number;
+  editMode: boolean;
 }
 
 export interface BuMainModel {

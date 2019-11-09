@@ -23,3 +23,11 @@ body {
 .mat-expansion-panel-header-title {
     font-family: 'Poppins';
 }
+.loader {
+    margin:auto;
+    left:0;
+    right:0;
+    top:180px;
+    bottom:0;
+    position:absolute;
+}

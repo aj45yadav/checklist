@@ -15,7 +15,6 @@ export class LoginComponent implements OnInit {
   loginData;
   constructor(public authentication: SocialLoginService, public route: Router, public authService: AuthService) { }
   ngOnInit() {
-    this.signData();
   }
   loginWithGoogle() {
     // let attempt = 0;
@@ -23,8 +22,8 @@ export class LoginComponent implements OnInit {
       .subscribe((user) => {
         if (user) {
           if (user.email.indexOf('regalix-inc') !== -1) {
-            // this.route.navigate(['/projects']);
-            this.signIn();
+            this.route.navigate(['/projects']);
+            // this.signIn();
             // this.authentication.makeServerSocialLoginCall('/rest-auth/google/', { access_token: user.token })
             //   .subscribe(
             //     (data) => {
@@ -72,14 +71,14 @@ export class LoginComponent implements OnInit {
       }
     );
   }
-  signData() {
-    this.authService.getLoginData().subscribe(
-      (data) => {
-        this.loginData = data;
-        console.log(this.loginData);
-      }
-    );
-  }
+  // signData() {
+  //   this.authService.getLoginData().subscribe(
+  //     (data) => {
+  //       this.loginData = data;
+  //       console.log(this.loginData);
+  //     }
+  //   );
+  // }
   signOut() {
     this.authentication.signOut();
   }

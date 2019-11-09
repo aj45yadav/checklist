@@ -11,7 +11,7 @@ import { Category } from '../questions.component';
 })
 export class CreateCategoryComponent implements OnInit {
   categoryForm: FormGroup;
-  dataOfCategory: Category[] = [] as Category[];
+  public dataOfCategory: Category[] = [] as Category[];
   mode: string;
   constructor(public dialogRef: MatDialogRef<CreateCategoryComponent>, public buService: BuService,
     @Inject(MAT_DIALOG_DATA) public data: Category) {}

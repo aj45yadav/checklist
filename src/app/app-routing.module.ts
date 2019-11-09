@@ -51,6 +51,14 @@ const routes: Routes = [
       {
         path: 'projects',
         component: ProjectsComponent
+      },
+      {
+        path: 'project/:id', children: [
+          {
+            path: 'questions',
+            component: QuestionsComponent
+          }
+        ]
       }
     ]
   },

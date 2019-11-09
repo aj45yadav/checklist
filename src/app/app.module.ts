@@ -9,7 +9,8 @@ import { TestcomponentComponent } from './testcomponent/testcomponent.component'
 import { MaterialModule } from 'src/material-module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LoginComponent } from './login/login.component';
-
+import {LocationStrategy, HashLocationStrategy} from '@angular/common';
+import { CookieService } from 'ngx-cookie-service';
 // social login imports
 import {
   SocialLoginModule,
@@ -35,6 +36,8 @@ import { MainQuestionsPipe } from './pipes/main-questions.pipe';
 import { TestDialogComponent } from './testcomponent/test-dialog/test-dialog.component';
 import { TestServiceService } from './services/test-service.service';
 import { ProjectsComponent } from './projects/projects.component';
+import { AuthService } from './services/auth.service';
+import { ProjectService } from './services/project.service';
 
 const CONFIG = new AuthServiceConfig([
   {
@@ -86,16 +89,17 @@ export function provideConfig() {
     AppRoutingModule,
     MaterialModule,
     HttpClientModule,
-    SocialLoginModule
+    SocialLoginModule,
   ],
   entryComponents: [TestDialogComponent, CreateCategoryComponent, CreateQuestionsComponent,
      ExistingCategoryComponent, BusinessComponent],
   providers: [
+    {provide: LocationStrategy, useClass: HashLocationStrategy},
     {
       provide: AuthServiceConfig,
       useFactory: provideConfig
     },
-    TestServiceService
+    TestServiceService, AuthService, ProjectService, CookieService
   ],
   bootstrap: [AppComponent]
 })

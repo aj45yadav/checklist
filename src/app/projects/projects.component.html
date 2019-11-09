@@ -1,3 +1,5 @@
+<mat-spinner class="loader" *ngIf="loading"></mat-spinner>
+
 <div class="page-container">
   <div class="project">
     <div class="p-heading">
@@ -8,14 +10,14 @@
     </div>
   </div>
   <div class="p-list">
-    <ng-container *ngFor= "let p of dataSource">
+    <ng-container *ngFor= "let p of dataSourcee">
     <mat-card>
       <div class="p-header">
       <mat-card-title>
-        {{p.projectName}}
+        {{p.name}}
       </mat-card-title>
       <mat-menu #menu="matMenu">
-          <button mat-menu-item routerLink= "/questions/{{p.id}}">Questions</button>
+          <button mat-menu-item routerLink= "/project/{{p.id}}/questions">Questions</button>
           <button mat-menu-item (click)="openDialog('Update', p)">Edit</button>
           <button mat-menu-item (click)="openDialog('Delete', p)">Delete</button>
           <button mat-menu-item (click)="openDialog('Share', p)">Share</button>
@@ -33,10 +35,10 @@
           Questions: {{p.quetions}}
           </h4>
         </div>
-        <div>Created By: {{p.createdBy}}</div>
+        <div>Created By: {{p.creator}}</div>
       </mat-card-content>
           <mat-card-actions>
-              <button mat-raised-button color="primary" (click)="openDialog('Status', p)"><mat-icon>check</mat-icon>Active</button>
+              <button mat-raised-button color="primary" (click)="openDialog('Status', p)"><mat-icon>check</mat-icon><span *ngIf="p.status">Active</span><span *ngIf="!p.status">Inactive</span></button>
               <button mat-raised-button color="primary" (click)="openDialog('Share', p)"><mat-icon>share</mat-icon>Share</button>
             </mat-card-actions>
 
