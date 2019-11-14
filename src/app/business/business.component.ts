@@ -4,6 +4,7 @@ import { ProjectData, ProjectService } from '../services/project.service';
 
 import { Router } from '@angular/router';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { FormControl, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-business',
@@ -17,13 +18,19 @@ export class BusinessComponent implements OnInit {
   subBuDwData;
   dwdata;
   buData: BuData = {} as BuData;
+  userList;
+  userListD;
+  shareProject: FormGroup;
+  userdd = new FormControl();
+  // toppingList: string[] = ['Extra cheese', 'Mushroom', 'Onion', 'Pepperoni', 'Sausage', 'Tomato'];
   constructor(public buService: BuService, public router: Router, public projectService: ProjectService,
     public dialogRef: MatDialogRef<BusinessComponent>,
     @Optional() @Inject(MAT_DIALOG_DATA) public data: ProjectData) {
     this.emitedData = { ...data };
-    console.log(this.emitedData);
+    // console.log(this.emitedData);
     this.action = this.emitedData.action;
   }
+
   ngOnInit() {
     this.getBudata();
   }
@@ -41,9 +48,7 @@ export class BusinessComponent implements OnInit {
     this.router.navigate(['/questions', id]);
     this.closeDialog();
   }
-  // subbucahnge(bu_id,data) {
-  //   this.subBuDwData = data[bu_id];
-  // }
+
   getBudata() {
     this.projectService.getBudata().subscribe(
       (data: any) => {
@@ -60,8 +65,10 @@ export class BusinessComponent implements OnInit {
     );
   }
 
+
   onBuChange() {
     this.subBuDwData = this.dwdata.subbu.filter(x => x.parent === this.emitedData.bu_id);
-    console.log(this.subBuDwData);
   }
+
+
 }

@@ -9,7 +9,7 @@ export class MainQuestionsPipe implements PipeTransform {
 
   transform(value: Question[]): any[] {
     const ques = value ? value.filter((x) => x.parentid === '') : [];
-    console.log(ques);
+    // console.log(ques);
     return ques;
   }
 

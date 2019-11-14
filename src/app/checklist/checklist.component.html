@@ -1,172 +1,81 @@
-<div class="example-container" [class.example-is-mobile]="mobileQuery.matches">
-  <mat-sidenav-container class="example-sidenav-container" [style.marginTop.px]="mobileQuery.matches ? 56 : 0">
-    <mat-sidenav #snav [mode]="mobileQuery.matches ? 'over' : 'side'" opened [fixedInViewport]="mobileQuery.matches"
-      fixedTopGap="56">
-      <mat-nav-list *ngFor="let categorydata of category;let i = index">
-        <mat-accordion>
-          <mat-expansion-panel [expanded]="false">
-            <mat-expansion-panel-header>
-              <mat-panel-title>
-                {{categorydata.CategoryName}}
-              </mat-panel-title>
-            </mat-expansion-panel-header>
-            <div class="catque" *ngFor="let question of categorydata.CategoryQuestions;let i = index">
-              <p>{{i+1}}. {{question.Question}}</p>
-              <div class="optionss">
-                <mat-radio-group aria-labelledby="example-radio-group-label" class="example-radio-group"
-                  [(ngModel)]="question.selectedoption">
-                  <mat-radio-button class="example-radio-button" *ngFor="let option of options;" [value]="option">
+<mat-sidenav-container class="side-container">
+  <mat-sidenav mode="side" opened>
+    <mat-nav-list *ngFor="let p of projectData?.categories;let i = index">
+      <mat-accordion>
+        <mat-expansion-panel [expanded]="false" (opened)="setCurrentCategory(p)">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              Category {{i+1}}: {{p.name}}
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <div class="catque" *ngFor="let l1 of p.questions | mainQuestions;let i = index">
+            <p>{{i+1}}. {{l1.question}}
+            </p>
+            <div class="optionss">
+              <mat-radio-group aria-labelledby="example-radio-group-label" class="example-radio-group"
+                [(ngModel)]="l1.selectedoption">
+                <mat-radio-button class="example-radio-button" *ngFor="let option of options;" [value]="option.qId"
+                  (change)="onRadioOptionChangeLevel2(l1.id, option.qId)">
 
-                    {{option}}
-                  </mat-radio-button>
-                </mat-radio-group>
-              </div>
+                  {{option.ans}}
+                </mat-radio-button>
+              </mat-radio-group>
             </div>
-
-
-          </mat-expansion-panel>
-        </mat-accordion>
-      </mat-nav-list>
-    </mat-sidenav>
-    <mat-sidenav-content>
+          </div>
+        </mat-expansion-panel>
+      </mat-accordion>
+    </mat-nav-list>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <div class="main-content">
+      <!-- {{questiondatalevel2 | json}} -->
       <div class="project-info">
         <div class="project-name">
-          <h4>Project Name: Google</h4>
+          <h4>Project Name: {{projectData?.project_name}}</h4>
         </div>
         <div class="unit">
-          <h4>Business Unit: Google</h4>
+          <h4>Business Unit: {{projectData?.bu_name}}</h4>
         </div>
         <div class="sub-unit">
-          <h4>Business Name: Google</h4>
+          <h4>Sub Business: {{projectData?.sub_bu_name}}</h4>
         </div>
       </div>
-      <div class="aside-content">
-        <ng-container *ngFor="let categorydata of category">
-          <ng-container *ngFor="let question of categorydata.CategoryQuestions;">
-            <ng-container *ngIf="question.selectedoption== 'Yes'">
-              <ng-container *ngFor="let d of question.SelectOption">
-                <ng-container *ngFor="let t of d.Yes">
-                  <p>{{t.Question}} <i class="material-icons" [matTooltip]="t.info" matTooltipClass="tooltip-blue"
-                      matTooltipPosition="right">
-                      info
-                    </i> </p>
-                  <div class="optionss">
-                    <mat-radio-group aria-labelledby="example-radio-group-label" class="example-radio-group"
-                      [(ngModel)]="t.selectedoption">
-                      <mat-radio-button class="example-radio-button" *ngFor="let option of options;" [value]="option">
+      <div class="aside-content" *ngFor="let l2 of questiondatalevel2">
+        <p>{{l2.question}} <i *ngIf="l2.tooltip !== null" class="material-icons" [matTooltip]="l2.tooltip"
+            matTooltipClass="tooltip-blue" matTooltipPosition="right">
+            info
+          </i> </p>
+        <div class="optionss">
+          <mat-radio-group aria-labelledby="example-radio-group-label" class="example-radio-group"
+            [(ngModel)]="l2.selectedoption">
+            <mat-radio-button class="example-radio-button" *ngFor="let option of options;" [value]="option.qId"
+              (change)="onRadioOptionChangeLevel3(l2.id, option.qId)">
 
-                        {{option}}
-                      </mat-radio-button>
-                    </mat-radio-group>
-                  </div>
-                  <ng-container *ngIf="t.selectedoption == 'Yes'">
-                    <ng-container *ngFor="let g of t.SelectOption">
-                      <ng-container *ngFor="let e of g.Yes">
-                        <p>{{e.Question}} <i class="material-icons" [matTooltip]="e.info" matTooltipClass="tooltip-blue"
-                            matTooltipPosition="right">
-                            info
-                          </i> </p>
-                        <div class="optionss">
-                          <mat-radio-group aria-labelledby="example-radio-group-label" class="example-radio-group"
-                            [(ngModel)]="e.selectedoption">
-                            <mat-radio-button class="example-radio-button" *ngFor="let option of options;"
-                              [value]="option">
-
-                              {{option}}
-                            </mat-radio-button>
-                          </mat-radio-group>
-                        </div>
-                      </ng-container>
-                    </ng-container>
-                  </ng-container>
-                  <ng-container *ngIf="t.selectedoption == 'No'">
-                    <ng-container *ngFor="let g of t.SelectOption">
-                      <ng-container *ngFor="let e of g.No">
-                        <p> {{e.Question}} <i class="material-icons" [matTooltip]="e.info"
-                            matTooltipClass="tooltip-blue" matTooltipPosition="right">
-                            info
-                          </i> </p>
-                        <div class="optionss">
-                          <mat-radio-group aria-labelledby="example-radio-group-label" class="example-radio-group"
-                            [(ngModel)]="e.selectedoption">
-                            <mat-radio-button class="example-radio-button" *ngFor="let option of options;"
-                              [value]="option">
-
-                              {{option}}
-                            </mat-radio-button>
-                          </mat-radio-group>
-                        </div>
-                      </ng-container>
-                    </ng-container>
-                  </ng-container>
-                </ng-container>
-              </ng-container>
-            </ng-container>
-            <ng-container *ngIf="question.selectedoption== 'No'">
-              <ng-container *ngFor="let d of question.SelectOption">
-                <ng-container *ngFor="let t of d.No">
-                  <p>{{t.Question}} <i class="material-icons" [matTooltip]="t.info" matTooltipClass="tooltip-blue"
-                      matTooltipPosition="right">
-                      info
-                    </i> </p>
-                  <div class="optionss">
-                    <mat-radio-group aria-labelledby="example-radio-group-label" class="example-radio-group"
-                      [(ngModel)]="t.selectedoption">
-                      <mat-radio-button class="example-radio-button" *ngFor="let option of options;" [value]="option">
-
-                        {{option}}
-                      </mat-radio-button>
-                    </mat-radio-group>
-                  </div>
-                  <ng-container *ngIf="t.selectedoption == 'Yes'">
-                    <ng-container *ngFor="let g of t.SelectOption">
-                      <ng-container *ngFor="let e of g.Yes">
-                        <p>{{e.Question}} <i class="material-icons" [matTooltip]="e.info" matTooltipClass="tooltip-blue"
-                            matTooltipPosition="right">
-                            info
-                          </i> </p>
-                        <div class="optionss">
-                          <mat-radio-group aria-labelledby="example-radio-group-label" class="example-radio-group"
-                            [(ngModel)]="e.selectedoption">
-                            <mat-radio-button class="example-radio-button" *ngFor="let option of options;"
-                              [value]="option">
-
-                              {{option}}
-                            </mat-radio-button>
-                          </mat-radio-group>
-                        </div>
-                      </ng-container>
-                    </ng-container>
-                  </ng-container>
-                  <ng-container *ngIf="t.selectedoption == 'No'">
-                    <ng-container *ngFor="let g of t.SelectOption">
-                      <ng-container *ngFor="let e of g.No">
-                        <p>{{e.Question}} <i class="material-icons" [matTooltip]="e.info" matTooltipClass="tooltip-blue"
-                            matTooltipPosition="right">
-                            info
-                          </i> </p>
-                        <div class="optionss">
-                          <mat-radio-group aria-labelledby="example-radio-group-label" class="example-radio-group"
-                            [(ngModel)]="e.selectedoption">
-                            <mat-radio-button class="example-radio-button" *ngFor="let option of options;"
-                              [value]="option">
-
-                              {{option}}
-                            </mat-radio-button>
-                          </mat-radio-group>
-                        </div>
-                      </ng-container>
-                    </ng-container>
-                  </ng-container>
-                </ng-container>
-              </ng-container>
-            </ng-container>
-          </ng-container>
-        </ng-container>
-        <div class="btn-save">
-          <button mat-raised-button color="primary">Save</button>
+              {{option.ans}}
+            </mat-radio-button>
+          </mat-radio-group>
+            <mat-form-field appearance="outline">
+              <mat-label>Add Comment</mat-label>
+             <input matInput placeholder="Comment">
+            </mat-form-field>
+            <form [formGroup]="form" (ngSubmit)="onSubmit()">
+            <input type="file" name="filedata" (change)="onChange($event)">
+            <button type="submit">Upload File</button>
+          </form>
+            <!-- <button mat-raised-button color="primary" [matMenuTriggerFor]="menu">Upload Document</button>
+            <mat-menu #menu="matMenu">
+              <button mat-menu-item (click)="openDocModel('Comment' , {})">Add Comment</button>
+              <mat-divider></mat-divider>
+              <button mat-menu-item (click)="openDocModel('Docx', {})">Upload Docx File</button>
+              <mat-divider></mat-divider>
+              <button mat-menu-item (click)="openDocModel('PDF', {})">Upload PDF</button>
+              <mat-divider></mat-divider>
+              <button mat-menu-item (click)="openDocModel('Link', {})">Add Link</button>
+            </mat-menu> -->
         </div>
+        <mat-divider></mat-divider>
       </div>
-    </mat-sidenav-content>
-  </mat-sidenav-container>
-</div>
+      <!-- {{questiondatalevel3 | json}} -->
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>

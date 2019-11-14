@@ -1,6 +1,5 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { BuService } from 'src/app/services/bu.service';
 import { Category } from '../questions.component';
 
@@ -10,19 +9,28 @@ import { Category } from '../questions.component';
   styleUrls: ['./create-category.component.css']
 })
 export class CreateCategoryComponent implements OnInit {
-  categoryForm: FormGroup;
+  action: string;
+  emitedCategoryData: any;
+
   public dataOfCategory: Category[] = [] as Category[];
   mode: string;
+
   constructor(public dialogRef: MatDialogRef<CreateCategoryComponent>, public buService: BuService,
-    @Inject(MAT_DIALOG_DATA) public data: Category) {}
+    @Inject(MAT_DIALOG_DATA) public data: Category) {
+      this.emitedCategoryData = {...data};
+      this.action = this.emitedCategoryData.action;
+    }
+
   ngOnInit() {
-    // this.categoryForm = new FormGroup({
-    //   name: new FormControl(null, [Validators.required, Validators.maxLength(20)]),
-    //   description: new FormControl(null, Validators.maxLength(150)),
-    // });
+
   }
-  onCancel() {
-    this.dialogRef.close();
+
+  doAction() {
+    this.dialogRef.close({ event: this.action, data: this.emitedCategoryData });
+  }
+
+  closeDialog() {
+    this.dialogRef.close({ event: 'Cancel' });
   }
 }
 

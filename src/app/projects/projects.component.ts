@@ -2,8 +2,9 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog, MatTable } from '@angular/material';
 import { BusinessComponent } from '../business/business.component';
 import { BuData } from '../services/bu.service';
-import {ProjectData, ProjectService } from '../services/project.service';
+import { ProjectData, ProjectService } from '../services/project.service';
 import { CookieService } from 'ngx-cookie-service';
+import { ShareProjectComponent } from './share-project/share-project.component';
 
 export interface ProjectData {
   id: number;
@@ -28,8 +29,8 @@ export class ProjectsComponent implements OnInit {
   constructor(public dialog: MatDialog, public projectService: ProjectService, public cookieService: CookieService) { }
 
   ngOnInit() {
-  this.getProjectList();
-  // alert(this.cookieService.get('token'));
+    this.getProjectList();
+    // alert(this.cookieService.get('token'));
   }
 
   openDialog(action, obj) {
@@ -40,6 +41,8 @@ export class ProjectsComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
+      // console.log('checkk it here', result);
+      // return false;
       if (result.event === 'Add') {
         // this.addProject(result.data);
         this.addProject(result.data);
@@ -49,13 +52,13 @@ export class ProjectsComponent implements OnInit {
         // this.deleteProject(result.data);
         this.deleteProjectt(result.data, result.id);
       } else if (result.event === 'Share') {
-        this.shareProject(result.data);
+        // this.shareProject(result.data);
       } else if (result.event === 'Status') {
-        this.chanegeStatus(result.data);
+        // this.chanegeStatus(result.data);
       }
     });
   }
-// peforming actions through api
+  // peforming actions through api
   addProject(project_Data) {
     const data = {
       name: project_Data.name,
@@ -70,21 +73,22 @@ export class ProjectsComponent implements OnInit {
         // this.dataSourcee.push(data);
         this.getProjectList();
       },
-      (error) => {}
+      (error) => { }
     );
   }
 
   editProject(project_Data) {
     const data = {
+      project_id: project_Data.project_id,
       name: project_Data.name,
       bu_id: project_Data.bu_id,
       sub_bu_id: project_Data.sub_bu_id
     };
-    this.projectService.editProject(project_Data.id, data).subscribe(
+    this.projectService.editProject(data).subscribe(
       () => {
         this.getProjectList();
       },
-      (error) => {}
+      (error) => { }
     );
   }
 
@@ -107,37 +111,31 @@ export class ProjectsComponent implements OnInit {
       (data) => {
         this.getProjectList();
       },
-      (error) => {}
+      (error) => { }
     );
   }
-  // addProject(project_Data) {
-  //   const d = new Date();
-  //   this.dataSource.push({
-  //     id: d.getTime(),
-  //     businessUnit: project_Data.businessUnit,
-  //     subBusinessUnit: project_Data.subBusinessUnit,
-  //     projectName: project_Data.projectName
-  //   });
-  // }
-  // updateProject(project_Data) {
-  //   this.dataSource =  this.dataSource.filter((value, key) => {
-  //     if (value.id === project_Data.id) {
-  //       value.businessUnit = project_Data.businessUnit;
-  //       value.subBusinessUnit = project_Data.subBusinessUnit;
-  //       value.projectName = project_Data.projectName;
-  //     }
-  //     return true;
-  //   });
-  // }
-  // deleteProject(project_Data) {
-  //   this.dataSource = this.dataSource.filter((value, key) => {
-  //     return value.id !== project_Data.id;
-  //   });
-  // }
-  shareProject(project_Data) {
+  shareProjectModel(pid) {
+    const dialogRef = this.dialog.open(ShareProjectComponent, {
+      width: '650px',
+      data: { project_id: pid }
+    });
 
+    dialogRef.afterClosed().subscribe(result => {
+      if (result && result.event === 'Share') {
+        const email = result.data.usernames.toString();
+        const data = {
+          usernames: email,
+          project_id: result.data.project_id,
+          subject: result.data.subject,
+          message: result.data.message
+        };
+        console.log(data);
+        this.projectService.sharedProjectViaMail(data).subscribe(
+          () => { },
+          (error) => { }
+        );
+      }
+    });
   }
-  chanegeStatus(project_Data) {
 
-  }
 }

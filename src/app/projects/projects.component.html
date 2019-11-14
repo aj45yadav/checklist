@@ -10,39 +10,47 @@
     </div>
   </div>
   <div class="p-list">
-    <ng-container *ngFor= "let p of dataSourcee">
-    <mat-card>
-      <div class="p-header">
-      <mat-card-title>
-        {{p.name}}
-      </mat-card-title>
-      <mat-menu #menu="matMenu">
-          <button mat-menu-item routerLink= "/project/{{p.id}}/questions">Questions</button>
-          <button mat-menu-item (click)="openDialog('Update', p)">Edit</button>
-          <button mat-menu-item (click)="openDialog('Delete', p)">Delete</button>
-          <button mat-menu-item (click)="openDialog('Share', p)">Share</button>
-        </mat-menu>
-      <button mat-button color="primary" [matMenuTriggerFor]="menu">
-      <mat-icon>view_list</mat-icon>
-    </button>
-      </div>
-      <mat-card-content>
-        <div class="q-info">
-          <h4>
-          Categories: {{p.category}}
-          </h4>
-          <h4>
-          Questions: {{p.quetions}}
-          </h4>
+    <ng-container *ngFor="let p of dataSourcee">
+      <mat-card>
+        <div class="p-header">
+          <mat-card-title>
+            {{p.name}}
+          </mat-card-title>
+          <mat-menu #menu="matMenu">
+            <button mat-menu-item routerLink="/project/{{p.id}}/questions">Questions</button>
+            <mat-divider></mat-divider>
+            <button mat-menu-item (click)="openDialog('Update', p)">Edit</button>
+            <mat-divider></mat-divider>
+            <button mat-menu-item (click)="openDialog('Delete', p)">Delete</button>
+            <mat-divider></mat-divider>
+            <!-- <button mat-menu-item (click)="shareProjectModel(p.id)">Share</button> -->
+            <a mat-menu-item routerLink="/checklist/{{p.id}}" target="_blank">Preview</a>
+          </mat-menu>
+          <button mat-button color="primary" [matMenuTriggerFor]="menu">
+            <mat-icon>view_list</mat-icon>
+          </button>
         </div>
-        <div>Created By: {{p.creator}}</div>
-      </mat-card-content>
-          <mat-card-actions>
-              <button mat-raised-button color="primary" (click)="openDialog('Status', p)"><mat-icon>check</mat-icon><span *ngIf="p.status">Active</span><span *ngIf="!p.status">Inactive</span></button>
-              <button mat-raised-button color="primary" (click)="openDialog('Share', p)"><mat-icon>share</mat-icon>Share</button>
-            </mat-card-actions>
+        <mat-card-content>
+          <div class="q-info">
+            <h4>
+              Categories: {{p.category}}
+            </h4>
+            <h4>
+              Questions: {{p.quetions}}
+            </h4>
+          </div>
+          <div>Created By: {{p.creator}}</div>
+        </mat-card-content>
+        <mat-card-actions>
+          <button mat-raised-button color="primary" (click)="openDialog('Status', p)">
+            <mat-icon>check</mat-icon><span *ngIf="p.status">Active</span><span *ngIf="!p.status">Inactive</span>
+          </button>
+          <button mat-raised-button color="primary" (click)="shareProjectModel(p.id)">
+            <mat-icon>share</mat-icon>Share
+          </button>
+        </mat-card-actions>
 
-    </mat-card>
+      </mat-card>
     </ng-container>
   </div>
 </div>

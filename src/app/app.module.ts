@@ -38,6 +38,9 @@ import { TestServiceService } from './services/test-service.service';
 import { ProjectsComponent } from './projects/projects.component';
 import { AuthService } from './services/auth.service';
 import { ProjectService } from './services/project.service';
+// import { Checklist2Component } from './checklist2/checklist2.component';
+import { ShareProjectComponent } from './projects/share-project/share-project.component';
+import { DocTypeContentComponent } from './checklist/doc-type-content/doc-type-content.component';
 
 const CONFIG = new AuthServiceConfig([
   {
@@ -80,6 +83,9 @@ export function provideConfig() {
     MainQuestionsPipe,
     TestDialogComponent,
     ProjectsComponent,
+    // Checklist2Component,
+    ShareProjectComponent,
+    DocTypeContentComponent,
   ],
   imports: [
     BrowserModule,
@@ -92,7 +98,7 @@ export function provideConfig() {
     SocialLoginModule,
   ],
   entryComponents: [TestDialogComponent, CreateCategoryComponent, CreateQuestionsComponent,
-     ExistingCategoryComponent, BusinessComponent],
+     ExistingCategoryComponent, BusinessComponent, ShareProjectComponent, DocTypeContentComponent],
   providers: [
     {provide: LocationStrategy, useClass: HashLocationStrategy},
     {

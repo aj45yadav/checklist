@@ -1,0 +1,44 @@
+
+<mat-card-header>
+    <mat-card-title> Share Poject </mat-card-title>
+    <mat-icon aria-hidden="false" aria-label="Example home icon" (click)="closeDialog()">cancel</mat-icon>
+  </mat-card-header>
+  
+  <mat-dialog-content class="mat-typography">
+    <input type="hidden" [(ngModel)]="emittedData.project_id">
+    <mat-card>
+      <h4>Share This Project Via mail</h4>
+      <!-- <mat-form-field appearance="outline">
+        <mat-label>To</mat-label>
+        <input matInput placeholder="Search For People">
+      </mat-form-field> -->
+        <mat-form-field appearance="outline">
+          <mat-label>To</mat-label>
+          <mat-select name="usernames" [(ngModel)]="emittedData.usernames" multiple>
+            <mat-option *ngFor="let userdd of arrayShuffle(userListD)" [value]="userdd">{{userdd}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Subject</mat-label>
+          <input matInput [(ngModel)]="emittedData.subject" name="subject">
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Message</mat-label>
+          <textarea matInput placeholder="message" [(ngModel)]="emittedData.message" name="message"></textarea>
+        </mat-form-field>
+  
+    </mat-card>
+    <div class="mdc-chip-set">
+  
+      <button type="button" class="mdc-chip" style="background-color: #F44336" (click)="closeDialog()">
+        <img src="../../assets/img/Group 142.svg" alt="icon">
+        <span class="mdc-chip__text">Cancel</span>
+      </button>
+
+          
+      <button class="mdc-chip">
+        <img src="../../assets/img/Group 142.svg" alt="icon">
+        <span class="mdc-chip__text" (click)="shareProject()">Share Project</span>
+      </button>
+    </div>
+  </mat-dialog-content>

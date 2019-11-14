@@ -1,0 +1,44 @@
+
+
+<mat-card-header>
+    <mat-card-title>Add {{action}} Document with Answer </mat-card-title>
+    <mat-icon aria-hidden="false" aria-label="Example home icon" (click)="closeDialog()">cancel</mat-icon>
+  </mat-card-header>
+  
+  <mat-dialog-content class="mat-typography">
+    <mat-card *ngIf="action == 'Comment'">
+        <mat-form-field appearance="outline">
+          <mat-label>Add Comment</mat-label>
+          <textarea matInput placeholder="comment" name=""></textarea>
+        </mat-form-field>
+    </mat-card>
+
+    <mat-card *ngIf="action == 'Link'">
+        <mat-form-field appearance="outline">
+          <mat-label>Add Comment</mat-label>
+          <input matInput placeholder="comment" name="">
+        </mat-form-field>
+  
+    </mat-card>
+
+    <mat-card *ngIf="action == 'PDF'">
+      <h4>PDF Document</h4>  
+    </mat-card>
+
+    <mat-card *ngIf="action == 'Docx'">
+        <h4>Docx Document</h4>  
+      </mat-card>
+    <div class="mdc-chip-set">
+  
+      <button type="button" class="mdc-chip" style="background-color: #F44336" (click)="closeDialog()">
+        <img src="../../assets/img/Group 142.svg" alt="icon">
+        <span class="mdc-chip__text">Cancel</span>
+      </button>
+
+          
+      <button class="mdc-chip">
+        <img src="../../assets/img/Group 142.svg" alt="icon">
+        <span class="mdc-chip__text" (click)="shareProject()">{{action}} Document</span>
+      </button>
+    </div>
+  </mat-dialog-content>

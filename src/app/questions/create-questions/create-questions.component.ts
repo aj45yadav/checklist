@@ -8,12 +8,21 @@ import { Question } from '../questions.component';
   styleUrls: ['./create-questions.component.css']
 })
 export class CreateQuestionsComponent implements OnInit {
+  action: string;
+  emittedQuestionData: any;
 
-  constructor(public dialogRef: MatDialogRef<CreateQuestionsComponent>, @Inject(MAT_DIALOG_DATA) public question: Question) { }
+  constructor(public dialogRef: MatDialogRef<CreateQuestionsComponent>, @Inject(MAT_DIALOG_DATA) public data: Question) {
+    this.emittedQuestionData = {...data};
+    this.action = this.emittedQuestionData.action;
+   }
 
   ngOnInit() {
   }
-  onCancel() {
-    this.dialogRef.close();
+  doAction() {
+    this.dialogRef.close({ event: this.action, data: this.emittedQuestionData });
+  }
+
+  closeDialog() {
+    this.dialogRef.close({ event: 'Cancel' });
   }
 }

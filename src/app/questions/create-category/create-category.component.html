@@ -1,4 +1,4 @@
-<mat-card-header>
+<!-- <mat-card-header>
   <mat-card-title>{{data.editMode ? 'Edit' : 'Create'}} Question Category </mat-card-title>
   <mat-icon aria-hidden="false" aria-label="Example home icon" (click)="dialogRef.close()">cancel</mat-icon>
 </mat-card-header>
@@ -15,14 +15,6 @@
       <mat-hint>Validation Msg</mat-hint>
       <mat-hint align="end">{{category.value?.length || 0}}</mat-hint>
     </mat-form-field>
-    <!-- <mat-form-field appearance="outline">
-      <mat-label>Enter Category Description</mat-label>
-      <textarea matInput placeholder="Category Description" formControlName="description" #categorydesc
-        rows="4"></textarea>
-      <mat-hint>Validation Msg</mat-hint>
-      <mat-hint align="end">{{categorydesc.value?.length || 0}}</mat-hint>
-    </mat-form-field> -->
-
   </mat-card>
   <div class="mdc-chip-set" *ngIf="!data.viewMode">
 
@@ -33,6 +25,39 @@
     <button class="mdc-chip" [mat-dialog-close]="data">
       <img src="../../assets/img/Group 142.svg" alt="icon">
       <span class="mdc-chip__text">Add Category</span>
+    </button>
+  </div>
+</mat-dialog-content> -->
+
+<mat-card-header>
+  <mat-card-title>{{action}} Question Category </mat-card-title>
+  <mat-icon aria-hidden="false" aria-label="Example home icon" (click)="closeDialog()">cancel</mat-icon>
+</mat-card-header>
+<mat-dialog-content class="mat-typography">
+  <mat-card *ngIf="action == 'Add' || action == 'Update'">
+
+    <mat-form-field appearance="outline">
+      <mat-label>Enter Category</mat-label>     
+      <input [(ngModel)]="emitedCategoryData.name" name="name" matInput placeholder="{{action}} name" #category required>
+      <mat-error>Category is required</mat-error>    
+      <mat-hint align="end">{{category.value?.length || 0}}</mat-hint>
+    </mat-form-field>
+  </mat-card>
+  <mat-card *ngIf="action == 'Delete'">
+      Are you sure to delete this <b>{{emitedCategoryData.name}}</b> ?
+    </mat-card>
+    <mat-card *ngIf="action == 'View'">
+        {{emitedCategoryData.name}}
+      </mat-card>
+  <div class="mdc-chip-set" *ngIf= "action != 'View'">
+
+    <button type="button" class="mdc-chip" style="background-color: #F44336" (click)="closeDialog()">
+      <img src="../../assets/img/Group 142.svg" alt="icon">
+      <span class="mdc-chip__text">Cancel</span>
+    </button>
+    <button class="mdc-chip" [mat-dialog-close]="data" (click)="doAction()">
+      <img src="../../assets/img/Group 142.svg" alt="icon">
+      <span class="mdc-chip__text">{{action}} Category</span>
     </button>
   </div>
 </mat-dialog-content>

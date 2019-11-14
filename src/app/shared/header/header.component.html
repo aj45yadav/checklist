@@ -1,12 +1,13 @@
 <mat-toolbar style="background: white">
     <h1>Checklist-Logo</h1>
+    <!-- {{userInfo | json}} -->
     <div class="perfonal-info">
-        <div class="profile-img">
+        <!-- <div class="profile-img">
           <img class="media-md" src="{{authentication?.user?.photoUrl}}" alt="profile-pic">
           <img class="media-sm" src="{{authentication?.user?.photoUrl}}" [matMenuTriggerFor]="menu" alt="profile-pic">
-        </div>
+        </div> -->
         <div class="name-drop">
-          <button mat-button [matMenuTriggerFor]="menu">{{authentication?.user?.name}} <i class="material-icons">
+          <button mat-button [matMenuTriggerFor]="menu">{{userInfo?.logged_user?.name}} <i class="material-icons">
               keyboard_arrow_down
             </i></button>
           <mat-menu #menu="matMenu">

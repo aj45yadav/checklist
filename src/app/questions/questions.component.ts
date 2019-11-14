@@ -29,12 +29,143 @@ export class QuestionsComponent implements OnInit {
   options: string[] = ['One', 'Two', 'Three'];
   filteredOptions: Observable<string[]>;
   mode: string;
-
-
   projectData;
-  constructor(public activatedRoute: ActivatedRoute, public buService: BuService, public dialog: MatDialog,
-     public projectService: ProjectService) { }
 
+  ngOnInit() {
+    this.filteredOptions = this.myControl.valueChanges
+      .pipe(
+        startWith(''),
+        map(value => this._filter(value))
+      );
+    this.categoryForm = new FormGroup({
+      title: new FormControl(null, [Validators.required, Validators.maxLength(20)]),
+      description: new FormControl(null, Validators.maxLength(150)),
+    });
+
+    this.projectId = this.activatedRoute.snapshot.params['id'];
+    this.getProjectData();
+  }
+
+  constructor(public activatedRoute: ActivatedRoute, public buService: BuService, public dialog: MatDialog,
+    public projectService: ProjectService) { }
+  // category related all functions
+  openCategoryDialog(action, obj) {
+    obj.action = action;
+    const dialogRef = this.dialog.open(CreateCategoryComponent, {
+      width: '650px',
+      data: obj
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result.event === 'Add') {
+        this.addCategoryD(result.data);
+      } else if (result.event === 'Update') {
+        this.editCategory(result.data);
+      } else if (result.event === 'Delete') {
+        this.deleteCategoryD(result.data);
+      } else if (result.event === 'View') {
+        this.viewCategory(result.data);
+      }
+    });
+  }
+  addCategoryD(cat_data) {
+    const data = {
+      project_id: this.projectId,
+      name: cat_data.name
+    };
+    this.projectService.addCategory(data).subscribe(
+      () => {
+        this.getProjectData();
+      });
+  }
+  editCategory(cat_data) {
+    const data = {
+      project_id: this.activatedRoute.snapshot.paramMap['id'],
+      name: cat_data.name
+    };
+    this.projectService.editCategory(cat_data.id, data).subscribe(
+      () => {
+
+      },
+      (error) => {
+
+      }
+    );
+  }
+  deleteCategoryD(cat_data) {
+    this.projectService.deleteCategory(cat_data.id).subscribe(
+      () => {
+        this.getProjectData();
+      },
+      (error) => {
+      }
+    );
+  }
+  viewCategory(cat_data) {
+
+  }
+  //  end category related functions
+
+  // questions related functions
+  openQuestionsDialog(action, obj) {
+    console.log(obj);
+    obj.action = action;
+    if (this.currentCategory.questions && this.currentCategory.questions.length === 0) {
+      obj.parentid = '';
+    }
+    const dialogRef = this.dialog.open(CreateQuestionsComponent, {
+      width: '650px',
+      data: obj
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result.event === 'Add') {
+        this.addQuestionsData(result.data);
+      } else if (result.event === 'Update') {
+        this.editQuestionsData(result.data);
+      } else if (result.event === 'Delete') {
+        this.deleteQuestionData(result.data);
+      } else if (result.event === 'View') {
+        this.viewQuestionsData(result.data);
+      }
+    });
+  }
+
+  addQuestionsData(que_data) {
+    const parent = que_data.parentid ? this.currentCategory.questions.find(x => x.id === que_data.parentid) : undefined;
+    // const id = que_data.parentid === undefined || '' ? 1 : parent && parent.qlevel ? parent.qlevel + 1 : 2;
+    const request = {
+      question: que_data.question,
+      parent_id: que_data.parentid ? que_data.parentid : '',
+      answer_opt: que_data.answer_opt,
+      tooltip: que_data.tooltip,
+      category_id: this.currentCategory.id,
+      project_id: this.projectId,
+      qlevel: que_data.parentid === '' ? 1 : parent && parent.qlevel ? parseInt(parent.qlevel.toString(), 10) + 1 : 2,
+      weightage: que_data.weightage,
+      score: que_data.score
+    };
+    console.log(request);
+    this.projectService.addQuestionsData(request).subscribe(
+      (response: any) => {
+        this.getProjectData();
+      },
+      (error) => { }
+    );
+  }
+
+  deleteQuestionData(que_data) {
+    this.projectService.deleteQestions(que_data.id).subscribe(
+      () => {
+        this.getProjectData();
+      },
+      (error) => { }
+    );
+  }
+  editQuestionsData(que_data) {
+
+  }
+  viewQuestionsData(que_data) {
+
+  }
   private _filter(value: string): string[] {
     const filterValue = value.toLowerCase();
 
@@ -87,154 +218,24 @@ export class QuestionsComponent implements OnInit {
     });
   }
 
-  openCreateQuesDialog(subQues?: Question, edit?: boolean) {
-    let dialogRef;
-    if (edit) {
-      this.mode = 'edit',
-        dialogRef = this.dialog.open(CreateQuestionsComponent, {
-          data: { parentId: subQues.parentid, ansId: subQues.ansId, question: subQues.question, id: subQues.id, editMode: 'true' }
-        });
-
-    } else {
-      if (subQues) {
-        dialogRef = this.dialog.open(CreateQuestionsComponent, {
-          data: { parentId: subQues.id }
-        });
-      } else {
-        dialogRef = this.dialog.open(CreateQuestionsComponent, {
-          data: { parentId: -1 }
-        });
-      }
-    }
-
-    dialogRef.afterClosed().subscribe(result => {
-      // console.log(result);
-      if (result && result.question) {
-        // Initialize the questions array, if not initialized
-        if (!this.currentCategory.questions) {
-          this.currentCategory.questions = [] as Question[];
-        }
-        const element = this.currentCategory.questions.find(x => x.id === result.id);
-        const indexOfQuestion = this.currentCategory.questions.indexOf(element);
-        // Directly update the question if it was opened in edit mode
-        if (result.editMode) {
-          this.currentCategory.questions[indexOfQuestion] = result;
-        } else {
-          const question = result;
-          question.id = result.id ? result.id : this.buService.generateId();
-          if (question.parentId && question.parentId !== -1) {
-            const parent = this.currentCategory.questions.find(x => x.id === question.parentId);
-            question.qLevel = parent && parent.qLevel ? parent.qLevel + 1 : 2;
-          } else {
-            question.parentId = -1;
-            question.ansId = -1;
-            question.qLevel = 1;
-          }
-          this.currentCategory.questions.push(question);
-          // console.log(this.currentCategory.questions);
-        }
-      }
-    });
-  }
-  deleteQuestion(id: number) {
-    const response = confirm('Are you sure want to delete this');
-    if (response) {
-      const element = this.currentCategory.questions.find(x => x.id === id);
-      const index = this.currentCategory.questions.indexOf(element);
-      this.currentCategory.questions.splice(index, 1);
-    }
-  }
-
-  ngOnInit() {
-    this.getProjectData();
-    this.filteredOptions = this.myControl.valueChanges
-      .pipe(
-        startWith(''),
-        map(value => this._filter(value))
-      );
-    this.categoryForm = new FormGroup({
-      title: new FormControl(null, [Validators.required, Validators.maxLength(20)]),
-      description: new FormControl(null, Validators.maxLength(150)),
-    });
-
-    const id = this.activatedRoute.snapshot.params['id'];
-    const temp = localStorage.getItem('bTemp');
-    this.buData = JSON.parse(temp);
-    this.buMainModel.businessUnit = this.buData.businessUnit;
-    this.buMainModel.subBusinessUnit = this.buData.subBusinessUnit;
-    this.buMainModel.projectName = this.buData.projectName;
-    this.buMainModel.categories = [] as Category[];
-    console.log(this.buData);
-  }
-
   getProjectData() {
-    this.activatedRoute.paramMap.subscribe(
-      (param) => {
-        this.projectId = param['params'].id;
-        this.projectService.getCategory(this.projectId).subscribe((data) => {
-          this.projectData = data;
-        });
-      },
-      (error) => {
-      }
-    );
+    this.projectService.getCategory(this.projectId).subscribe(
+      (data) => {
+        this.projectData = data;
+      });
   }
 
-addCategoryDataa(cat_data) {
- const data = {
-   project_id: this.activatedRoute.snapshot.params['id'],
-   name: cat_data.name
-  };
-  this.projectService.addCategory(data).subscribe(
-    () => {
-      this.getProjectData();
-  });
-}
+
   setCurrentCategory(category: Category) {
     this.currentCategory = category;
     // console.log(category);
   }
 
-  addCategoryData() {
-    // const id = this.buService.generateId();
-    const category = this.categoryForm.value;
-    // category.id = id;
-    this.addCategoryDataa(category);
-    this.categoryForm.reset();
-    console.log(this.dataOfCategory);
-    this.addCategory = false;
-  }
-
-  deleteCategory(id: number) {
-    const response = confirm('are you sure want to delete this');
-    if (response) {
-      const element = this.dataOfCategory.find(x => x.id === id);
-      this.currentCategory = {} as Category;
-      const index = this.dataOfCategory.indexOf(element);
-      this.dataOfCategory.splice(index, 1);
-      // this.dataOfCategory = [];
-
-    }
-  }
-
-  addQuestion(form: NgForm) {
-    const responses = Constants.responses;
-    const cat_id = this.dataOfCategory.indexOf(this.currentCategory);
-    if (!this.currentCategory.questions || this.currentCategory.questions.length === 0) {
-      this.currentCategory.questions = [] as Question[];
-    }
-    this.currentCategory.questions.push(form.value);
-    console.log(this.currentCategory.questions);
-    this.dataOfCategory[cat_id] = this.currentCategory;
-    this.questiondata.push(form.value);
-    console.log(this.questiondata);
-    this.addQuestionForm = false;
-  }
 }
 
 export interface Category {
   id: number;
-  projectId: number;
+  project_id: number;
   userId: number;
   name: string;
   questions: Question[];
@@ -247,7 +248,7 @@ export interface Question {
   categoryId: number;
   parentid: string;
   ansId: number;
-  qLevel: number;
+  qlevel: number;
   question: string;
   weightage: number;
   score: number;

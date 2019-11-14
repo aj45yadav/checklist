@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { SocialLoginService } from '../services/social-login.service';
 import { Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
+import { ProjectService } from '../services/project.service';
 
 @Component({
   selector: 'app-login',
@@ -13,8 +14,15 @@ export class LoginComponent implements OnInit {
   unsubscribe = [];
   errors: { non_field_errors: Array<string>, email: string, password: string };
   loginData;
-  constructor(public authentication: SocialLoginService, public route: Router, public authService: AuthService) { }
+  constructor(public authentication: SocialLoginService, public route: Router,
+     public authService: AuthService, public projectService: ProjectService) { }
   ngOnInit() {
+   const token = this.projectService.checkForToke();
+   if (token) {
+     this.route.navigate(['/projects']);
+   } else {
+     this.route.navigate(['/']);
+   }
   }
   loginWithGoogle() {
     // let attempt = 0;

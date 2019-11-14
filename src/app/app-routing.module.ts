@@ -11,6 +11,8 @@ import { CategoryLibraryComponent } from './category-library/category-library.co
 import { AdminComponent } from './layouts/admin/admin.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { ProjectsComponent } from './projects/projects.component';
+// import { Checklist2Component } from './checklist2/checklist2.component';
+import { AuthGuard } from './guards/auth.guard';
 
 const routes: Routes = [
   {
@@ -18,12 +20,16 @@ const routes: Routes = [
     component: LoginComponent
   },
   {
-    path: 'checklist',
-    component: ChecklistComponent
+    path: 'checklist/:id',
+    component: ChecklistComponent, canActivate: [AuthGuard]
   },
+  // {
+  //   path: 'checklist2/:id',
+  //   component: Checklist2Component, canActivate: [AuthGuard]
+  // },
   {
     path: 'testcomponent',
-    component: TestcomponentComponent
+    component: TestcomponentComponent, canActivate: [AuthGuard]
   },
   {
     path: '',
@@ -34,29 +40,29 @@ const routes: Routes = [
       // },
       {
         path: 'questions/:id',
-        component: QuestionsComponent
+        component: QuestionsComponent, canActivate: [AuthGuard]
       },
       {
         path: 'dashboard',
-        component: DashboardComponent
+        component: DashboardComponent, canActivate: [AuthGuard]
       },
       {
         path: 'project-report',
-        component: ProjectReportsComponent
+        component: ProjectReportsComponent, canActivate: [AuthGuard]
       },
       {
         path: 'category-library',
-        component: CategoryLibraryComponent
+        component: CategoryLibraryComponent, canActivate: [AuthGuard]
       },
       {
         path: 'projects',
-        component: ProjectsComponent
+        component: ProjectsComponent, canActivate: [AuthGuard]
       },
       {
         path: 'project/:id', children: [
           {
             path: 'questions',
-            component: QuestionsComponent
+            component: QuestionsComponent, canActivate: [AuthGuard]
           }
         ]
       }

@@ -11,17 +11,17 @@
     </div>
   </div>
 
-  <!-- {{dataOfCategory | json}} -->
-  {{projectData | json}}
+  <!-- {{currentCategory | json}} -->
+  <!-- {{projectData | json}} -->
 
   <div class="add-category">
     <div class="add-button">
-      <button class="mdc-chip" [matMenuTriggerFor]="category">
+      <button class="mdc-chip" (click)="openCategoryDialog('Add', {})">
         <img src="../../assets/img/Group 142.svg" alt="icon">
         <span class="mdc-chip__text">Add Category</span>
       </button>
     </div>
-    <mat-card *ngIf="projectData?.categories.length == 0" style="text-align: center">
+    <mat-card *ngIf="projectData?.categories?.length == 0" style="text-align: center">
       <h4>Category is empty</h4>
     </mat-card>
     <mat-menu #category="matMenu">
@@ -29,32 +29,31 @@
       <button mat-menu-item (click)="openExistingCategory()">Select Existing Category</button>
     </mat-menu>
   </div>
-
   <mat-accordion>
     <ng-container *ngFor="let p of projectData?.categories;let i = index">
-      <mat-expansion-panel [expanded]="i+1 === dataOfCategory.length" (opened)="setCurrentCategory(p)">
+      <mat-expansion-panel [expanded]="i+1 === projectData.length" (opened)="setCurrentCategory(p)">
         <mat-expansion-panel-header>
           <mat-panel-title>
             Category {{i+1}}: {{p.name}}
           </mat-panel-title>
-          <mat-icon (click)="deleteCategory(p.id);$event.stopPropagation();" matTooltip="Delete This Category" matTooltipClass="tooltip-blue"
+          <mat-icon (click)="openCategoryDialog('Delete', p);$event.stopPropagation();" matTooltip="Delete This Category" matTooltipClass="tooltip-blue"
             matTooltipPosition="above">delete</mat-icon>
           <mat-icon matTooltip="Edit This Category" matTooltipClass="tooltip-blue" matTooltipPosition="above"
-            (click)="openCreateCDialog(p,true);$event.stopPropagation();">edit
+            (click)="openCategoryDialog('Update', p);$event.stopPropagation();">edit
           </mat-icon>
-          <mat-icon (click)="openCreateCDialogView(p, true);$event.stopPropagation();" matTooltip="View Categry" matTooltipClass="tooltip-blue"
+          <mat-icon (click)="openCategoryDialog('View', p);$event.stopPropagation();" matTooltip="View Categry" matTooltipClass="tooltip-blue"
             matTooltipPosition="above">visibility
           </mat-icon>
         </mat-expansion-panel-header>
         <mat-panel-description>
           <div class="add-category">
             <div class="add-button">
-              <button class="mdc-chip" (click)="openCreateQuesDialog()" style="background-color: rgb(18, 179, 243)">
+              <button class="mdc-chip" (click)="openQuestionsDialog('Add', {})" style="background-color: rgb(18, 179, 243)">
                 <img src="../../assets/img/Group 142.svg" alt="icon">
                 <span class="mdc-chip__text">Add Questions</span>
               </button>
             </div>
-            <mat-card *ngIf="currentCategory.questions?.length == null" style="text-align: center">
+            <mat-card *ngIf="currentCategory.questions?.length == 0" style="text-align: center">
               <h4> There is no question for this category </h4>
             </mat-card>
           </div>
@@ -65,55 +64,55 @@
               {{i+1}}. {{l1.question}}
 
               <mat-card-actions>
-                <div class="subQues" (click)="openCreateQuesDialog(l1)">
+                <div class="subQues" (click)="openQuestionsDialog('Add', { parentid: l1.id })">
                   <mat-icon aria-hidden="false" aria-label="Example home icon" style="width: 20px">add_circle</mat-icon>
                   Sub Questions
                 </div>
 
                 <mat-icon matTooltip="Delete This Questions" matTooltipClass="tooltip-blue" matTooltipPosition="above"
-                  (click)="deleteQuestion(l1.id)">delete</mat-icon>
-                <mat-icon (click)="openCreateQuesDialog(l1,true)" matTooltip="Edit This Question"
+                (click)="openQuestionsDialog('Delete', l1)">delete</mat-icon>
+                <mat-icon (click)="openQuestionsDialog('Update', l1)" matTooltip="Edit This Question"
                   matTooltipClass="tooltip-blue" matTooltipPosition="above">edit
                 </mat-icon>
-                <mat-icon (click)="openCreateQuesDialog(l1,true)" matTooltip="View Categry"
+                <mat-icon (click)="openQuestionsDialog('View', l1)" matTooltip="View Categry"
                   matTooltipClass="tooltip-blue" matTooltipPosition="above">visibility
                 </mat-icon>
               </mat-card-actions>
               <ng-container *ngFor="let l2 of currentCategory.questions | subQuestions: l1.id; let j = index">
                 <mat-card class="level2">
-                  <button *ngIf="l2.ansId == 1" mat-mini-fab color="primary">Yes</button> <button mat-mini-fab
-                    color="warn" *ngIf="l2.ansId == 2">No</button> <button *ngIf="l2.ansId == 3" mat-mini-fab
+                  <button *ngIf="l2.answer_opt == 1" mat-mini-fab color="primary">Yes</button> <button mat-mini-fab
+                    color="warn" *ngIf="l2.answer_opt == 2">No</button> <button *ngIf="l2.answer_opt == 3" mat-mini-fab
                     class="both">Both</button> {{j+1}}. {{l2.question}}
 
                   <mat-card-actions>
-                    <div class="subQues" (click)="openCreateQuesDialog(l2)">
+                    <div class="subQues" (click)="openQuestionsDialog('Add', { parentid: l2.id })">
                       <mat-icon aria-hidden="false" aria-label="Example home icon" style="width: 20px">add_circle
                       </mat-icon>
                       Sub Questions
                     </div>
 
                     <mat-icon matTooltip="Delete This Questions" matTooltipClass="tooltip-blue"
-                      matTooltipPosition="above">delete</mat-icon>
-                    <mat-icon (click)="openCreateQuesDialog(l2,true)" matTooltip="Edit This Question"
+                      matTooltipPosition="above" (click)="openQuestionsDialog('Delete', l2)">delete</mat-icon>
+                    <mat-icon (click)="openQuestionsDialog('Update', l2)" matTooltip="Edit This Question"
                       matTooltipClass="tooltip-blue" matTooltipPosition="above">edit
                     </mat-icon>
-                    <mat-icon (click)="openCreateQuesDialog(l2,true)" matTooltip="View Question"
+                    <mat-icon (click)="openQuestionsDialog('View', l2)" matTooltip="View Question"
                       matTooltipClass="tooltip-blue" matTooltipPosition="above">visibility
                     </mat-icon>
                   </mat-card-actions>
 
                   <ng-container *ngFor="let l3 of currentCategory.questions | subQuestions: l2.id; let k = index">
                     <mat-card class="level2">
-                      <button *ngIf="l3.ansId == 1" mat-mini-fab color="primary">Yes</button> <button mat-mini-fab
-                        color="warn" *ngIf="l3.ansId == 2">No</button> <button *ngIf="l3.ansId == 3" mat-mini-fab
+                      <button *ngIf="l3.answer_opt == 1" mat-mini-fab color="primary">Yes</button> <button mat-mini-fab
+                        color="warn" *ngIf="l3.answer_opt == 2">No</button> <button *ngIf="l3.answer_opt == 3" mat-mini-fab
                         class="both">Both</button> {{k+1}}. {{l3.question}}
                       <mat-card-actions>
                         <mat-icon matTooltip="Delete This Questions" matTooltipClass="tooltip-blue"
-                          matTooltipPosition="above">delete</mat-icon>
-                        <mat-icon (click)="openCreateQuesDialog(l3,true)" matTooltip="Edit This Question"
+                          matTooltipPosition="above" (click)="openQuestionsDialog('Delete', l3)">delete</mat-icon>
+                        <mat-icon (click)="openQuestionsDialog('Update', l3)" matTooltip="Edit This Question"
                           matTooltipClass="tooltip-blue" matTooltipPosition="above">edit
                         </mat-icon>
-                        <mat-icon (click)="openCreateQuesDialog(l3,true)" matTooltip="View Question"
+                        <mat-icon (click)="openQuestionsDialog('View', l3)" matTooltip="View Question"
                           matTooltipClass="tooltip-blue" matTooltipPosition="above">visibility
                         </mat-icon>
                       </mat-card-actions>
@@ -125,17 +124,6 @@
           </ng-container>
 
         </mat-panel-description>
-
-        <!-- <mat-action-row>
-          <mat-icon (click)="deleteCategory(p.id)" matTooltip="Delete This Category" matTooltipClass="tooltip-blue"
-            matTooltipPosition="above">delete</mat-icon>
-          <mat-icon matTooltip="Edit This Category" matTooltipClass="tooltip-blue" matTooltipPosition="above"
-            (click)="openCreateCDialog(p,true)">edit
-          </mat-icon>
-          <mat-icon (click)="openCreateCDialogView(p, true)" matTooltip="View Categry" matTooltipClass="tooltip-blue"
-            matTooltipPosition="above">visibility
-          </mat-icon>
-        </mat-action-row> -->
       </mat-expansion-panel>
     </ng-container>
   </mat-accordion>

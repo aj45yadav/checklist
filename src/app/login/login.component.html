@@ -6,7 +6,7 @@
   <div class="socina-btn">
       <!-- {{authentication?.user?.email}} -->
   <!-- <button (click)="loginWithGoogle()"> Sign With Google</button> -->
-  <button> Sign With Google</button>
+  <a href="/login/google-oauth2/?next=/login/"><button> Sign With Google</button></a>
 </div>
 <div *ngIf="errors?.non_field_errors">
   <p *ngFor="let loginErros of errors?.non_field_errors">{{ loginErros }}</p>
