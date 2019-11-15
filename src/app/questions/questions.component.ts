@@ -80,13 +80,14 @@ export class QuestionsComponent implements OnInit {
   }
   editCategory(cat_data) {
     const data = {
+      category_id: cat_data.id,
       project_id: this.activatedRoute.snapshot.paramMap['id'],
       name: cat_data.name,
       desc: cat_data.desc
     };
-    this.projectService.editCategory(cat_data.id, data).subscribe(
+    this.projectService.editCategory(data).subscribe(
       () => {
-
+        this.getProjectData();
       },
       (error) => {
 
@@ -145,7 +146,7 @@ export class QuestionsComponent implements OnInit {
       weightage: que_data.weightage,
       score: que_data.score
     };
-    console.log(request);
+    // console.log(request);
     this.projectService.addQuestionsData(request).subscribe(
       (response: any) => {
         this.getProjectData();
@@ -163,7 +164,18 @@ export class QuestionsComponent implements OnInit {
     );
   }
   editQuestionsData(que_data) {
-
+   const data  = {
+      question_id: que_data.id,
+      question: que_data.question,
+      answer_opt: que_data.answer_opt,
+      tooltip: que_data.tooltip,
+      weightage: que_data.weightage,
+      score: que_data.score
+    };
+    this.projectService.editQuestionsData(data).subscribe(
+      () => {},
+      (error) => {}
+    );
   }
   viewQuestionsData(que_data) {
 
@@ -238,6 +250,7 @@ export class QuestionsComponent implements OnInit {
 export interface Category {
   id: number;
   project_id: number;
+  category_id: number;
   userId: number;
   name: string;
   desc: string;

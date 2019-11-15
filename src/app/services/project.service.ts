@@ -54,7 +54,7 @@ checkForToke() {
   }
   getProjectList() {
     const token = this.cookieService.get('token');
-    console.log('Cookie is ' + token);
+    // console.log('Cookie is ' + token);
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
@@ -67,7 +67,7 @@ checkForToke() {
   addProject(data) {
     const token = this.cookieService.get('token');
     // const allCookies: {} = this.cookieService.getAll();
-    console.log('Cookie is ' + token);
+    // console.log('Cookie is ' + token);
     const httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
@@ -126,9 +126,16 @@ checkForToke() {
     const url = this.apiBaseUrl + 'addcat/';
     return this.http.post(url, data, httpOptions);
   }
-  editCategory(id, data) {
-    const url = this.apiBaseUrl + 'edit-category/' + id;
-    return this.http.patch(url, data);
+  editCategory(data) {
+    const token = this.cookieService.get('token');
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': 'token ' + token
+      })
+    };
+    const url = this.apiBaseUrl + 'edit-category/';
+    return this.http.post(url, data, httpOptions);
   }
   deleteCategory(id) {
     const token = this.cookieService.get('token');
@@ -157,7 +164,7 @@ checkForToke() {
     const url = this.apiBaseUrl + 'addquestion/';
     return this.http.post(url, data, httpOptions);
   }
-  editQuestionsData(id, data) {
+  editQuestionsData(data) {
     const token = this.cookieService.get('token');
     const httpOptions = {
       headers: new HttpHeaders({
@@ -165,8 +172,8 @@ checkForToke() {
         'Authorization': 'token ' + token
       })
     };
-    const url = this.apiBaseUrl + 'edit-question/' + id;
-    return this.http.patch(url, data, httpOptions);
+    const url = this.apiBaseUrl + 'edit-question/';
+    return this.http.post(url, data, httpOptions);
   }
   deleteQestions(id) {
     const token = this.cookieService.get('token');
@@ -221,6 +228,18 @@ checkForToke() {
   uploadFiles(formData) {
     const url =  this.apiBaseUrl + 'file-upload/';
     return this.http.post(url, formData);
+  }
+  // user reponse post
+  postUserResponse(data) {
+    const token = this.cookieService.get('token');
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': 'token ' + token
+      })
+    };
+    const url = this.apiBaseUrl + '';
+    return this.http.post(url, data, httpOptions);
   }
 }
 

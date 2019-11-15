@@ -3,7 +3,7 @@
     <mat-nav-list>
       <mat-accordion>
         <ng-container *ngFor="let p of projectData?.categories;let i = index">
-          <mat-expansion-panel [expanded]="false" (opened)="setCurrentCategory(p)">
+          <mat-expansion-panel [expanded]="i === 0" (opened)="setCurrentCategory(p)">
             <mat-expansion-panel-header>
               <mat-panel-title>
                 Category {{i+1}}: {{p.name}}
@@ -17,7 +17,7 @@
                 </i>
                 <span class="score">Score : {{l1.score}}</span>
               </p>
-              
+
               <div class="optionss">
                 <mat-radio-group aria-labelledby="example-radio-group-label" class="example-radio-group"
                   [(ngModel)]="l1.selectedoption">
@@ -36,10 +36,11 @@
   </mat-sidenav>
   <mat-sidenav-content>
     <div class="main-content">
-      <!-- {{questiondatalevel2 | json}} -->
+      <!-- {{projectData | json}} -->
+      {{questiondatalevel2 | json}}
       <div class="project-info">
         <div class="project-name">
-          <h4>Project Name: {{projectData?.project_name}}</h4>
+          <h4>Project: {{projectData?.project_name}}</h4>
         </div>
         <div class="unit">
           <h4>Business Unit: {{projectData?.bu_name}}</h4>
@@ -53,7 +54,7 @@
             matTooltipClass="tooltip-blue" matTooltipPosition="right">
             info
           </i>
-          <span class="score">Score : {{l2.score}}</span> 
+          <span class="score">Score : {{l2.score}}</span>
         </p>
         <div class="optionss">
           <mat-radio-group aria-labelledby="example-radio-group-label" class="example-radio-group"
@@ -89,11 +90,12 @@
             </mat-menu> -->
         </div>
         <ng-container *ngIf="l2.selectedoption">
-          <div class="aside-content l3" *ngFor="let l3 of currentCategory.questions | subQuestions: l2.id : l2.selectedoption">
+          <div class="aside-content l3"
+            *ngFor="let l3 of currentCategory.questions | subQuestions: l2.id : l2.selectedoption">
             <p>{{l3.question}} <i *ngIf="l3.tooltip !== null" class="material-icons" [matTooltip]="l3.tooltip"
                 matTooltipClass="tooltip-blue" matTooltipPosition="right">
                 info
-              </i> 
+              </i>
               <span class="score">Score : {{l3.score}}</span>
             </p>
             <div class="optionss">
@@ -134,7 +136,12 @@
 
         <mat-divider></mat-divider>
       </div>
-      <!-- {{questiondatalevel3 | json}} -->
+      {{questiondatalevel3 | json}}
+
+      <div class="btn-save">
+        <button mat-raised-button color="primary" (click)="postUserResponseData()">Submit Response</button>
+      </div>
+
     </div>
   </mat-sidenav-content>
 </mat-sidenav-container>

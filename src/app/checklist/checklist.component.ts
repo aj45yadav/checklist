@@ -1,16 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { BuData, BuService } from '../services/bu.service';
 import { ActivatedRoute } from '@angular/router';
 import { FormGroup, FormControl, Validators, NgForm, FormBuilder } from '@angular/forms';
 import { Observable, from } from 'rxjs';
-import { map, startWith, elementAt } from 'rxjs/operators';
 import { MatDialog } from '@angular/material/dialog';
 import { Constants } from '../constants';
 import { ProjectService } from '../services/project.service';
-import { CreateCategoryComponent } from '../questions/create-category/create-category.component';
-import { CreateQuestionsComponent } from '../questions/create-questions/create-questions.component';
-import { ExistingCategoryComponent } from '../questions/existing-category/existing-category.component';
-import { asTextData } from '@angular/core/src/view';
 import { DocTypeContentComponent } from './doc-type-content/doc-type-content.component';
 
 @Component({
@@ -21,19 +15,11 @@ import { DocTypeContentComponent } from './doc-type-content/doc-type-content.com
 export class ChecklistComponent implements OnInit {
   options = Constants.responses;
   projectId: number;
-  buData: BuData = {} as BuData;
-  addCategory = false;
   addQuestionForm = false;
-  categoryForm: FormGroup;
-  dataOfCategory: Category[] = [] as Category[];
   questiondatalevel2: Question[] = [] as Question[];
   questiondatalevel3: Question[] = [] as Question[];
   currentCategory: Category = {} as Category;
-  buMainModel: BuMainModel = {} as BuMainModel;
   myControl = new FormControl();
-  // options: string[] = ['One', 'Two', 'Three'];
-  filteredOptions: Observable<string[]>;
-  mode: string;
   projectData;
   DJANGO_SERVER = 'http://dev-checklist.regalix.com/';
   form: FormGroup;
@@ -48,7 +34,7 @@ export class ChecklistComponent implements OnInit {
     });
   }
 
-  constructor(public activatedRoute: ActivatedRoute, public buService: BuService, public dialog: MatDialog,
+  constructor(public activatedRoute: ActivatedRoute, public dialog: MatDialog,
     public projectService: ProjectService, public formBuilder: FormBuilder) { }
 
   onChange(event) {
@@ -99,6 +85,19 @@ export class ChecklistComponent implements OnInit {
     this.currentCategory = category;
     // console.log(category);
   }
+  postUserResponseData(user_response) {
+    const data = {
+      project_id : this.projectId,
+      categoryId: this.currentCategory.id,
+      // selectedAns: this.currentCategory.questions.filter(x => ),
+      // questions: this.currentCategory.question
+    };
+    console.log(data);
+    // this.projectService.postUserResponse(data).subscribe(
+    //   () => {},
+    //   (error) => {}
+    // );
+  }
   openDocModel(action, obj) {
     obj.action = action;
     const dialogRef = this.dialog.open(DocTypeContentComponent, {
@@ -129,8 +128,6 @@ export interface Category {
   userId: number;
   name: string;
   questions: Question[];
-  viewMode: boolean;
-  editMode: boolean;
 }
 export interface Question {
   id: number;
@@ -147,12 +144,5 @@ export interface Question {
   createdDate: Date;
   userId: number;
   editMode: boolean;
-}
-
-export interface BuMainModel {
-  categories: Category[];
-  businessUnit: string;
-  subBusinessUnit: string;
-  projectName: string;
 }
 

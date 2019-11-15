@@ -36,6 +36,7 @@
 <mat-dialog-content class="mat-typography">
   <mat-card *ngIf="action == 'Add' || action == 'Update'">
 
+    <input type="hidden" *ngIf="action == 'Update'" [(ngModel)]="emitedCategoryData.id" name="category_id">
     <mat-form-field appearance="outline">
       <mat-label>Enter Category</mat-label>     
       <input [(ngModel)]="emitedCategoryData.name" name="name" matInput placeholder="{{action}} name" #category required>
@@ -55,7 +56,8 @@
       Are you sure to delete this <b>{{emitedCategoryData.name}}</b> ?
     </mat-card>
     <mat-card *ngIf="action == 'View'">
-        {{emitedCategoryData.name}}
+        <p>Category: {{emitedCategoryData.name}}</p>
+        <p>Description: {{emitedCategoryData.desc}}</p>
       </mat-card>
   <div class="mdc-chip-set" *ngIf= "action != 'View'">
 

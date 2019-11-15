@@ -5,6 +5,8 @@
   <mat-dialog-content class="mat-typography">
   
       <mat-card *ngIf="action == 'Add' || action == 'Update'">
+          <input hidden *ngIf="action == 'Update'" [(ngModel)]="emittedQuestionData.id" name="question_id">
+
           <input hidden [(ngModel)]="emittedQuestionData.parentid" name="parentid">
         <ng-container *ngIf="emittedQuestionData.parentid !== ''">
           <mat-radio-group aria-label="Select an option" name="answer_opt" [(ngModel)]="emittedQuestionData.answer_opt">
