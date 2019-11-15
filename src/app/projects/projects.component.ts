@@ -63,7 +63,8 @@ export class ProjectsComponent implements OnInit {
     const data = {
       name: project_Data.name,
       bu_id: project_Data.bu_id,
-      sub_bu_id: project_Data.sub_bu_id
+      sub_bu_id: project_Data.sub_bu_id,
+      desc: project_Data.desc
     };
 
 
@@ -82,7 +83,8 @@ export class ProjectsComponent implements OnInit {
       project_id: project_Data.id,
       name: project_Data.name,
       bu_id: project_Data.bu_id,
-      sub_bu_id: project_Data.sub_bu_id
+      sub_bu_id: project_Data.sub_bu_id,
+      desc: project_Data.desc
     };
     this.projectService.editProject(data).subscribe(
       () => {

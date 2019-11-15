@@ -42,6 +42,14 @@
       <mat-error>Category is required</mat-error>    
       <mat-hint align="end">{{category.value?.length || 0}}</mat-hint>
     </mat-form-field>
+
+    <mat-form-field appearance="outline">
+        <mat-label>Enter Description</mat-label>     
+        <textarea [(ngModel)]="emitedCategoryData.desc" name="desc" matInput placeholder="{{action}} name" #description required></textarea>
+        <mat-error>Description is required</mat-error>    
+        <mat-hint align="end">{{description.value?.length || 0}}</mat-hint>
+      </mat-form-field>
+
   </mat-card>
   <mat-card *ngIf="action == 'Delete'">
       Are you sure to delete this <b>{{emitedCategoryData.name}}</b> ?
@@ -52,11 +60,11 @@
   <div class="mdc-chip-set" *ngIf= "action != 'View'">
 
     <button type="button" class="mdc-chip" style="background-color: #F44336" (click)="closeDialog()">
-      <img src="../../assets/img/Group 142.svg" alt="icon">
+      <img src="{{projectService.getImagepath()}}/Group 142.svg" alt="icon">
       <span class="mdc-chip__text">Cancel</span>
     </button>
     <button class="mdc-chip" [mat-dialog-close]="data" (click)="doAction()">
-      <img src="../../assets/img/Group 142.svg" alt="icon">
+      <img src="{{projectService.getImagepath()}}/Group 142.svg" alt="icon">
       <span class="mdc-chip__text">{{action}} Category</span>
     </button>
   </div>

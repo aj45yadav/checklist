@@ -26,6 +26,7 @@ export class BusinessComponent implements OnInit {
   constructor(public buService: BuService, public router: Router, public projectService: ProjectService,
     public dialogRef: MatDialogRef<BusinessComponent>,
     @Optional() @Inject(MAT_DIALOG_DATA) public data: ProjectData) {
+    dialogRef.disableClose = true;
     this.emitedData = { ...data };
     // console.log(this.emitedData);
     this.action = this.emitedData.action;

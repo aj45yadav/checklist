@@ -231,6 +231,7 @@ export interface ProjectData {
   buname: string;
   subBuName: string;
   name: string;
+  desc: string;
   creator: string;
   sub_bu: string;
   bu: string;

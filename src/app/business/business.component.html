@@ -43,6 +43,13 @@
             <mat-error>Name is required</mat-error>
             <mat-hint align="end">{{projectname.value?.length || 0}}</mat-hint>
           </mat-form-field>
+
+          <mat-form-field appearance="outline">
+              <mat-label>Enter Project Name</mat-label>
+              <textarea matInput placeholder="Project name" name="desc" #description [(ngModel)]="emitedData.desc" required></textarea>
+              <mat-error>Description is required</mat-error>
+              <mat-hint align="end">{{description.value?.length || 0}}</mat-hint>
+            </mat-form-field>
         </div>
       </div>
     </form>

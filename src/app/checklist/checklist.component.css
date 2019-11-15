@@ -83,3 +83,10 @@
   margin: 0px 20px 0px 20px;
   cursor: pointer;
 }
+.aside-content.l3 {
+  margin: 0 0 0 45px;
+}
+.score {
+  float: right;
+  font-weight: 600;
+}

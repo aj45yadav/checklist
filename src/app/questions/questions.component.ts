@@ -70,7 +70,8 @@ export class QuestionsComponent implements OnInit {
   addCategoryD(cat_data) {
     const data = {
       project_id: this.projectId,
-      name: cat_data.name
+      name: cat_data.name,
+      desc: cat_data.desc
     };
     this.projectService.addCategory(data).subscribe(
       () => {
@@ -80,7 +81,8 @@ export class QuestionsComponent implements OnInit {
   editCategory(cat_data) {
     const data = {
       project_id: this.activatedRoute.snapshot.paramMap['id'],
-      name: cat_data.name
+      name: cat_data.name,
+      desc: cat_data.desc
     };
     this.projectService.editCategory(cat_data.id, data).subscribe(
       () => {
@@ -238,6 +240,7 @@ export interface Category {
   project_id: number;
   userId: number;
   name: string;
+  desc: string;
   questions: Question[];
   viewMode: boolean;
   editMode: boolean;

@@ -12,6 +12,7 @@ export class ShareProjectComponent implements OnInit {
   emittedData: any;
   constructor(public dialogRef: MatDialogRef<ShareProjectComponent>, public projectService: ProjectService,
     @Optional() @Inject(MAT_DIALOG_DATA) public data: ShareProject) {
+      dialogRef.disableClose = true;
       this.emittedData = { ...data };
       // console.log(this.emittedData);
      }

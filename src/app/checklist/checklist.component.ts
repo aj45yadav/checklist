@@ -82,12 +82,16 @@ export class ChecklistComponent implements OnInit {
   }
 
   onRadioOptionChangeLevel2(parent_question_id, selected_option) {
+    // tslint:disable-next-line:max-line-length
     this.questiondatalevel2 = this.currentCategory.questions.filter(x => x.parentid === parent_question_id && (x.answer_opt === selected_option || x.answer_opt === "3") && x.qlevel === '2');
+    // tslint:disable-next-line:max-line-length
     // this.questiondatalevel2 = this.currentCategory.questions.filter(x => x.parentid === parent_question_id && x.answer_opt === selected_option || x.answer_opt === "3");
   }
 
   onRadioOptionChangeLevel3(parent_question_id, selected_option) {
+    // tslint:disable-next-line:max-line-length
     this.questiondatalevel3 = this.currentCategory.questions.filter(x => x.parentid === parent_question_id && (x.answer_opt === selected_option || x.answer_opt === "3") && x.qlevel === '3');
+    // tslint:disable-next-line:max-line-length
     // this.questiondatalevel2 = this.currentCategory.questions.filter(x => x.parentid === parent_question_id && x.answer_opt === selected_option || x.answer_opt === "3");
   }
 

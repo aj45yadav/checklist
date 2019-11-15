@@ -5,4 +5,8 @@
     color: white;
     background: #DD0031;
     cursor: pointer;
+    margin-top: 20px;
+}
+.sing-btngrp {
+    margin-top: 50px;;
 }

@@ -15,7 +15,9 @@
                   matTooltipClass="tooltip-blue" matTooltipPosition="right">
                   info
                 </i>
+                <span class="score">Score : {{l1.score}}</span>
               </p>
+              
               <div class="optionss">
                 <mat-radio-group aria-labelledby="example-radio-group-label" class="example-radio-group"
                   [(ngModel)]="l1.selectedoption">
@@ -50,7 +52,9 @@
         <p>{{l2.question}} <i *ngIf="l2.tooltip !== null" class="material-icons" [matTooltip]="l2.tooltip"
             matTooltipClass="tooltip-blue" matTooltipPosition="right">
             info
-          </i> </p>
+          </i>
+          <span class="score">Score : {{l2.score}}</span> 
+        </p>
         <div class="optionss">
           <mat-radio-group aria-labelledby="example-radio-group-label" class="example-radio-group"
             [(ngModel)]="l2.selectedoption">
@@ -63,7 +67,7 @@
           <div class="comment">
             <mat-form-field appearance="outline">
               <mat-label>Add Comment</mat-label>
-              <input matInput placeholder="Comment">
+              <textarea matInput placeholder="Comment"></textarea>
             </mat-form-field>
             <mat-card>
               <form [formGroup]="form" (ngSubmit)="onSubmit()">
@@ -85,11 +89,13 @@
             </mat-menu> -->
         </div>
         <ng-container *ngIf="l2.selectedoption">
-          <div class="aside-content" *ngFor="let l3 of currentCategory.questions | subQuestions: l2.id : l2.selectedoption">
+          <div class="aside-content l3" *ngFor="let l3 of currentCategory.questions | subQuestions: l2.id : l2.selectedoption">
             <p>{{l3.question}} <i *ngIf="l3.tooltip !== null" class="material-icons" [matTooltip]="l3.tooltip"
                 matTooltipClass="tooltip-blue" matTooltipPosition="right">
                 info
-              </i> </p>
+              </i> 
+              <span class="score">Score : {{l3.score}}</span>
+            </p>
             <div class="optionss">
               <mat-radio-group aria-labelledby="example-radio-group-label" class="example-radio-group"
                 [(ngModel)]="l3.selectedoption">
@@ -102,7 +108,7 @@
               <div class="comment">
                 <mat-form-field appearance="outline">
                   <mat-label>Add Comment</mat-label>
-                  <input matInput placeholder="Comment">
+                  <textarea matInput placeholder="Comment"></textarea>
                 </mat-form-field>
                 <mat-card>
                   <form [formGroup]="form" (ngSubmit)="onSubmit()">
@@ -128,7 +134,7 @@
 
         <mat-divider></mat-divider>
       </div>
-      {{questiondatalevel3 | json}}
+      <!-- {{questiondatalevel3 | json}} -->
     </div>
   </mat-sidenav-content>
 </mat-sidenav-container>

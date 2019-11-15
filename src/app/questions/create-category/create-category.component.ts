@@ -2,6 +2,7 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { BuService } from 'src/app/services/bu.service';
 import { Category } from '../questions.component';
+import { ProjectService } from 'src/app/services/project.service';
 
 @Component({
   selector: 'app-create-category',
@@ -15,8 +16,9 @@ export class CreateCategoryComponent implements OnInit {
   public dataOfCategory: Category[] = [] as Category[];
   mode: string;
 
-  constructor(public dialogRef: MatDialogRef<CreateCategoryComponent>, public buService: BuService,
+  constructor(public dialogRef: MatDialogRef<CreateCategoryComponent>, public buService: BuService, public projectService: ProjectService,
     @Inject(MAT_DIALOG_DATA) public data: Category) {
+      dialogRef.disableClose = true;
       this.emitedCategoryData = {...data};
       this.action = this.emitedCategoryData.action;
     }
