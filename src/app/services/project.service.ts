@@ -19,9 +19,9 @@ export class ProjectService {
   }
   getImagepath() {
     if (isDevMode()) {
-      this.imagePath = '../../assets/img';
+      return '../../assets/img';
     } else {
-      this.imagePath = '/static/assets/img';
+      return '/static/assets/img';
     }
   }
 

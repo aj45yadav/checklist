@@ -17,6 +17,7 @@
               <mat-option value="Non Google">Non Google</mat-option>
             </mat-select>
           </mat-form-field> -->
+          <input  type="hidden" *ngIf="action == 'Update'" name="project_id" [(ngModel)]="emitedData.id">
           <mat-form-field appearance="outline">
             <mat-label>Select Business Unit</mat-label>
             <mat-select placeholder="Business" name="bu_id" [(ngModel)]="emitedData.bu_id"

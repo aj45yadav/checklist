@@ -109,9 +109,9 @@ export class QuestionsComponent implements OnInit {
   openQuestionsDialog(action, obj) {
     console.log(obj);
     obj.action = action;
-    if (this.currentCategory.questions && this.currentCategory.questions.length === 0) {
-      obj.parentid = '';
-    }
+    // if (this.currentCategory.questions && this.currentCategory.questions.length === 0) {
+    //   obj.parentid = '';
+    // }
     const dialogRef = this.dialog.open(CreateQuestionsComponent, {
       width: '650px',
       data: obj

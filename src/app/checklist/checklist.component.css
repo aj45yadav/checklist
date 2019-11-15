@@ -58,11 +58,28 @@
     right: 30px;
   }
   .mat-form-field { 
-    margin: 20px 0px 20px 0px;
+    margin: 20px 20px 20px 0;
+    width: 400px;
   }
   mat-radio-group {
     margin: 20px 0 20px 0;
   }
   .mat-raised-button.mat-primary {
-    margin: 0 20px 0 20px;
+    margin: 20px;
+}
+.comment {
+  display: flex;
+}
+.input-file {
+  color: #fff;
+  background-color: #232527;
+  border-color: #232527;
+  font-size: 15px;
+  border-radius: 2px;
+}
+.subQues {
+  display: flex;
+  /* align-items: center; */
+  margin: 0px 20px 0px 20px;
+  cursor: pointer;
 }

@@ -38,7 +38,7 @@ export class ChecklistComponent implements OnInit {
   DJANGO_SERVER = 'http://dev-checklist.regalix.com/';
   form: FormGroup;
   response;
-  imageURL;
+  fileUrl;
   ngOnInit() {
     this.projectId = this.activatedRoute.snapshot.params['id'];
     this.getProjectData();
@@ -64,9 +64,9 @@ export class ChecklistComponent implements OnInit {
     this.projectService.uploadFiles(formData).subscribe(
       (res) => {
         this.response = res;
-        this.imageURL = `${this.DJANGO_SERVER}${res.file}`;
-        console.log(res);
-        console.log(this.imageURL);
+        this.fileUrl = `${this.DJANGO_SERVER}${res}`;
+        // console.log(res);
+        // console.log(this.fileUrl);
       },
       (err) => {
         console.log(err);

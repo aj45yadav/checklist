@@ -1,28 +1,34 @@
 <mat-sidenav-container class="side-container">
   <mat-sidenav mode="side" opened>
-    <mat-nav-list *ngFor="let p of projectData?.categories;let i = index">
+    <mat-nav-list>
       <mat-accordion>
-        <mat-expansion-panel [expanded]="false" (opened)="setCurrentCategory(p)">
-          <mat-expansion-panel-header>
-            <mat-panel-title>
-              Category {{i+1}}: {{p.name}}
-            </mat-panel-title>
-          </mat-expansion-panel-header>
-          <div class="catque" *ngFor="let l1 of p.questions | mainQuestions;let i = index">
-            <p>{{i+1}}. {{l1.question}}
-            </p>
-            <div class="optionss">
-              <mat-radio-group aria-labelledby="example-radio-group-label" class="example-radio-group"
-                [(ngModel)]="l1.selectedoption">
-                <mat-radio-button class="example-radio-button" *ngFor="let option of options;" [value]="option.qId"
-                  (change)="onRadioOptionChangeLevel2(l1.id, option.qId)">
+        <ng-container *ngFor="let p of projectData?.categories;let i = index">
+          <mat-expansion-panel [expanded]="false" (opened)="setCurrentCategory(p)">
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                Category {{i+1}}: {{p.name}}
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <div class="catque" *ngFor="let l1 of p.questions | mainQuestions;let i = index">
+              <p>{{i+1}}. {{l1.question}}
+                <i *ngIf="l1.tooltip !== null" class="material-icons" [matTooltip]="l1.tooltip"
+                  matTooltipClass="tooltip-blue" matTooltipPosition="right">
+                  info
+                </i>
+              </p>
+              <div class="optionss">
+                <mat-radio-group aria-labelledby="example-radio-group-label" class="example-radio-group"
+                  [(ngModel)]="l1.selectedoption">
+                  <mat-radio-button class="example-radio-button" *ngFor="let option of options;" [value]="option.qId"
+                    (change)="onRadioOptionChangeLevel2(l1.id, option.qId)">
 
-                  {{option.ans}}
-                </mat-radio-button>
-              </mat-radio-group>
+                    {{option.ans}}
+                  </mat-radio-button>
+                </mat-radio-group>
+              </div>
             </div>
-          </div>
-        </mat-expansion-panel>
+          </mat-expansion-panel>
+        </ng-container>
       </mat-accordion>
     </mat-nav-list>
   </mat-sidenav>
@@ -54,15 +60,20 @@
               {{option.ans}}
             </mat-radio-button>
           </mat-radio-group>
+          <div class="comment">
             <mat-form-field appearance="outline">
               <mat-label>Add Comment</mat-label>
-             <input matInput placeholder="Comment">
+              <input matInput placeholder="Comment">
             </mat-form-field>
-            <form [formGroup]="form" (ngSubmit)="onSubmit()">
-            <input type="file" name="filedata" (change)="onChange($event)">
-            <button type="submit">Upload File</button>
-          </form>
-            <!-- <button mat-raised-button color="primary" [matMenuTriggerFor]="menu">Upload Document</button>
+            <mat-card>
+              <form [formGroup]="form" (ngSubmit)="onSubmit()">
+                <input type="file" mat-raised-button color="primary" class="input-file" name="filedata"
+                  (change)="onChange($event)">
+                <button type="submit" mat-raised-button color="primary">Upload File</button>
+              </form>
+            </mat-card>
+          </div>
+          <!-- <button mat-raised-button color="primary" [matMenuTriggerFor]="menu">Upload Document</button>
             <mat-menu #menu="matMenu">
               <button mat-menu-item (click)="openDocModel('Comment' , {})">Add Comment</button>
               <mat-divider></mat-divider>
@@ -73,9 +84,51 @@
               <button mat-menu-item (click)="openDocModel('Link', {})">Add Link</button>
             </mat-menu> -->
         </div>
+        <ng-container *ngIf="l2.selectedoption">
+          <div class="aside-content" *ngFor="let l3 of currentCategory.questions | subQuestions: l2.id : l2.selectedoption">
+            <p>{{l3.question}} <i *ngIf="l3.tooltip !== null" class="material-icons" [matTooltip]="l3.tooltip"
+                matTooltipClass="tooltip-blue" matTooltipPosition="right">
+                info
+              </i> </p>
+            <div class="optionss">
+              <mat-radio-group aria-labelledby="example-radio-group-label" class="example-radio-group"
+                [(ngModel)]="l3.selectedoption">
+                <mat-radio-button class="example-radio-button" *ngFor="let option of options;" [value]="option.qId"
+                  (change)="onRadioOptionChangeLevel3(l3.id, option.qId)">
+
+                  {{option.ans}}
+                </mat-radio-button>
+              </mat-radio-group>
+              <div class="comment">
+                <mat-form-field appearance="outline">
+                  <mat-label>Add Comment</mat-label>
+                  <input matInput placeholder="Comment">
+                </mat-form-field>
+                <mat-card>
+                  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+                    <input type="file" mat-raised-button color="primary" class="input-file" name="filedata"
+                      (change)="onChange($event)">
+                    <button type="submit" mat-raised-button color="primary">Upload File</button>
+                  </form>
+                </mat-card>
+              </div>
+              <!-- <button mat-raised-button color="primary" [matMenuTriggerFor]="menu">Upload Document</button>
+            <mat-menu #menu="matMenu">
+              <button mat-menu-item (click)="openDocModel('Comment' , {})">Add Comment</button>
+              <mat-divider></mat-divider>
+              <button mat-menu-item (click)="openDocModel('Docx', {})">Upload Docx File</button>
+              <mat-divider></mat-divider>
+              <button mat-menu-item (click)="openDocModel('PDF', {})">Upload PDF</button>
+              <mat-divider></mat-divider>
+              <button mat-menu-item (click)="openDocModel('Link', {})">Add Link</button>
+            </mat-menu> -->
+            </div>
+          </div>
+        </ng-container>
+
         <mat-divider></mat-divider>
       </div>
-      <!-- {{questiondatalevel3 | json}} -->
+      {{questiondatalevel3 | json}}
     </div>
   </mat-sidenav-content>
 </mat-sidenav-container>

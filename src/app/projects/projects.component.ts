@@ -79,7 +79,7 @@ export class ProjectsComponent implements OnInit {
 
   editProject(project_Data) {
     const data = {
-      project_id: project_Data.project_id,
+      project_id: project_Data.id,
       name: project_Data.name,
       bu_id: project_Data.bu_id,
       sub_bu_id: project_Data.sub_bu_id
