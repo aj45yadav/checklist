@@ -36,9 +36,9 @@
       </button>
 
           
-      <button class="mdc-chip">
+      <button class="mdc-chip" (click)="shareProject()">
         <img src="{{projectService.getImagepath()}}/Group 142.svg" alt="icon">
-        <span class="mdc-chip__text" (click)="shareProject()">Share Project</span>
+        <span class="mdc-chip__text">Share Project</span>
       </button>
     </div>
   </mat-dialog-content>
