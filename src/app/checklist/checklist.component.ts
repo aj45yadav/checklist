@@ -19,6 +19,7 @@ export class ChecklistComponent implements OnInit {
   questiondatalevel2: Question[] = [] as Question[];
   questiondatalevel3: Question[] = [] as Question[];
   currentCategory: Category = {} as Category;
+  currentCategoryResponse: UserResponse[] = [] as UserResponse[];
   myControl = new FormControl();
   projectData;
   DJANGO_SERVER = 'http://dev-checklist.regalix.com/';
@@ -43,13 +44,14 @@ export class ChecklistComponent implements OnInit {
       this.form.get('filedata').setValue(file);
     }
   }
-  onSubmit() {
+  onSubmit(qId: number) {
     const formData = new FormData();
     formData.append('file', this.form.get('filedata').value);
-
+    const qResp = this.currentCategoryResponse.filter((x) => x.questionId === qId)[0];
     this.projectService.uploadFiles(formData).subscribe(
-      (res) => {
+      (res: any) => {
         this.response = res;
+        qResp.file = res.file;
         this.fileUrl = `${this.DJANGO_SERVER}${res}`;
         // console.log(res);
         // console.log(this.fileUrl);
@@ -83,20 +85,29 @@ export class ChecklistComponent implements OnInit {
 
   setCurrentCategory(category: Category) {
     this.currentCategory = category;
+    this.currentCategoryResponse = [] as UserResponse[];
+    this.currentCategory.questions.forEach(question => {
+      const qResp: UserResponse = {
+        questionId: question.id,
+        selectedOption: '',
+        comment: '',
+        file: ''
+      };
+      this.currentCategoryResponse.push(qResp);
+    });
     // console.log(category);
   }
-  postUserResponseData(user_response) {
-    const data = {
-      project_id : this.projectId,
-      categoryId: this.currentCategory.id,
-      // selectedAns: this.currentCategory.questions.filter(x => ),
-      // questions: this.currentCategory.question
-    };
-    console.log(data);
-    // this.projectService.postUserResponse(data).subscribe(
-    //   () => {},
-    //   (error) => {}
-    // );
+  postUserResponseData() {
+    this.currentCategory.questions.forEach((question: any) => {
+      const qResp = this.currentCategoryResponse.filter(x => x.questionId === question.id)[0];
+      qResp.selectedOption = question.selectedOption;
+      qResp.comment = question.comment;
+    });
+    // console.log(this.currentCategoryResponse);
+    this.projectService.postUserResponse(this.currentCategoryResponse).subscribe(
+      () => {},
+      (error) => {}
+    );
   }
   openDocModel(action, obj) {
     obj.action = action;
@@ -144,5 +155,11 @@ export interface Question {
   createdDate: Date;
   userId: number;
   editMode: boolean;
+}
+export interface UserResponse {
+  questionId: number;
+  selectedOption: string;
+  comment: string;
+  file: string;
 }
 

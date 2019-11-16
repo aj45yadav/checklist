@@ -20,7 +20,7 @@
 
               <div class="optionss">
                 <mat-radio-group aria-labelledby="example-radio-group-label" class="example-radio-group"
-                  [(ngModel)]="l1.selectedoption">
+                  [(ngModel)]="l1.selectedOption">
                   <mat-radio-button class="example-radio-button" *ngFor="let option of options;" [value]="option.qId"
                     (change)="onRadioOptionChangeLevel2(l1.id, option.qId)">
 
@@ -58,7 +58,7 @@
         </p>
         <div class="optionss">
           <mat-radio-group aria-labelledby="example-radio-group-label" class="example-radio-group"
-            [(ngModel)]="l2.selectedoption">
+            [(ngModel)]="l2.selectedOption">
             <mat-radio-button class="example-radio-button" *ngFor="let option of options;" [value]="option.qId"
               (change)="onRadioOptionChangeLevel3(l2.id, option.qId)">
 
@@ -68,13 +68,13 @@
           <div class="comment">
             <mat-form-field appearance="outline">
               <mat-label>Add Comment</mat-label>
-              <textarea matInput placeholder="Comment"></textarea>
+              <textarea matInput placeholder="Comment" [(ngModel)]="l2.comment"></textarea>
             </mat-form-field>
             <mat-card>
-              <form [formGroup]="form" (ngSubmit)="onSubmit()">
+              <form [formGroup]="form">
                 <input type="file" mat-raised-button color="primary" class="input-file" name="filedata"
                   (change)="onChange($event)">
-                <button type="submit" mat-raised-button color="primary">Upload File</button>
+                <button (click)="onSubmit(l2.id)" mat-raised-button color="primary">Upload File</button>
               </form>
             </mat-card>
           </div>
@@ -89,9 +89,9 @@
               <button mat-menu-item (click)="openDocModel('Link', {})">Add Link</button>
             </mat-menu> -->
         </div>
-        <ng-container *ngIf="l2.selectedoption">
+        <ng-container *ngIf="l2.selectedOption">
           <div class="aside-content l3"
-            *ngFor="let l3 of currentCategory.questions | subQuestions: l2.id : l2.selectedoption">
+            *ngFor="let l3 of currentCategory.questions | subQuestions: l2.id : l2.selectedOption">
             <p>{{l3.question}} <i *ngIf="l3.tooltip !== null" class="material-icons" [matTooltip]="l3.tooltip"
                 matTooltipClass="tooltip-blue" matTooltipPosition="right">
                 info
@@ -100,7 +100,7 @@
             </p>
             <div class="optionss">
               <mat-radio-group aria-labelledby="example-radio-group-label" class="example-radio-group"
-                [(ngModel)]="l3.selectedoption">
+                [(ngModel)]="l3.selectedOption">
                 <mat-radio-button class="example-radio-button" *ngFor="let option of options;" [value]="option.qId"
                   (change)="onRadioOptionChangeLevel3(l3.id, option.qId)">
 
@@ -110,7 +110,7 @@
               <div class="comment">
                 <mat-form-field appearance="outline">
                   <mat-label>Add Comment</mat-label>
-                  <textarea matInput placeholder="Comment"></textarea>
+                  <textarea matInput placeholder="Comment" [(ngModel)]="l3.comment"></textarea>
                 </mat-form-field>
                 <mat-card>
                   <form [formGroup]="form" (ngSubmit)="onSubmit()">

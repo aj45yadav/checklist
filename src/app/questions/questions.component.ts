@@ -68,13 +68,29 @@ export class QuestionsComponent implements OnInit {
     });
   }
   addCategoryD(cat_data) {
+    // const data: Category = {
+    //   id: 0,
+    //   project_id: this.projectId,
+    //   name: cat_data.name,
+    //   desc: cat_data.desc,
+    //   questions: []
+    // };
+    // this.projectService.addCategory(data).subscribe(
+    //   (response: any) => {
+    //     const id = response.category_id;
+    //     if (this.projectData.categories || this.projectData.categories.length || 0) {
+    //       this.projectData.categories = [];
+    //     } else {
+    //       data.id = id;
+    //       this.projectData.categories.push(data);
+    //     }
     const data = {
       project_id: this.projectId,
       name: cat_data.name,
-      desc: cat_data.desc
+      desc: cat_data.desc,
     };
     this.projectService.addCategory(data).subscribe(
-      () => {
+      (response: any) => {
         this.getProjectData();
       });
   }
@@ -164,7 +180,7 @@ export class QuestionsComponent implements OnInit {
     );
   }
   editQuestionsData(que_data) {
-   const data  = {
+    const data = {
       question_id: que_data.id,
       question: que_data.question,
       answer_opt: que_data.answer_opt,
@@ -173,8 +189,8 @@ export class QuestionsComponent implements OnInit {
       score: que_data.score
     };
     this.projectService.editQuestionsData(data).subscribe(
-      () => {},
-      (error) => {}
+      () => { },
+      (error) => { }
     );
   }
   viewQuestionsData(que_data) {
@@ -250,13 +266,9 @@ export class QuestionsComponent implements OnInit {
 export interface Category {
   id: number;
   project_id: number;
-  category_id: number;
-  userId: number;
   name: string;
   desc: string;
   questions: Question[];
-  viewMode: boolean;
-  editMode: boolean;
 }
 export interface Question {
   id: number;
