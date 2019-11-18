@@ -60,16 +60,19 @@ export class ProjectsComponent implements OnInit {
   }
   // peforming actions through api
   addProject(project_Data) {
-    const data = {
+    const request = {
       name: project_Data.name,
       bu_id: project_Data.bu_id,
       sub_bu_id: project_Data.sub_bu_id,
-      desc: project_Data.desc
+      desc: project_Data.desc,
+      id: 0,
+      status: false
     };
-    this.projectService.addProject(data).subscribe(
+    this.projectService.addProject(request).subscribe(
       // tslint:disable-next-line:no-shadowed-variable
-      (data: ProjectData) => {
-        this.dataSourcee.push(data);
+      (data: any) => {
+        request.id = data.project_id;
+        this.dataSourcee.push(request);
         // this.dataSourcee.push(data);
         // this.getProjectList();
       },

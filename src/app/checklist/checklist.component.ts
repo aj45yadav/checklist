@@ -64,8 +64,17 @@ export class ChecklistComponent implements OnInit {
 
   getProjectData() {
     this.projectService.getCategory(this.projectId).subscribe(
-      (data) => {
+      (data: any) => {
         this.projectData = data;
+        this.questiondatalevel2 = [];
+        const firstCategory = this.projectData.categories[0];
+        if (firstCategory && firstCategory.status) {
+          firstCategory.questions.forEach(question => {
+            if (question.qlevel === '2') {
+              this.questiondatalevel2.push(question);
+            }
+          });
+          }
       });
   }
 
