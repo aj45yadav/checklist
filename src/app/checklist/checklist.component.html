@@ -6,8 +6,10 @@
           <mat-expansion-panel [expanded]="i === 0" (opened)="setCurrentCategory(p)">
             <mat-expansion-panel-header>
               <mat-panel-title>
-                Category {{i+1}}: {{p.name}}
+                <b>{{i+1}}. {{p.name}} </b>
               </mat-panel-title>
+              <mat-icon style="margin-right: 20px; color: green" *ngIf="p.status" aria-hidden="false" aria-label="Example home icon" matTooltip="Answer is submitted for this category"
+              matTooltipClass="tooltip-blue" matTooltipPosition="above">done</mat-icon>
             </mat-expansion-panel-header>
             <div class="catque" *ngFor="let l1 of p.questions | mainQuestions;let i = index">
               <p>{{i+1}}. {{l1.question}}
@@ -37,7 +39,7 @@
   <mat-sidenav-content>
     <div class="main-content">
       <!-- {{projectData | json}} -->
-      {{questiondatalevel2 | json}}
+      <!-- {{questiondatalevel2 | json}} -->
       <div class="project-info">
         <div class="project-name">
           <h4>Project: {{projectData?.project_name}}</h4>
@@ -76,6 +78,7 @@
                   (change)="onChange($event)">
                 <button (click)="onSubmit(l2.id)" mat-raised-button color="primary">Upload File</button>
               </form>
+              <a href="http://dev-checklist.regalix.com{{l2.document}}">{{l2.document}}</a>
             </mat-card>
           </div>
           <!-- <button mat-raised-button color="primary" [matMenuTriggerFor]="menu">Upload Document</button>
@@ -113,11 +116,12 @@
                   <textarea matInput placeholder="Comment" [(ngModel)]="l3.comment"></textarea>
                 </mat-form-field>
                 <mat-card>
-                  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+                  <form [formGroup]="form">
                     <input type="file" mat-raised-button color="primary" class="input-file" name="filedata"
                       (change)="onChange($event)">
-                    <button type="submit" mat-raised-button color="primary">Upload File</button>
+                    <button (click)="onSubmit(l3.id)" mat-raised-button color="primary">Upload File</button>
                   </form>
+                  <a href="http://dev-checklist.regalix.com/{{l3.document}}">http://dev-checklist.regalix.com/{{l3.document}}</a>
                 </mat-card>
               </div>
               <!-- <button mat-raised-button color="primary" [matMenuTriggerFor]="menu">Upload Document</button>
@@ -136,7 +140,7 @@
 
         <mat-divider></mat-divider>
       </div>
-      {{questiondatalevel3 | json}}
+      <!-- {{questiondatalevel3 | json}} -->
 
       <div class="btn-save">
         <button mat-raised-button color="primary" (click)="postUserResponseData()">Submit Response</button>

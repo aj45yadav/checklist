@@ -238,12 +238,13 @@ checkForToke() {
         'Authorization': 'token ' + token
       })
     };
-    const url = 'http://localhost:3000/postUserResponse';
+    const url = this.apiBaseUrl + 'submit-category/';
     return this.http.post(url, data, httpOptions);
   }
 }
 
 export interface ProjectData {
+  id: number;
   project_id: number;
   bu_id: number;
   sub_bu_id: number;

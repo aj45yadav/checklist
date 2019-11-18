@@ -66,13 +66,12 @@ export class ProjectsComponent implements OnInit {
       sub_bu_id: project_Data.sub_bu_id,
       desc: project_Data.desc
     };
-
-
     this.projectService.addProject(data).subscribe(
       // tslint:disable-next-line:no-shadowed-variable
-      (data) => {
+      (data: ProjectData) => {
+        this.dataSourcee.push(data);
         // this.dataSourcee.push(data);
-        this.getProjectList();
+        // this.getProjectList();
       },
       (error) => { }
     );

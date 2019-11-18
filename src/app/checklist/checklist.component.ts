@@ -88,6 +88,8 @@ export class ChecklistComponent implements OnInit {
     this.currentCategoryResponse = [] as UserResponse[];
     this.currentCategory.questions.forEach(question => {
       const qResp: UserResponse = {
+        projectId: this.projectId,
+        categoryId: category.id,
         questionId: question.id,
         selectedOption: '',
         comment: '',
@@ -105,7 +107,9 @@ export class ChecklistComponent implements OnInit {
     });
     // console.log(this.currentCategoryResponse);
     this.projectService.postUserResponse(this.currentCategoryResponse).subscribe(
-      () => {},
+      () => {
+        this.getProjectData();
+      },
       (error) => {}
     );
   }
@@ -150,6 +154,7 @@ export interface Question {
   question: string;
   weightage: number;
   score: number;
+  document: string;
   hasTooltip: boolean;
   tooltip: string;
   createdDate: Date;
@@ -157,6 +162,8 @@ export interface Question {
   editMode: boolean;
 }
 export interface UserResponse {
+  projectId: number;
+  categoryId: number;
   questionId: number;
   selectedOption: string;
   comment: string;

@@ -34,7 +34,7 @@
       <mat-expansion-panel [expanded]="i+1 === projectData.length" (opened)="setCurrentCategory(p)">
         <mat-expansion-panel-header>
           <mat-panel-title>
-            Category {{i+1}}: {{p.name}}
+            <b> {{i+1}}. {{p.name}} </b>
           </mat-panel-title>
           <mat-icon (click)="openCategoryDialog('Delete', p);$event.stopPropagation();" matTooltip="Delete This Category" matTooltipClass="tooltip-blue"
             matTooltipPosition="above">delete</mat-icon>
