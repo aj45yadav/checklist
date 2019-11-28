@@ -70,9 +70,11 @@ mat-form-field {
     flex-wrap: nowrap;
 }
 
-
-    @media only screen and (max-width: 600px) {
-        .mdc-chip span {
+@media only screen and (max-width: 600px) {
+    .mdc-chip span {
             margin: 0px;
-        }
-      }
+    }
+}
+.mdc-chip:disabled {
+    cursor: not-allowed;
+}

@@ -16,18 +16,24 @@
 
   <div class="add-category">
     <div class="add-button">
+      
+        <a class="mdc-chip" target="_blank"  routerLink="/checklist/{{p.id}}">
+            <img src="{{projectService.getImagepath()}}/Group 142.svg" alt="icon">
+            <span class="mdc-chip__text">Preview</span>
+        </a>
+
       <button class="mdc-chip" (click)="openCategoryDialog('Add', {})">
-        <img src="../../assets/img/Group 142.svg" alt="icon">
+        <img src="{{projectService.getImagepath()}}/Group 142.svg" alt="icon">
         <span class="mdc-chip__text">Add Category</span>
       </button>
+      <mat-menu #category="matMenu">
+        <button mat-menu-item (click)="openCreateCDialog()">Create new Category</button>
+        <button mat-menu-item (click)="openExistingCategory()">Select Existing Category</button>
+      </mat-menu>
     </div>
     <mat-card *ngIf="projectData?.categories?.length == 0" style="text-align: center">
       <h4>Category is empty</h4>
     </mat-card>
-    <mat-menu #category="matMenu">
-      <button mat-menu-item (click)="openCreateCDialog()">Create new Category</button>
-      <button mat-menu-item (click)="openExistingCategory()">Select Existing Category</button>
-    </mat-menu>
   </div>
   <mat-accordion>
     <ng-container *ngFor="let p of projectData?.categories;let i = index">
@@ -49,7 +55,7 @@
           <div class="add-category">
             <div class="add-button">
               <button class="mdc-chip" (click)="openQuestionsDialog('Add', { parentid: ''})" style="background-color: rgb(18, 179, 243)">
-                <img src="../../assets/img/Group 142.svg" alt="icon">
+                <img src="{{projectService.getImagepath()}}/Group 142.svg" alt="icon">
                 <span class="mdc-chip__text">Add Questions</span>
               </button>
             </div>

@@ -65,7 +65,7 @@
       <img src="{{projectService.getImagepath()}}/Group 142.svg" alt="icon">
       <span class="mdc-chip__text">Cancel</span>
     </button>
-    <button class="mdc-chip" [mat-dialog-close]="data" (click)="doAction()">
+    <button class="mdc-chip" [mat-dialog-close]="data" (click)="doAction()" [disabled]="!emitedCategoryData.name || !emitedCategoryData.desc">
       <img src="{{projectService.getImagepath()}}/Group 142.svg" alt="icon">
       <span class="mdc-chip__text">{{action}} Category</span>
     </button>

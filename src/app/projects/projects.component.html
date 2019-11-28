@@ -42,9 +42,11 @@
           <div>Created By: {{p.creator}}</div>
         </mat-card-content>
         <mat-card-actions>
-          <button mat-raised-button color="primary" (click)="openDialog('Status', p)">
+          <!-- <button mat-raised-button color="primary" (click)="openDialog('Status', p)">
             <mat-icon>check</mat-icon><span *ngIf="p.status">Active</span><span *ngIf="!p.status">Inactive</span>
-          </button>
+          </button> -->
+          <a mat-raised-button color="primary" target="_blank" routerLink="/checklist/{{p.id}}" target="_blank">
+          </a>
           <button mat-raised-button color="primary" (click)="shareProjectModel(p.id)">
             <mat-icon>share</mat-icon>Share
           </button>

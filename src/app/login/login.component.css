@@ -1,4 +1,4 @@
-.socina-btn button {
+/* .socina-btn button {
     padding: 20px 20px;
     border-radius: 30px;
     font-size: 20px;
@@ -9,4 +9,88 @@
 }
 .sing-btngrp {
     margin-top: 50px;;
+} */
+/* added new css for login  */
+.background-img {
+  position: fixed;
+    top: 0;
+    left: 0;
+    width: 70%;
+    height: 100%;
+    background-image: url('../../assets/img/login-img.jpg');
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+}
+
+  .login-content {
+    position: absolute;
+    right: 2vw;
+    top: 50%;
+    -webkit-transform: translateY(-50%);
+    transform: translateY(-50%);
+}
+.product-logo {
+  text-align: center;
+  margin-bottom: 30px;
+}
+ img {
+  width: 100px;
+  display: inline-block;
+  vertical-align: middle;
+}
+.login-content p {
+  font-weight: 400;
+  font-style: normal;
+  font-size: 20px;
+  margin: 0 30px .3vw;
+  color: #000;
+  display: inline-block;
+    vertical-align: middle;
+    position: relative;
+    box-sizing: border-box;
+}
+.login-content p:before {
+  content: "";
+  width: 2px;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: -15px;
+  background-color: #000;
+}
+.login-btn {
+  display: block;
+  margin: 10% 2% 10% 0%;
+  width: 260px;
+  height: 45px;
+  background-color: #fff;
+  border-radius: 360px;
+  border: none;
+  font-weight: 600;
+  font-style: normal;
+  font-size: 16px;
+  line-height: 16px;
+  color: #282828;
+  cursor: pointer;
+  box-shadow: 0 0 10px 0 rgba(0,0,0,.55);
+}
+.login-btn::before {
+  content: '';
+  position: absolute;
+  left: 18px;
+  margin-top: 8px;
+  width: 27px;
+  height: 25px;
+  transform: translateY(-50%);
+  background-image: url(../../assets/img/goggle-icn.png);
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+}
+
+
+/* media query */
+@media only screen and (max-width: 1024px) {
+  .background-img { 
+    width: 100%;
+  }
 }

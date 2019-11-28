@@ -19,21 +19,21 @@
         <mat-form-field appearance="outline">
           <mat-label>Enter Question</mat-label>
           <textarea  matInput placeholder="Question" [(ngModel)]="emittedQuestionData.question" name="question" #ques rows="4"
-            type="text"></textarea>
-          <mat-hint>Validation Msg</mat-hint>
+            type="text" required></textarea>
+            <mat-error>Question is required</mat-error>
           <mat-hint align="end">{{ques.value?.length || 0}}</mat-hint>
         </mat-form-field>
         <div class="score-form">
           <mat-form-field appearance="outline">
             <mat-label>Enter Weightage For this Question</mat-label>
-            <input matInput placeholder="Weightage" [(ngModel)]="emittedQuestionData.weightage" name="weightage" #Weightage
+            <input disabled matInput placeholder="Weightage" [(ngModel)]="emittedQuestionData.weightage" name="weightage" #Weightage
               type="number">
-            <mat-hint>Validation Msg</mat-hint>
+            <!-- <mat-hint>Validation Msg</mat-hint> -->
             <mat-hint align="end">{{Weightage.value?.length || 0}}</mat-hint>
           </mat-form-field>
           <mat-form-field appearance="outline">
             <mat-label>Enter Score</mat-label>
-            <input  matInput placeholder="score" [(ngModel)]="emittedQuestionData.score" name="score" type="number">
+            <input disabled matInput placeholder="score" [(ngModel)]="emittedQuestionData.score" name="score" type="number">
           </mat-form-field>
         </div>
   
@@ -61,7 +61,7 @@
           <img src="{{projectService.getImagepath()}}/Group 142.svg" alt="icon">
           <span class="mdc-chip__text">Cancel</span>
         </button>
-        <button class="mdc-chip" [mat-dialog-close]="data" (click)="doAction()">
+        <button class="mdc-chip" [mat-dialog-close]="data" (click)="doAction()" [disabled]="!emittedQuestionData.question">
           <img src="{{projectService.getImagepath()}}/Group 142.svg" alt="icon">
           <span class="mdc-chip__text">{{action}} Questions</span>
         </button>

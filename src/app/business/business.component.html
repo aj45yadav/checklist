@@ -5,9 +5,9 @@
 </mat-card-header>
 
 <mat-dialog-content class="mat-typography">
+<form #buForm="ngForm">
   <mat-card *ngIf="action == 'Add' || action == 'Update'">
       
-    <form #buForm="ngForm">
       <div class="form-field">
         <div class="input-fields">
           <!-- <mat-form-field appearance="outline">
@@ -52,7 +52,6 @@
             </mat-form-field>
         </div>
       </div>
-    </form>
 
   </mat-card>
 
@@ -77,9 +76,10 @@
           <img src="../../assets/img/Group 142.svg" alt="icon">
           <span class="mdc-chip__text" (click)="doAction()">{{action}} Project</span>
         </button> -->
-    <button class="mdc-chip" (click)="doAction()">
+    <button class="mdc-chip" [disabled]="buForm.invalid" (click)="doAction()" [disabled]="!emitedData.bu_id || !emitedData.sub_bu_id || !emitedData.name || !emitedData.desc">
       <img src="{{projectService.getImagepath()}}/Group 142.svg" alt="icon">
       <span class="mdc-chip__text">{{action}} Project</span>
     </button>
   </div>
+</form>
 </mat-dialog-content>

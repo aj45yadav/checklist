@@ -36,7 +36,7 @@
       </button>
 
           
-      <button class="mdc-chip" (click)="shareProject()">
+      <button class="mdc-chip" (click)="shareProject()" [disabled]="!emittedData.usernames || !emittedData.subject || !emittedData.message">
         <img src="{{projectService.getImagepath()}}/Group 142.svg" alt="icon">
         <span class="mdc-chip__text">Share Project</span>
       </button>

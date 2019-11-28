@@ -8,8 +8,10 @@
               <mat-panel-title>
                 <b>{{i+1}}. {{p.name}} </b>
               </mat-panel-title>
-              <mat-icon style="margin-right: 20px; color: green" *ngIf="p.status" aria-hidden="false" aria-label="Example home icon" matTooltip="Answer is submitted for this category"
-              matTooltipClass="tooltip-blue" matTooltipPosition="above">done</mat-icon>
+              <!-- <mat-icon style="margin-right: 20px; color: green" *ngIf="p.status" aria-hidden="false" aria-label="Example home icon" matTooltip="Answer is submitted for this category"
+              matTooltipClass="tooltip-blue" matTooltipPosition="above">done</mat-icon> -->
+              <img style="margin-right: 20px;" *ngIf="p.status" src="{{projectService.getImagepath()}}/Group 142.svg" matTooltip="Answer is submitted for this category"
+              matTooltipClass="tooltip-blue" matTooltipPosition="above">
             </mat-expansion-panel-header>
             <div class="catque" *ngFor="let l1 of p.questions | mainQuestions;let i = index">
               <p>{{i+1}}. {{l1.question}}
@@ -56,7 +58,7 @@
             matTooltipClass="tooltip-blue" matTooltipPosition="right">
             info
           </i>
-          <span class="score">Score : {{l2.score}}</span>
+          <!-- <span class="score">Score : {{l2.score}}</span> -->
         </p>
         <div class="optionss">
           <mat-radio-group aria-labelledby="example-radio-group-label" class="example-radio-group"
@@ -121,7 +123,7 @@
                       (change)="onChange($event)">
                     <button (click)="onSubmit(l3.id)" mat-raised-button color="primary">Upload File</button>
                   </form>
-                  <a href="http://dev-checklist.regalix.com/{{l3.document}}">http://dev-checklist.regalix.com/{{l3.document}}</a>
+                  <a href="http://dev-checklist.regalix.com/{{l3.document}}">{{l3.document}}</a>
                 </mat-card>
               </div>
               <!-- <button mat-raised-button color="primary" [matMenuTriggerFor]="menu">Upload Document</button>
@@ -143,9 +145,9 @@
       <!-- {{questiondatalevel3 | json}} -->
 
       <div class="btn-save">
-        <button mat-raised-button color="primary" (click)="postUserResponseData()">Submit Response</button>
+        <button mat-raised-button color="primary" *ngIf="!currentCategory.status" (click)="postUserResponseData()">Submit {{currentCategory.name}} Response</button>
       </div>
-
+<!-- {{currentCategory | json}} -->
     </div>
   </mat-sidenav-content>
 </mat-sidenav-container>
