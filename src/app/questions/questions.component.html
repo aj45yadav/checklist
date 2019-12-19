@@ -1,7 +1,7 @@
 <div class="main-content">
   <div class="project-info">
     <div class="project-name">
-      <h4>Project Name: {{projectData?.project_name}}</h4>
+      <h4>Project: {{projectData?.project_name}}</h4>
     </div>
     <div class="unit">
       <h4>Business Unit: {{projectData?.bu_name}}</h4>
@@ -17,8 +17,10 @@
   <div class="add-category">
     <div class="add-button">
       
-        <a class="mdc-chip" target="_blank"  routerLink="/checklist/{{p.id}}">
-            <img src="{{projectService.getImagepath()}}/Group 142.svg" alt="icon">
+        <a class="mdc-chip" target="_blank"  routerLink="/checklist/{{projectId}}">
+            <!-- <img src="{{projectService.getImagepath()}}/Group 142.svg" alt="icon"> -->
+            <mat-icon>visibility
+          </mat-icon>
             <span class="mdc-chip__text">Preview</span>
         </a>
 

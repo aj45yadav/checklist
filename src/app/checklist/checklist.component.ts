@@ -152,6 +152,7 @@ export interface Category {
   userId: number;
   name: string;
   questions: Question[];
+  status: boolean;
 }
 export interface Question {
   id: number;

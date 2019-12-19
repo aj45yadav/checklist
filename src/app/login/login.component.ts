@@ -90,4 +90,5 @@ export class LoginComponent implements OnInit {
   signOut() {
     this.authentication.signOut();
   }
+
 }

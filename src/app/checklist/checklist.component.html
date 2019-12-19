@@ -10,7 +10,7 @@
               </mat-panel-title>
               <!-- <mat-icon style="margin-right: 20px; color: green" *ngIf="p.status" aria-hidden="false" aria-label="Example home icon" matTooltip="Answer is submitted for this category"
               matTooltipClass="tooltip-blue" matTooltipPosition="above">done</mat-icon> -->
-              <img style="margin-right: 20px;" *ngIf="p.status" src="{{projectService.getImagepath()}}/Group 142.svg" matTooltip="Answer is submitted for this category"
+              <img style="margin-right: 20px;width:25px" *ngIf="p.status" src="{{projectService.getImagepath()}}/Group 142.svg" matTooltip="Answer is submitted for this category"
               matTooltipClass="tooltip-blue" matTooltipPosition="above">
             </mat-expansion-panel-header>
             <div class="catque" *ngFor="let l1 of p.questions | mainQuestions;let i = index">
@@ -19,7 +19,7 @@
                   matTooltipClass="tooltip-blue" matTooltipPosition="right">
                   info
                 </i>
-                <span class="score">Score : {{l1.score}}</span>
+                <!-- <span class="score">Score : {{l1.score}}</span> -->
               </p>
 
               <div class="optionss">
@@ -101,7 +101,7 @@
                 matTooltipClass="tooltip-blue" matTooltipPosition="right">
                 info
               </i>
-              <span class="score">Score : {{l3.score}}</span>
+              <!-- <span class="score">Score : {{l3.score}}</span> -->
             </p>
             <div class="optionss">
               <mat-radio-group aria-labelledby="example-radio-group-label" class="example-radio-group"
