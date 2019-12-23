@@ -6,7 +6,10 @@
       Projects
     </div>
     <div>
-      <button mat-raised-button color="primary" (click)="openDialog('Add', {})">Add Project</button>
+      <button mat-raised-button color="primary" (click)="openDialog('Add', {})">
+        <mat-icon>add_circle_outline</mat-icon>
+        Add Project
+      </button>
     </div>
   </div>
   <div class="p-list">
@@ -17,7 +20,7 @@
             {{p.name}}
           </mat-card-title>
           <mat-menu #menu="matMenu">
-            <button mat-menu-item routerLink="/project/{{p.id}}/questions">Questions</button>
+            <button mat-menu-item routerLink="/project/{{p.id}}/stages">Stages</button>
             <mat-divider></mat-divider>
             <button mat-menu-item (click)="openDialog('Update', p)">Edit</button>
             <mat-divider></mat-divider>
@@ -33,21 +36,21 @@
         <mat-card-content>
           <div class="q-info">
             <h4>
-              Categories: {{p.category}}
+              Stages: {{p.stages}}
             </h4>
             <h4>
-              Questions: {{p.quetions}}
+              Category: {{p.category}}
             </h4>
           </div>
-          <div>Created By: {{p.creator}}</div>
+          <!-- <div>Created By: {{p.creator}}</div> -->
         </mat-card-content>
         <mat-card-actions>
           <!-- <button mat-raised-button color="primary" (click)="openDialog('Status', p)">
             <mat-icon>check</mat-icon><span *ngIf="p.status">Active</span><span *ngIf="!p.status">Inactive</span>
           </button> -->
           <a mat-raised-button color="primary" target="_blank" routerLink="/checklist/{{p.id}}" target="_blank">
-            Preview
-          </a>
+            <mat-icon>visibility</mat-icon> Preview
+           </a>
           <button mat-raised-button color="primary" (click)="shareProjectModel(p.id)">
             <mat-icon>share</mat-icon>Share
           </button>

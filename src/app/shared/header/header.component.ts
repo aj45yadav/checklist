@@ -14,7 +14,7 @@ export class HeaderComponent implements OnInit {
   apiBaseUrl: string;
   constructor(public authentication: SocialLoginService, public router: Router, public projectServices: ProjectService) {
     if (isDevMode()) {
-      this.apiBaseUrl = 'http://dev-checklist.regalix.com/';
+      this.apiBaseUrl = 'https://dev-checklist.regalix.com/';
     } else {
       this.apiBaseUrl = '/';
     }

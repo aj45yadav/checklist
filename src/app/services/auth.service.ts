@@ -9,7 +9,7 @@ export class AuthService {
 
   constructor(public http: HttpClient) {
     if (isDevMode()) {
-      this.apiBaseUrl = 'http://dev-checklist.regalix.com/';
+      this.apiBaseUrl = 'https://dev-checklist.regalix.com/';
     }  else {
       this.apiBaseUrl = '/';
     }

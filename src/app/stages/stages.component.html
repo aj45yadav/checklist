@@ -1,0 +1,46 @@
+<mat-spinner class="loader" *ngIf="loading"></mat-spinner>
+<div class="main-content">
+  <div class="project-info">
+    <div class="project-name">
+      <h4>Project: {{projectStages?.project_name}} </h4>
+    </div>
+    <div class="unit">
+      <h4>Business Unit:{{projectStages?.bu_name}} </h4>
+    </div>
+    <div class="sub-unit">
+      <h4>Sub Business: {{projectStages?.sub_bu_name}}</h4>
+    </div>
+  </div>
+
+  <div class="add-category">
+    <div class="add-button">
+      <button class="mdc-chip" (click)="openStageDialog('Add', {})">
+        <mat-icon>add_circle_outline</mat-icon>
+        <span class="mdc-chip__text">
+          Add Stages
+        </span>
+      </button>
+
+    </div>
+    <ng-container *ngFor="let stage of projectStages?.stages;let i = index">
+    <mat-card>
+     {{i+1}}. {{stage.name}}
+      <mat-card-actions>
+        <div class="subQues" matTooltip="Add Questions into this Stage" matTooltipClass="tooltip-blue" matTooltipPosition="above" routerLink="/project/{{projectId}}/stage/{{stage?.id}}/questions">
+          <mat-icon aria-hidden="false" aria-label="Example home icon" style="width: 20px">add_circle</mat-icon>
+          Add Questions
+        </div>
+
+        <mat-icon matTooltip="Delete This Stage" matTooltipClass="tooltip-blue" matTooltipPosition="above" (click)="openStageDialog('Delete', stage)"
+        >delete</mat-icon>
+        <mat-icon matTooltip="Edit This Stage" (click)="openStageDialog('Update', stage)"
+          matTooltipClass="tooltip-blue" matTooltipPosition="above">edit
+        </mat-icon>
+        <mat-icon matTooltip="View this stage" (click)="openStageDialog('View', stage)"
+          matTooltipClass="tooltip-blue" matTooltipPosition="above">visibility
+        </mat-icon>
+      </mat-card-actions>
+    </mat-card>
+    </ng-container>
+  </div>
+</div>

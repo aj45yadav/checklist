@@ -12,7 +12,7 @@ export class ProjectService {
   imagePath: string;
   constructor(public http: HttpClient, private cookieService: CookieService) {
     if (isDevMode()) {
-      this.apiBaseUrl = 'http://dev-checklist.regalix.com/';
+      this.apiBaseUrl = 'https://dev-checklist.regalix.com/';
     } else {
       this.apiBaseUrl = '/';
     }
@@ -100,7 +100,7 @@ checkForToke() {
     return this.http.delete(url, httpOptions);
   }
 
-  // category CRUD api
+
   getCategory(id) {
     const body = {
       project_id: id
@@ -115,6 +115,20 @@ checkForToke() {
     const url = this.apiBaseUrl + 'project-view/';
     return this.http.post(url, body, httpOptions);
   }
+
+  getStageData(data) {
+    const token = this.cookieService.get('token');
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': 'token ' + token
+      })
+    };
+    const url = this.apiBaseUrl + 'project-view-extend/';
+    return this.http.post(url, data, httpOptions);
+  }
+
+  // category CRUD api
   addCategory(data) {
     const token = this.cookieService.get('token');
     const httpOptions = {
@@ -240,6 +254,89 @@ checkForToke() {
     };
     const url = this.apiBaseUrl + 'submit-category/';
     return this.http.post(url, data, httpOptions);
+  }
+  //  stages CTUD api
+  addStages(data) {
+    const token = this.cookieService.get('token');
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': 'token ' + token
+      })
+    };
+    const url = this.apiBaseUrl + 'addstage/';
+    return this.http.post(url, data, httpOptions);
+  }
+
+  editStage(data) {
+    const token = this.cookieService.get('token');
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': 'token ' + token
+      })
+    };
+    const url = this.apiBaseUrl + 'edit-stage/';
+    return this.http.post(url, data, httpOptions);
+  }
+
+  deleteStage(id) {
+    const token = this.cookieService.get('token');
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': 'token ' + token
+      })
+    };
+    const url = this.apiBaseUrl + 'delete-stage/' + id;
+    return this.http.delete(url, httpOptions);
+  }
+
+  getStages(data) {
+    const token = this.cookieService.get('token');
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': 'token ' + token
+      })
+    };
+    const url = this.apiBaseUrl + 'project-view-base/';
+    return this.http.post(url, data, httpOptions);
+  }
+
+  // category group api
+  addCategoryGroup(data) {
+    const token = this.cookieService.get('token');
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': 'token ' + token
+      })
+    };
+    const url = this.apiBaseUrl + 'addcatgroup/';
+    return this.http.post(url, data, httpOptions);
+  }
+  editCategoryGropup(data) {
+    const token = this.cookieService.get('token');
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': 'token ' + token
+      })
+    };
+    const url = this.apiBaseUrl + 'edit-catgroup/';
+    return this.http.post(url, data, httpOptions);
+  }
+  deleteCategoryGroup(id) {
+    const token = this.cookieService.get('token');
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': 'token ' + token
+      })
+    };
+    const url = this.apiBaseUrl + 'delete-catgroup/' + id;
+    return this.http.delete(url, httpOptions);
   }
 }
 

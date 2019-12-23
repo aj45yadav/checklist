@@ -41,6 +41,9 @@ import { ProjectService } from './services/project.service';
 // import { Checklist2Component } from './checklist2/checklist2.component';
 import { ShareProjectComponent } from './projects/share-project/share-project.component';
 import { DocTypeContentComponent } from './checklist/doc-type-content/doc-type-content.component';
+import { StagesComponent } from './stages/stages.component';
+import { StageDialogComponent } from './stages/stage-dialog/stage-dialog.component';
+import { CatGrpDialogComponent } from './questions/cat-grp-dialog/cat-grp-dialog.component';
 
 const CONFIG = new AuthServiceConfig([
   {
@@ -86,6 +89,9 @@ export function provideConfig() {
     // Checklist2Component,
     ShareProjectComponent,
     DocTypeContentComponent,
+    StagesComponent,
+    StageDialogComponent,
+    CatGrpDialogComponent,
   ],
   imports: [
     BrowserModule,
@@ -98,7 +104,7 @@ export function provideConfig() {
     SocialLoginModule,
   ],
   entryComponents: [TestDialogComponent, CreateCategoryComponent, CreateQuestionsComponent,
-     ExistingCategoryComponent, BusinessComponent, ShareProjectComponent, DocTypeContentComponent],
+     ExistingCategoryComponent, BusinessComponent, ShareProjectComponent, DocTypeContentComponent, StageDialogComponent],
   providers: [
     {provide: LocationStrategy, useClass: HashLocationStrategy},
     {

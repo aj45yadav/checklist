@@ -5,6 +5,7 @@ import { BuData } from '../services/bu.service';
 import { ProjectData, ProjectService } from '../services/project.service';
 import { CookieService } from 'ngx-cookie-service';
 import { ShareProjectComponent } from './share-project/share-project.component';
+import { Router } from '@angular/router';
 
 export interface ProjectData {
   id: number;
@@ -26,7 +27,8 @@ export class ProjectsComponent implements OnInit {
   dataSource = ProjectData;
   dataSourcee;
   @ViewChild(MatTable, {}) table: MatTable<any>;
-  constructor(public dialog: MatDialog, public projectService: ProjectService, public cookieService: CookieService) { }
+  constructor(public dialog: MatDialog, public projectService: ProjectService, public cookieService: CookieService,
+     public router: Router) { }
 
   ngOnInit() {
     this.getProjectList();
@@ -75,6 +77,7 @@ export class ProjectsComponent implements OnInit {
         this.dataSourcee.push(request);
         // this.dataSourcee.push(data);
         // this.getProjectList();
+        this.router.navigate(['project', data['project_id'], 'stages']);
       },
       (error) => { }
     );

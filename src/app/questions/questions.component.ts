@@ -10,6 +10,7 @@ import { CreateQuestionsComponent } from './create-questions/create-questions.co
 import { Constants } from '../constants';
 import { ExistingCategoryComponent } from './existing-category/existing-category.component';
 import { ProjectService } from '../services/project.service';
+import { CatGrpDialogComponent } from './cat-grp-dialog/cat-grp-dialog.component';
 @Component({
   selector: 'app-questions',
   templateUrl: './questions.component.html',
@@ -17,6 +18,7 @@ import { ProjectService } from '../services/project.service';
 })
 export class QuestionsComponent implements OnInit {
   projectId: number;
+  stageId: number;
   buData: BuData = {} as BuData;
   addCategory = false;
   addQuestionForm = false;
@@ -30,7 +32,8 @@ export class QuestionsComponent implements OnInit {
   filteredOptions: Observable<string[]>;
   mode: string;
   projectData;
-
+  catGroup;
+  loading: boolean;
   ngOnInit() {
     this.filteredOptions = this.myControl.valueChanges
       .pipe(
@@ -43,11 +46,48 @@ export class QuestionsComponent implements OnInit {
     });
 
     this.projectId = this.activatedRoute.snapshot.params['id'];
+
+    this.stageId = this.activatedRoute.snapshot.params['id'];
+
     this.getProjectData();
+    this.getStagesData();
   }
 
   constructor(public activatedRoute: ActivatedRoute, public buService: BuService, public dialog: MatDialog,
     public projectService: ProjectService) { }
+  // category Group add, edit and delete
+  categoryGrpDialog(action, obj) {
+    obj.action = action;
+    const dialogRef = this.dialog.open(CatGrpDialogComponent, {
+      width: '650px',
+      data: obj
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result.event === 'Add') {
+        this.addCatGroup(result.data);
+      } else if (result.event === 'Update') {
+        this.editCatGroup(result.data);
+      } else if (result.event === 'Delete') {
+        this.editCatGroup(result.data);
+      }
+    });
+  }
+  addCatGroup(catGroup) {
+    const request = {
+      stage_id: this.stageId,
+      name: catGroup.name,
+    };
+    this.projectService.addCategoryGroup(request).subscribe(
+      (data) => {
+        this.catGroup.push(request);
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
+  }
+  editCatGroup(catGroup) {}
+  deleteCatGroup(catGroup) {}
   // category related all functions
   openCategoryDialog(action, obj) {
     obj.action = action;
@@ -253,6 +293,23 @@ export class QuestionsComponent implements OnInit {
       (data) => {
         this.projectData = data;
       });
+  }
+
+  getStagesData() {
+    this.loading = true;
+    const request = {
+      stage_id: this.stageId
+    };
+    this.projectService.getStageData(request).subscribe(
+      (data: any) => {
+        this.projectData = data;
+        // console.log(this.stages);
+        this.loading = false;
+      },
+      (error) => {
+        this.loading = false;
+      }
+    );
   }
 
 

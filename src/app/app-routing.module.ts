@@ -13,6 +13,7 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
 import { ProjectsComponent } from './projects/projects.component';
 // import { Checklist2Component } from './checklist2/checklist2.component';
 import { AuthGuard } from './guards/auth.guard';
+import { StagesComponent } from './stages/stages.component';
 
 const routes: Routes = [
   {
@@ -60,9 +61,21 @@ const routes: Routes = [
       },
       {
         path: 'project/:id', children: [
+          // {
+          //   path: 'questions',
+          //   component: QuestionsComponent, canActivate: [AuthGuard]
+          // },
           {
-            path: 'questions',
-            component: QuestionsComponent, canActivate: [AuthGuard]
+            path: 'stages',
+            component: StagesComponent, canActivate: [AuthGuard],
+          },
+          {
+            path: 'stage/:id', children: [
+              {
+                path: 'questions',
+                component: QuestionsComponent, canActivate: [AuthGuard]
+              }
+            ]
           }
         ]
       }

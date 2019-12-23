@@ -22,7 +22,7 @@ export class ChecklistComponent implements OnInit {
   currentCategoryResponse: UserResponse[] = [] as UserResponse[];
   myControl = new FormControl();
   projectData;
-  DJANGO_SERVER = 'http://dev-checklist.regalix.com/';
+  DJANGO_SERVER = 'https://dev-checklist.regalix.com/';
   form: FormGroup;
   response;
   fileUrl;

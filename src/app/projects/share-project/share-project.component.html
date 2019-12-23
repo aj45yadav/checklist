@@ -31,13 +31,13 @@
     <div class="mdc-chip-set">
   
       <button type="button" class="mdc-chip" style="background-color: #F44336" (click)="closeDialog()">
-        <img src="{{projectService.getImagepath()}}/Group 142.svg" alt="icon">
+        <mat-icon>cancel</mat-icon>
         <span class="mdc-chip__text">Cancel</span>
       </button>
 
           
       <button class="mdc-chip" (click)="shareProject()" [disabled]="!emittedData.usernames || !emittedData.subject || !emittedData.message">
-        <img src="{{projectService.getImagepath()}}/Group 142.svg" alt="icon">
+        <mat-icon>add_circle</mat-icon>
         <span class="mdc-chip__text">Share Project</span>
       </button>
     </div>

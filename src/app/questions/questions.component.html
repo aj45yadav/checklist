@@ -18,14 +18,13 @@
     <div class="add-button">
       
         <a class="mdc-chip" target="_blank"  routerLink="/checklist/{{projectId}}">
-            <!-- <img src="{{projectService.getImagepath()}}/Group 142.svg" alt="icon"> -->
-            <mat-icon>visibility
+            <mat-icon>airplay
           </mat-icon>
             <span class="mdc-chip__text">Preview</span>
         </a>
 
       <button class="mdc-chip" (click)="openCategoryDialog('Add', {})">
-        <img src="{{projectService.getImagepath()}}/Group 142.svg" alt="icon">
+        <mat-icon>add_circle_outline</mat-icon>
         <span class="mdc-chip__text">Add Category</span>
       </button>
       <mat-menu #category="matMenu">
@@ -33,12 +32,22 @@
         <button mat-menu-item (click)="openExistingCategory()">Select Existing Category</button>
       </mat-menu>
     </div>
-    <mat-card *ngIf="projectData?.categories?.length == 0" style="text-align: center">
+    <!-- <mat-card *ngIf="projectData?.categories?.length == 0" style="text-align: center">
       <h4>Category is empty</h4>
-    </mat-card>
+    </mat-card> -->
   </div>
   <mat-accordion>
-    <ng-container *ngFor="let p of projectData?.categories;let i = index">
+    <mat-card *ngFor="let catgrp of projectData?.catgroups">
+      {{catgrp.name}}
+      <div class="add-category">
+        <div class="add-button">
+          <button class="mdc-chip" (click)="openCategoryDialog('Add', {})" style="background-color: #F44336">
+            <mat-icon>add_circle_outline</mat-icon>
+            <span class="mdc-chip__text">Add Category</span>
+          </button>
+        </div>
+</div>
+    <ng-container *ngFor="let p of catgrp?.categories;let i = index">
       <mat-expansion-panel [expanded]="i+1 === projectData.length" (opened)="setCurrentCategory(p)">
         <mat-expansion-panel-header>
           <mat-panel-title>
@@ -56,8 +65,8 @@
         <mat-panel-description>
           <div class="add-category">
             <div class="add-button">
-              <button class="mdc-chip" (click)="openQuestionsDialog('Add', { parentid: ''})" style="background-color: rgb(18, 179, 243)">
-                <img src="{{projectService.getImagepath()}}/Group 142.svg" alt="icon">
+              <button class="mdc-chip" (click)="openQuestionsDialog('Add', { parentid: ''})" style="background-color: rgb(67, 95, 255)">
+                <mat-icon>add_circle_outline</mat-icon>
                 <span class="mdc-chip__text">Add Questions</span>
               </button>
             </div>
@@ -134,6 +143,7 @@
         </mat-panel-description>
       </mat-expansion-panel>
     </ng-container>
+    </mat-card>
   </mat-accordion>
 
 

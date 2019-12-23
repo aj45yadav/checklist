@@ -1,0 +1,34 @@
+<mat-card-header>
+  <mat-card-title><span *ngIf="action != 'View'"> {{action}} </span> Project Stage </mat-card-title>
+  <mat-icon aria-hidden="false" aria-label="Example home icon" (click)="closeDialog()">cancel</mat-icon>
+</mat-card-header>
+<mat-dialog-content class="mat-typography">
+  <mat-card *ngIf="action == 'Add' || action == 'Update'">
+    <input type="hidden" *ngIf="action == 'Update'" [(ngModel)]="stageData.id" name="stage_id">
+    <mat-form-field appearance="outline">
+      <mat-label>Enter Stage</mat-label>
+      <!-- <input name="name" matInput placeholder="{{action}} name" #stage required> -->
+      <input [(ngModel)]="stageData.name" name="name" matInput placeholder="{{action}} name" #stage required>
+      <mat-error>Stage is required</mat-error>
+      <mat-hint align="end">{{stage.value?.length || 0}}</mat-hint>
+    </mat-form-field>
+
+  </mat-card>
+  <mat-card *ngIf="action == 'Delete'">
+    Are you sure to delete this <b>{{stageData.name}}</b> ?
+  </mat-card>
+  <mat-card *ngIf="action == 'View'">
+    <p>Stage: {{stageData.name}}</p>
+  </mat-card>
+  <div class="mdc-chip-set" *ngIf="action != 'View'">
+
+    <button type="button" class="mdc-chip" style="background-color: #F44336" (click)="closeDialog()">
+      <mat-icon>cancel</mat-icon>
+      <span class="mdc-chip__text">Cancel</span>
+    </button>
+    <button class="mdc-chip" [mat-dialog-close]="data" (click)="doAction()" [disabled]="!stageData.name">
+      <mat-icon>add_circle</mat-icon>
+      <span class="mdc-chip__text">{{action}} Stage</span>
+    </button>
+  </div>
+</mat-dialog-content>

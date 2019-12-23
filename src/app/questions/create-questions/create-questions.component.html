@@ -59,11 +59,12 @@
       <div class="mdc-chip-set" *ngIf="action != 'View'">
   
         <button type="button" class="mdc-chip" style="background-color: #F44336" (click)="closeDialog()">
-          <img src="{{projectService.getImagepath()}}/Group 142.svg" alt="icon">
+          <mat-icon>cancel</mat-icon>
           <span class="mdc-chip__text">Cancel</span>
         </button>
         <button class="mdc-chip" [mat-dialog-close]="data" (click)="doAction()" [disabled]="!emittedQuestionData.question">
-          <img src="{{projectService.getImagepath()}}/Group 142.svg" alt="icon">
+          <mat-icon *ngIf="action == 'Delete'">delete</mat-icon>
+          <mat-icon *ngIf="action != 'Delete'">add_circle_outline</mat-icon>
           <span class="mdc-chip__text">{{action}} Questions</span>
         </button>
       </div>

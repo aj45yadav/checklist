@@ -65,7 +65,7 @@
   <div class="mdc-chip-set">
 
     <button type="button" class="mdc-chip" style="background-color: #F44336" (click)="closeDialog()">
-      <img src="{{projectService.getImagepath()}}/Group 142.svg" alt="icon">
+      <mat-icon>cancel</mat-icon>
       <span class="mdc-chip__text">Cancel</span>
     </button>
     <!-- <button class="mdc-chip" *ngIf="action == 'Add'">
@@ -76,8 +76,8 @@
           <img src="../../assets/img/Group 142.svg" alt="icon">
           <span class="mdc-chip__text" (click)="doAction()">{{action}} Project</span>
         </button> -->
-    <button class="mdc-chip" [disabled]="buForm.invalid" (click)="doAction()" [disabled]="!emitedData.bu_id || !emitedData.sub_bu_id || !emitedData.name || !emitedData.desc">
-      <img src="{{projectService.getImagepath()}}/Group 142.svg" alt="icon">
+    <button class="mdc-chip"  (click)="doAction()" [disabled]="!emitedData.bu_id || !emitedData.sub_bu_id || !emitedData.name || !emitedData.desc">
+      <mat-icon>add_circle</mat-icon>
       <span class="mdc-chip__text">{{action}} Project</span>
     </button>
   </div>

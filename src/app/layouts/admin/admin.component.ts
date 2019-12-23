@@ -10,7 +10,7 @@ export class AdminComponent implements OnInit {
   apiBaseUrl;
   constructor(public authentication: SocialLoginService) {
     if (isDevMode()) {
-      this.apiBaseUrl = 'http://dev-checklist.regalix.com/';
+      this.apiBaseUrl = 'https://dev-checklist.regalix.com/';
     } else {
       this.apiBaseUrl = '/';
     }
