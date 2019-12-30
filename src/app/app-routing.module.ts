@@ -14,6 +14,7 @@ import { ProjectsComponent } from './projects/projects.component';
 // import { Checklist2Component } from './checklist2/checklist2.component';
 import { AuthGuard } from './guards/auth.guard';
 import { StagesComponent } from './stages/stages.component';
+import { ChecklistNewComponent } from './checklist-new/checklist-new.component';
 
 const routes: Routes = [
   {
@@ -21,13 +22,30 @@ const routes: Routes = [
     component: LoginComponent
   },
   {
-    path: 'checklist/:id',
-    component: ChecklistComponent, canActivate: [AuthGuard]
+    path: 'project/:stageId', children: [
+      {
+        path: 'checklist',
+        component: ChecklistComponent, canActivate: [AuthGuard]
+      },
+      {
+        path: 'checklist/:id',
+        component: ChecklistComponent, canActivate: [AuthGuard]
+      },
+      // {
+      //   path: 'checklistt/:id',
+      //   component: ChecklistComponent, canActivate: [AuthGuard]
+      // },
+    ]
   },
+
   // {
   //   path: 'checklist2/:id',
   //   component: Checklist2Component, canActivate: [AuthGuard]
   // },
+  {
+    path: 'checklist-new',
+    component: ChecklistNewComponent
+  },
   {
     path: 'testcomponent',
     component: TestcomponentComponent, canActivate: [AuthGuard]
@@ -60,7 +78,7 @@ const routes: Routes = [
         component: ProjectsComponent, canActivate: [AuthGuard]
       },
       {
-        path: 'project/:id', children: [
+        path: 'project/:stageId', children: [
           // {
           //   path: 'questions',
           //   component: QuestionsComponent, canActivate: [AuthGuard]
@@ -76,7 +94,11 @@ const routes: Routes = [
                 component: QuestionsComponent, canActivate: [AuthGuard]
               }
             ]
-          }
+          },
+          // {
+          //   path: 'checklist/:id',
+          //   component: ChecklistComponent, canActivate: [AuthGuard]
+          // },
         ]
       }
     ]

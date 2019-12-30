@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { BuData, BuService } from '../services/bu.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { FormGroup, FormControl, Validators, NgForm } from '@angular/forms';
-import { Observable, from } from 'rxjs';
+import { Observable, from, Subscription } from 'rxjs';
 import { map, startWith, elementAt } from 'rxjs/operators';
 import { MatDialog } from '@angular/material/dialog';
 import { CreateCategoryComponent } from './create-category/create-category.component';
@@ -17,7 +17,8 @@ import { CatGrpDialogComponent } from './cat-grp-dialog/cat-grp-dialog.component
   styleUrls: ['./questions.component.css']
 })
 export class QuestionsComponent implements OnInit {
-  projectId: number;
+  private paramSubscription: Subscription;
+  projectId: any;
   stageId: number;
   buData: BuData = {} as BuData;
   addCategory = false;
@@ -32,8 +33,10 @@ export class QuestionsComponent implements OnInit {
   filteredOptions: Observable<string[]>;
   mode: string;
   projectData;
+  projectBasic;
   catGroup;
   loading: boolean;
+  url;
   ngOnInit() {
     this.filteredOptions = this.myControl.valueChanges
       .pipe(
@@ -45,16 +48,14 @@ export class QuestionsComponent implements OnInit {
       description: new FormControl(null, Validators.maxLength(150)),
     });
 
-    this.projectId = this.activatedRoute.snapshot.params['id'];
-
+    this.projectId = this.activatedRoute.snapshot.params['stageId'];
     this.stageId = this.activatedRoute.snapshot.params['id'];
-
     this.getProjectData();
     this.getStagesData();
   }
 
   constructor(public activatedRoute: ActivatedRoute, public buService: BuService, public dialog: MatDialog,
-    public projectService: ProjectService) { }
+    public projectService: ProjectService, public router: Router) { }
   // category Group add, edit and delete
   categoryGrpDialog(action, obj) {
     obj.action = action;
@@ -68,7 +69,7 @@ export class QuestionsComponent implements OnInit {
       } else if (result.event === 'Update') {
         this.editCatGroup(result.data);
       } else if (result.event === 'Delete') {
-        this.editCatGroup(result.data);
+        this.deleteCatGroup(result.data);
       }
     });
   }
@@ -79,15 +80,39 @@ export class QuestionsComponent implements OnInit {
     };
     this.projectService.addCategoryGroup(request).subscribe(
       (data) => {
-        this.catGroup.push(request);
+        // this.projectData.push(request);
+        this.getStagesData();
       },
       (error) => {
         console.log(error);
       }
     );
   }
-  editCatGroup(catGroup) {}
-  deleteCatGroup(catGroup) {}
+  editCatGroup(catGroup) {
+    const request = {
+      catgroup_id: catGroup.catgroup_id,
+      name: catGroup.name,
+    };
+    this.projectService.editCategoryGropup(request).subscribe(
+      () => {
+        this.getStagesData();
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
+  }
+
+  deleteCatGroup(catGroup) {
+    this.projectService.deleteCategoryGroup(catGroup.catgroup_id).subscribe(
+      () => {
+        this.getStagesData();
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
+  }
   // category related all functions
   openCategoryDialog(action, obj) {
     obj.action = action;
@@ -102,8 +127,6 @@ export class QuestionsComponent implements OnInit {
         this.editCategory(result.data);
       } else if (result.event === 'Delete') {
         this.deleteCategoryD(result.data);
-      } else if (result.event === 'View') {
-        this.viewCategory(result.data);
       }
     });
   }
@@ -126,12 +149,13 @@ export class QuestionsComponent implements OnInit {
     //     }
     const data = {
       project_id: this.projectId,
+      catgroup_id: cat_data.catgroup_id,
       name: cat_data.name,
       desc: cat_data.desc,
     };
     this.projectService.addCategory(data).subscribe(
       (response: any) => {
-        this.getProjectData();
+        this.getStagesData();
       });
   }
   editCategory(cat_data) {
@@ -143,7 +167,7 @@ export class QuestionsComponent implements OnInit {
     };
     this.projectService.editCategory(data).subscribe(
       () => {
-        this.getProjectData();
+        this.getStagesData();
       },
       (error) => {
 
@@ -153,14 +177,11 @@ export class QuestionsComponent implements OnInit {
   deleteCategoryD(cat_data) {
     this.projectService.deleteCategory(cat_data.id).subscribe(
       () => {
-        this.getProjectData();
+        this.getStagesData();
       },
       (error) => {
       }
     );
-  }
-  viewCategory(cat_data) {
-
   }
   //  end category related functions
 
@@ -205,7 +226,7 @@ export class QuestionsComponent implements OnInit {
     // console.log(request);
     this.projectService.addQuestionsData(request).subscribe(
       (response: any) => {
-        this.getProjectData();
+        this.getStagesData();
       },
       (error) => { }
     );
@@ -214,7 +235,7 @@ export class QuestionsComponent implements OnInit {
   deleteQuestionData(que_data) {
     this.projectService.deleteQestions(que_data.id).subscribe(
       () => {
-        this.getProjectData();
+        this.getStagesData();
       },
       (error) => { }
     );
@@ -229,7 +250,9 @@ export class QuestionsComponent implements OnInit {
       score: que_data.score
     };
     this.projectService.editQuestionsData(data).subscribe(
-      () => { },
+      () => {
+        this.getStagesData();
+       },
       (error) => { }
     );
   }
@@ -288,11 +311,22 @@ export class QuestionsComponent implements OnInit {
     });
   }
 
+
   getProjectData() {
-    this.projectService.getCategory(this.projectId).subscribe(
-      (data) => {
-        this.projectData = data;
-      });
+    this.loading = true;
+    const request = {
+      project_id: this.projectId
+    };
+    this.projectService.getStages(request).subscribe(
+      (data: any) => {
+        this.projectBasic = data;
+        // console.log(this.stages);
+        this.loading = false;
+      },
+      (error) => {
+        this.loading = false;
+      }
+    );
   }
 
   getStagesData() {

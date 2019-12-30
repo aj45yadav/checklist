@@ -27,13 +27,14 @@ h2 {
 .mat-expansion-panel-header.mat-expanded:focus, .mat-expansion-panel-header.mat-expanded:hover {
     background: #37BAF4;
 } */
-.mat-icon {
+mat-card-actions .mat-icon {
     height: 24px;
-    width: 30px;
+    width: 40px;
     cursor: pointer;
 }
 .material-icons {
     font-size: 20px;
+    width: 30px;
 }
 .mdc-chip {
     border-radius: 20px;
@@ -65,10 +66,16 @@ h2 {
     line-height: 21px;
     margin: 10px 5px 15px 0;
 }
-.add-category .add-button {
+
+.add-category {
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
 }
+
+/* .add-category .add-button { */
+    /* display: flex; */
+    /* justify-content: flex-end; */
+/* } */
 .mat-accordion>.mat-expansion-panel-spacing:last-child, .mat-accordion>:last-child:not(.mat-expansion-panel) .mat-expansion-panel-spacing {
     margin-bottom: 10px;
     margin-top: 10px;
@@ -85,7 +92,7 @@ h2 {
 mat-card-actions {
     display: flex;
     float: right;
-    color: #03A9F4;
+    /* color: #03A9F4; */
 }
 mat-card mat-card.level2 {
     width: 96%;
@@ -103,3 +110,16 @@ mat-card mat-card.level2 {
 }
 /* mat-card mat-card.level2:first-child {
  } */
+ .mat-card-actions {
+     padding: 0;
+ }
+ .mat-divider {
+    margin: 20px 0 0 0;
+    border-top-width: 1.27px;
+    border-top-color: #463434;
+ }
+.p-title {
+    display: flex;
+    justify-content: space-between;
+    color: #0e5578;
+}

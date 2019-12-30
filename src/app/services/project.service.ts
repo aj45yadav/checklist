@@ -112,7 +112,7 @@ checkForToke() {
         'Authorization': 'token ' + token
       })
     };
-    const url = this.apiBaseUrl + 'project-view/';
+    const url = this.apiBaseUrl + 'project-view-extend/';
     return this.http.post(url, body, httpOptions);
   }
 

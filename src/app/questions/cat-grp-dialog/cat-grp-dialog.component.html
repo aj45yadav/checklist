@@ -1,15 +1,15 @@
 <mat-card-header>
-  <mat-card-title><span *ngIf="action != 'View'"> {{action}} </span> Project Stage </mat-card-title>
+  <mat-card-title><span *ngIf="action != 'View'"> {{action}} </span> Project Parent Category </mat-card-title>
   <mat-icon aria-hidden="false" aria-label="Example home icon" (click)="closeDialog()">cancel</mat-icon>
 </mat-card-header>
 <mat-dialog-content class="mat-typography">
   <mat-card *ngIf="action == 'Add' || action == 'Update'">
-    <input type="hidden" *ngIf="action == 'Update'" [(ngModel)]="catGrp.id" name="stage_id">
+    <input type="hidden" *ngIf="action == 'Update'" [(ngModel)]="catGrp.catgroup_id" name="catgroup_id">
     <mat-form-field appearance="outline">
-      <mat-label>Enter Stage</mat-label>
+      <mat-label>Enter Parent Category</mat-label>
       <!-- <input name="name" matInput placeholder="{{action}} name" #stage required> -->
       <input [(ngModel)]="catGrp.name" name="name" matInput placeholder="{{action}} name" #stage required>
-      <mat-error>Stage is required</mat-error>
+      <mat-error>Parent Category is required</mat-error>
       <mat-hint align="end">{{stage.value?.length || 0}}</mat-hint>
     </mat-form-field>
 
@@ -18,7 +18,7 @@
     Are you sure to delete this <b>{{catGrp.name}}</b> ?
   </mat-card>
   <mat-card *ngIf="action == 'View'">
-    <p>Stage: {{catGrp.name}}</p>
+    <p>Category: {{catGrp.name}}</p>
   </mat-card>
   <div class="mdc-chip-set" *ngIf="action != 'View'">
 
@@ -26,9 +26,10 @@
       <mat-icon>cancel</mat-icon>
       <span class="mdc-chip__text">Cancel</span>
     </button>
-    <button class="mdc-chip" [mat-dialog-close]="data" (click)="doAction()" [disabled]="!stageData.name">
-      <mat-icon>add_circle</mat-icon>
-      <span class="mdc-chip__text">{{action}} Stage</span>
+    <button class="mdc-chip" [mat-dialog-close]="data" (click)="doAction()" [disabled]="!catGrp.name">
+      <mat-icon *ngIf="action == 'Delete'">delete</mat-icon>
+      <mat-icon *ngIf="action != 'Delete'">add_circle</mat-icon>
+      <span class="mdc-chip__text">{{action}} Parent Category</span>
     </button>
   </div>
 </mat-dialog-content>

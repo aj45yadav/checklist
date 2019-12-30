@@ -13,6 +13,11 @@
   </div>
 
   <div class="add-category">
+    <a class="mdc-chip" routerLink="/projects">
+      <mat-icon>reply
+      </mat-icon>
+      <span class="mdc-chip__text"> Return to Projects</span>
+    </a>
     <div class="add-button">
       <button class="mdc-chip" (click)="openStageDialog('Add', {})">
         <mat-icon>add_circle_outline</mat-icon>
@@ -22,11 +27,12 @@
       </button>
 
     </div>
+    </div>
     <ng-container *ngFor="let stage of projectStages?.stages;let i = index">
     <mat-card>
      {{i+1}}. {{stage.name}}
       <mat-card-actions>
-        <div class="subQues" matTooltip="Add Questions into this Stage" matTooltipClass="tooltip-blue" matTooltipPosition="above" routerLink="/project/{{projectId}}/stage/{{stage?.id}}/questions">
+        <div class="subQues" matTooltip="Add Questions for this Stage" matTooltipClass="tooltip-blue" matTooltipPosition="above" routerLink="/project/{{projectId}}/stage/{{stage?.id}}/questions">
           <mat-icon aria-hidden="false" aria-label="Example home icon" style="width: 20px">add_circle</mat-icon>
           Add Questions
         </div>
@@ -42,5 +48,4 @@
       </mat-card-actions>
     </mat-card>
     </ng-container>
-  </div>
 </div>

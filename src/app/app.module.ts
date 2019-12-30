@@ -44,6 +44,7 @@ import { DocTypeContentComponent } from './checklist/doc-type-content/doc-type-c
 import { StagesComponent } from './stages/stages.component';
 import { StageDialogComponent } from './stages/stage-dialog/stage-dialog.component';
 import { CatGrpDialogComponent } from './questions/cat-grp-dialog/cat-grp-dialog.component';
+import { ChecklistNewComponent } from './checklist-new/checklist-new.component';
 
 const CONFIG = new AuthServiceConfig([
   {
@@ -92,6 +93,7 @@ export function provideConfig() {
     StagesComponent,
     StageDialogComponent,
     CatGrpDialogComponent,
+    ChecklistNewComponent,
   ],
   imports: [
     BrowserModule,
@@ -104,7 +106,8 @@ export function provideConfig() {
     SocialLoginModule,
   ],
   entryComponents: [TestDialogComponent, CreateCategoryComponent, CreateQuestionsComponent,
-     ExistingCategoryComponent, BusinessComponent, ShareProjectComponent, DocTypeContentComponent, StageDialogComponent],
+     ExistingCategoryComponent, BusinessComponent, ShareProjectComponent, DocTypeContentComponent, StageDialogComponent,
+      CatGrpDialogComponent],
   providers: [
     {provide: LocationStrategy, useClass: HashLocationStrategy},
     {

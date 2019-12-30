@@ -1,9 +1,23 @@
 <mat-sidenav-container class="side-container">
   <mat-sidenav mode="side" opened>
     <mat-nav-list>
+      <div class="projectname">
+        {{projectBasic?.project_name}}
+      </div>
+      <mat-divider></mat-divider>
+      <div class="projectDescription">
+        <!-- <h4>Business Unit: {{projectBasic?.bu_name}}</h4>
+        <h4>Sub Business: {{projectBasic?.sub_bu_name}}</h4> -->
+        <strong>{{projectBasic?.desc}}</strong>
+      </div>
+      <mat-divider></mat-divider>
       <mat-accordion>
-        <ng-container *ngFor="let p of projectData?.categories;let i = index">
-          <mat-expansion-panel [expanded]="i === 0" (opened)="setCurrentCategory(p)">
+        <ng-container *ngFor="let catgrp of projectData?.catgroups;let k = index">
+          <div class="parentcategory">
+          <b>{{k+1}}. {{catgrp.name}} </b>
+          </div>
+        <ng-container *ngFor="let p of catgrp?.categories;let i = index">
+          <mat-expansion-panel (opened)="setCurrentCategory(p)">
             <mat-expansion-panel-header>
               <mat-panel-title>
                 <b>{{i+1}}. {{p.name}} </b>
@@ -35,6 +49,8 @@
             </div>
           </mat-expansion-panel>
         </ng-container>
+        <mat-divider></mat-divider>
+        </ng-container>
       </mat-accordion>
     </mat-nav-list>
   </mat-sidenav>
@@ -42,17 +58,26 @@
     <div class="main-content">
       <!-- {{projectData | json}} -->
       <!-- {{questiondatalevel2 | json}} -->
-      <div class="project-info">
+
+      <!-- <div class="project-info">
         <div class="project-name">
-          <h4>Project: {{projectData?.project_name}}</h4>
+          <h4>Project: {{projectBasic?.project_name}}</h4>
         </div>
         <div class="unit">
-          <h4>Business Unit: {{projectData?.bu_name}}</h4>
+          <h4>Business Unit: {{projectBasic?.bu_name}}</h4>
         </div>
         <div class="sub-unit">
-          <h4>Sub Business: {{projectData?.sub_bu_name}}</h4>
+          <h4>Sub Business: {{projectBasic?.sub_bu_name}}</h4>
+        </div>
+      </div> -->
+      
+      <div class="stages">
+        <div *ngFor="let stage of projectBasic?.stages">
+        <span class="underline underline--stars" [ngClass]="{'active': selectedItem == item}" (click)="getProjectData({ stage_id: stage.id})">{{stage.name}}</span>
         </div>
       </div>
+      <hr/>
+    </div>
       <div class="aside-content" *ngFor="let l2 of questiondatalevel2">
         <p>{{l2.question}} <i *ngIf="l2.tooltip !== null" class="material-icons" [matTooltip]="l2.tooltip"
             matTooltipClass="tooltip-blue" matTooltipPosition="right">
@@ -78,7 +103,10 @@
               <form [formGroup]="form">
                 <input type="file" mat-raised-button color="primary" class="input-file" name="filedata"
                   (change)="onChange($event)">
-                <button (click)="onSubmit(l2.id)" mat-raised-button color="primary">Upload File</button>
+                <button (click)="onSubmit(l2.id)" mat-raised-button color="primary">
+                  <mat-icon>cloud_upload</mat-icon>
+                  Upload File
+                </button>
               </form>
               <a href="https://dev-checklist.regalix.com{{l2.document}}">{{l2.document}}</a>
             </mat-card>
@@ -148,6 +176,5 @@
         <button mat-raised-button color="primary" *ngIf="!currentCategory.status" (click)="postUserResponseData()">Submit {{currentCategory.name}} Response</button>
       </div>
 <!-- {{currentCategory | json}} -->
-    </div>
   </mat-sidenav-content>
 </mat-sidenav-container>

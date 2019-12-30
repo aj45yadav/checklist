@@ -16,7 +16,7 @@ export class StagesComponent implements OnInit {
   constructor(public projectService: ProjectService, public dialog: MatDialog, public activatedRoute: ActivatedRoute) { }
 
   ngOnInit() {
-    this.projectId = this.activatedRoute.snapshot.params['id'];
+    this.projectId = this.activatedRoute.snapshot.params['stageId'];
     this.getStages();
   }
   openStageDialog(action , obj) {

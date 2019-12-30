@@ -15,26 +15,32 @@ import { DocTypeContentComponent } from './doc-type-content/doc-type-content.com
 export class ChecklistComponent implements OnInit {
   options = Constants.responses;
   projectId: number;
+  stageId: number;
   addQuestionForm = false;
   questiondatalevel2: Question[] = [] as Question[];
   questiondatalevel3: Question[] = [] as Question[];
   currentCategory: Category = {} as Category;
   currentCategoryResponse: UserResponse[] = [] as UserResponse[];
   myControl = new FormControl();
+  projectBasic;
   projectData;
   DJANGO_SERVER = 'https://dev-checklist.regalix.com/';
   form: FormGroup;
   response;
   fileUrl;
-  ngOnInit() {
-    this.projectId = this.activatedRoute.snapshot.params['id'];
-    this.getProjectData();
+  firstStageId;
 
+  ngOnInit() {
+    this.stageId = this.activatedRoute.snapshot.params['stageId'];
+    this.projectId = this.activatedRoute.snapshot.params['id'];
+    // this.firstStageId = this.
+
+    this.getStageData();
+    this.getProjectData(2);
     this.form = this.formBuilder.group({
       filedata: ['']
     });
   }
-
   constructor(public activatedRoute: ActivatedRoute, public dialog: MatDialog,
     public projectService: ProjectService, public formBuilder: FormBuilder) { }
 
@@ -56,25 +62,42 @@ export class ChecklistComponent implements OnInit {
         // console.log(res);
         // console.log(this.fileUrl);
       },
-      (err) => {
-        console.log(err);
+      (error) => {
+        console.log(error);
       }
     );
   }
-
-  getProjectData() {
-    this.projectService.getCategory(this.projectId).subscribe(
+  getStageData() {
+    const request = {
+      project_id: this.stageId
+    };
+    this.projectService.getStages(request).subscribe(
+      (data: any) => {
+        this.projectBasic = data;
+        // console.log(this.stages);
+        this.firstStageId = data.stages[0].id;
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
+  }
+  getProjectData(req) {
+       const request = {
+        stage_id: req.stage_id
+      };
+    this.projectService.getStageData(request).subscribe(
       (data: any) => {
         this.projectData = data;
         this.questiondatalevel2 = [];
-        const firstCategory = this.projectData.categories[0];
+        const firstCategory = this.projectData.catgroups[0].categories[0];
         if (firstCategory && firstCategory.status) {
           firstCategory.questions.forEach(question => {
             if (question.qlevel === '2') {
               this.questiondatalevel2.push(question);
             }
           });
-          }
+        }
       });
   }
 
@@ -117,9 +140,9 @@ export class ChecklistComponent implements OnInit {
     // console.log(this.currentCategoryResponse);
     this.projectService.postUserResponse(this.currentCategoryResponse).subscribe(
       () => {
-        this.getProjectData();
+        this.getProjectData(2);
       },
-      (error) => {}
+      (error) => { }
     );
   }
   openDocModel(action, obj) {

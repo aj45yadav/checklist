@@ -45,12 +45,6 @@
     border-bottom: 1px solid;
   }
 
-  .project-info {
-    display: flex;
-    justify-content: space-around;
-    margin: 10px 0 0 0;
-    border-bottom: 1px solid;
-  }
 
   .btn-save button {
     float: right;
@@ -87,4 +81,65 @@
 .score {
   float: right;
   font-weight: 600;
+}
+.parentcategory {
+  padding: 24px 24px;
+  font-size: 18px;
+  color: #607D8B;
+}
+.projectname {
+  padding: 0 24px;
+  font-size: 32px;
+  font-weight: 600;
+  color: #56288B;
+  text-decoration: underline;
+}
+.projectDescription {
+  padding: 24px 24px;
+}
+.stages {
+  display: flex;
+  justify-content: space-around;
+  cursor: pointer;
+}
+/* .stages:hover {
+  color: #3F51B5;
+} */
+.underline {
+  background-repeat: no-repeat;
+}
+
+.underline--stars {
+  background-image: url("../../assets/img/diamond.png");
+  background-position: bottom;
+  background-size: 20px 20px;
+  padding:  0px 0 20px 0;
+  cursor: pointer;
+}
+.underline--stars:hover {
+  background-image: url("../../assets/img/diamond2.png");
+  color: white;
+}
+/* .underline--stars:hover {
+color: #3F51B5;
+} */
+.main-content {
+  background-color: #8B97A3;
+  padding: 20px 0 20px 0;
+}
+.main-content:hover {
+  background-color: #67696b;
+}
+hr {
+  display: block;
+  height: 1px;
+  border: 0;
+  border-top: 1.2px solid #4c4a4ac7;
+  padding: 0;
+}
+.color {
+  color: white;
+}
+.mat-divider {
+  border-top-width: 2px;
 }

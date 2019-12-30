@@ -62,9 +62,13 @@
           <mat-icon>cancel</mat-icon>
           <span class="mdc-chip__text">Cancel</span>
         </button>
-        <button class="mdc-chip" [mat-dialog-close]="data" (click)="doAction()" [disabled]="!emittedQuestionData.question">
+        <button *ngIf="emittedQuestionData.parentid === ''" class="mdc-chip" [mat-dialog-close]="data" (click)="doAction()" [disabled]="!emittedQuestionData.question">
           <mat-icon *ngIf="action == 'Delete'">delete</mat-icon>
           <mat-icon *ngIf="action != 'Delete'">add_circle_outline</mat-icon>
+          <span class="mdc-chip__text">{{action}} Questions</span>
+        </button>
+        <button  *ngIf="emittedQuestionData.parentid !== ''" class="mdc-chip" [mat-dialog-close]="data" (click)="doAction()" [disabled]="!emittedQuestionData.question || !emittedQuestionData.answer_opt">
+          <mat-icon>add_circle_outline</mat-icon>
           <span class="mdc-chip__text">{{action}} Questions</span>
         </button>
       </div>
