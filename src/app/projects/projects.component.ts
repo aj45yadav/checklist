@@ -14,9 +14,7 @@ export interface ProjectData {
   category: number;
   quetions: number;
 }
-const ProjectData: BuData[] = [
-  // {id: 1, project_name: 'Google', createdBy: 'Ajay Yadav', category: 5, quetions: 45 }
-];
+
 @Component({
   selector: 'app-projects',
   templateUrl: './projects.component.html',
@@ -24,15 +22,13 @@ const ProjectData: BuData[] = [
 })
 export class ProjectsComponent implements OnInit {
   loading: boolean;
-  dataSource = ProjectData;
-  dataSourcee;
+  dataSource;
   @ViewChild(MatTable, {}) table: MatTable<any>;
   constructor(public dialog: MatDialog, public projectService: ProjectService, public cookieService: CookieService,
      public router: Router) { }
 
   ngOnInit() {
     this.getProjectList();
-    // alert(this.cookieService.get('token'));
   }
 
   openDialog(action, obj) {
@@ -43,20 +39,14 @@ export class ProjectsComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      // console.log('checkk it here', result);
-      // return false;
       if (result.event === 'Add') {
-        // this.addProject(result.data);
         this.addProject(result.data);
       } else if (result.event === 'Update') {
         this.editProject(result.data);
       } else if (result.event === 'Delete') {
-        // this.deleteProject(result.data);
         this.deleteProjectt(result.data, result.id);
       } else if (result.event === 'Share') {
-        // this.shareProject(result.data);
       } else if (result.event === 'Status') {
-        // this.chanegeStatus(result.data);
       }
     });
   }
@@ -74,8 +64,8 @@ export class ProjectsComponent implements OnInit {
       // tslint:disable-next-line:no-shadowed-variable
       (data: any) => {
         request.id = data.project_id;
-        this.dataSourcee.push(request);
-        // this.dataSourcee.push(data);
+        this.dataSource.push(request);
+        // this.dataSource.push(data);
         // this.getProjectList();
         this.router.navigate(['project', data['project_id'], 'stages']);
       },
@@ -84,16 +74,18 @@ export class ProjectsComponent implements OnInit {
   }
 
   editProject(project_Data) {
-    const data = {
+    const request = {
       project_id: project_Data.id,
       name: project_Data.name,
       bu_id: project_Data.bu_id,
       sub_bu_id: project_Data.sub_bu_id,
       desc: project_Data.desc
     };
-    this.projectService.editProject(data).subscribe(
-      () => {
-        this.getProjectList();
+    this.projectService.editProject(request).subscribe(
+      (data) => {
+        const currentProject = this.dataSource.find(x => x.id === project_Data.id);
+        const projectIndex = this.dataSource.indexOf(currentProject);
+        this.dataSource[projectIndex] = project_Data;
       },
       (error) => { }
     );
@@ -103,7 +95,7 @@ export class ProjectsComponent implements OnInit {
     this.loading = true;
     this.projectService.getProjectList().subscribe(
       (data) => {
-        this.dataSourcee = data;
+        this.dataSource = data;
         this.loading = false;
       },
       (error) => {
@@ -113,10 +105,13 @@ export class ProjectsComponent implements OnInit {
   }
 
   deleteProjectt(project_Data, index) {
-    // this.dataSourcee.splice(index, 1);
+    // this.dataSource.splice(index, 1);
     this.projectService.deleteProject(project_Data.id).subscribe(
       (data) => {
-        this.getProjectList();
+        // this.getProjectList();
+        const currentProject = this.dataSource.find(x => x.id === project_Data.id);
+        const projectIndex = this.dataSource.indexOf(currentProject);
+        this.dataSource.splice(projectIndex, 1);
       },
       (error) => { }
     );

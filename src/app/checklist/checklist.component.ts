@@ -28,7 +28,7 @@ export class ChecklistComponent implements OnInit {
   form: FormGroup;
   response;
   fileUrl;
-  firstStageId;
+  currentStageId;
 
   ngOnInit() {
     this.stageId = this.activatedRoute.snapshot.params['stageId'];
@@ -36,7 +36,6 @@ export class ChecklistComponent implements OnInit {
     // this.firstStageId = this.
 
     this.getStageData();
-    this.getProjectData(2);
     this.form = this.formBuilder.group({
       filedata: ['']
     });
@@ -75,22 +74,26 @@ export class ChecklistComponent implements OnInit {
       (data: any) => {
         this.projectBasic = data;
         // console.log(this.stages);
-        this.firstStageId = data.stages[0].id;
+        this.currentStageId = data.stages[0].id;
+        this.getProjectData();
       },
       (error) => {
         console.log(error);
       }
     );
   }
-  getProjectData(req) {
+  getProjectData(stageId?: any) {
        const request = {
-        stage_id: req.stage_id
+        stage_id: stageId ? stageId : this.currentStageId
       };
+      if (stageId) {
+        this.currentStageId =  stageId;
+      }
     this.projectService.getStageData(request).subscribe(
       (data: any) => {
         this.projectData = data;
         this.questiondatalevel2 = [];
-        const firstCategory = this.projectData.catgroups[0].categories[0];
+        const firstCategory = data.catgroups[0].categories[0];
         if (firstCategory && firstCategory.status) {
           firstCategory.questions.forEach(question => {
             if (question.qlevel === '2') {
@@ -140,7 +143,7 @@ export class ChecklistComponent implements OnInit {
     // console.log(this.currentCategoryResponse);
     this.projectService.postUserResponse(this.currentCategoryResponse).subscribe(
       () => {
-        this.getProjectData(2);
+        this.getStageData();
       },
       (error) => { }
     );

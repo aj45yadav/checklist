@@ -26,7 +26,7 @@ export class QuestionsComponent implements OnInit {
   categoryForm: FormGroup;
   dataOfCategory: Category[] = [] as Category[];
   questiondata: Question[] = [] as Question[];
-  currentCategory: Category = {} as Category;
+  currentCategory: any;
   buMainModel: BuMainModel = {} as BuMainModel;
   myControl = new FormControl();
   options: string[] = ['One', 'Two', 'Three'];
@@ -79,9 +79,14 @@ export class QuestionsComponent implements OnInit {
       name: catGroup.name,
     };
     this.projectService.addCategoryGroup(request).subscribe(
-      (data) => {
-        // this.projectData.push(request);
-        this.getStagesData();
+      (data: any) => {
+        const newGrp = {
+          catgroup_id: data.catgroup_id,
+          name: catGroup.name,
+          categories: []
+        };
+        this.projectData.catgroups.push(newGrp);
+        // this.getStagesData();
       },
       (error) => {
         console.log(error);
@@ -94,8 +99,10 @@ export class QuestionsComponent implements OnInit {
       name: catGroup.name,
     };
     this.projectService.editCategoryGropup(request).subscribe(
-      () => {
-        this.getStagesData();
+      (data) => {
+        const currentCategoryGrp = this.projectData.catgroups.find(x => x.catgroup_id === catGroup.catgroup_id);
+        const categoryGroupIndex = this.projectData.catgroups.indexOf(currentCategoryGrp);
+        this.projectData.catgroups[categoryGroupIndex] = catGroup;
       },
       (error) => {
         console.log(error);
@@ -105,8 +112,11 @@ export class QuestionsComponent implements OnInit {
 
   deleteCatGroup(catGroup) {
     this.projectService.deleteCategoryGroup(catGroup.catgroup_id).subscribe(
-      () => {
-        this.getStagesData();
+      (data) => {
+        // this.getStagesData();
+        const currentCategoryGrp = this.projectData.catgroups.find(x => x.catgroup_id === catGroup.catgroup_id);
+        const categoryGroupIndex = this.projectData.catgroups.indexOf(currentCategoryGrp);
+        this.projectData.catgroups.splice(categoryGroupIndex, 1);
       },
       (error) => {
         console.log(error);
@@ -114,8 +124,11 @@ export class QuestionsComponent implements OnInit {
     );
   }
   // category related all functions
-  openCategoryDialog(action, obj) {
+  openCategoryDialog(action, obj, catgroup_id?: number) {
     obj.action = action;
+    if (catgroup_id) {
+      obj.catgroup_id = catgroup_id;
+    }
     const dialogRef = this.dialog.open(CreateCategoryComponent, {
       width: '650px',
       data: obj
@@ -131,43 +144,46 @@ export class QuestionsComponent implements OnInit {
     });
   }
   addCategoryD(cat_data) {
-    // const data: Category = {
-    //   id: 0,
-    //   project_id: this.projectId,
-    //   name: cat_data.name,
-    //   desc: cat_data.desc,
-    //   questions: []
-    // };
-    // this.projectService.addCategory(data).subscribe(
-    //   (response: any) => {
-    //     const id = response.category_id;
-    //     if (this.projectData.categories || this.projectData.categories.length || 0) {
-    //       this.projectData.categories = [];
-    //     } else {
-    //       data.id = id;
-    //       this.projectData.categories.push(data);
-    //     }
-    const data = {
+    const request = {
       project_id: this.projectId,
+      stage_id: this.stageId,
       catgroup_id: cat_data.catgroup_id,
       name: cat_data.name,
       desc: cat_data.desc,
     };
-    this.projectService.addCategory(data).subscribe(
+    this.projectService.addCategory(request).subscribe(
       (response: any) => {
-        this.getStagesData();
-      });
+        const newCategory = {
+          id: response.category_id,
+          name: cat_data.name,
+          desc: cat_data.desc,
+          status: cat_data.status,
+          questions: []
+        };
+        // this.getStagesData();
+        const currentCategoryGrp = this.projectData.catgroups.find(x => x.catgroup_id === cat_data.catgroup_id);
+        const categoryGroupIndex = this.projectData.catgroups.indexOf(currentCategoryGrp);
+        this.projectData.catgroups[categoryGroupIndex].categories.push(newCategory);
+        this.currentCategory = newCategory;
+      },
+      (error) => { }
+    );
   }
   editCategory(cat_data) {
-    const data = {
+    const request = {
       category_id: cat_data.id,
-      project_id: this.activatedRoute.snapshot.paramMap['id'],
+      project_id: this.projectId,
+      stage_id: this.stageId,
       name: cat_data.name,
       desc: cat_data.desc
     };
-    this.projectService.editCategory(data).subscribe(
-      () => {
-        this.getStagesData();
+    this.projectService.editCategory(request).subscribe(
+      (response: any) => {
+        const currentCategoryGrp = this.projectData.catgroups.find(x => x.catgroup_id === cat_data.catgroup_id);
+        const categoryGroupIndex = this.projectData.catgroups.indexOf(currentCategoryGrp);
+        const currentCategory = this.projectData.catgroups[categoryGroupIndex].categories.find(x => x.id === cat_data.id);
+        const categoryIndex = this.projectData.catgroups[categoryGroupIndex].categories.indexOf(currentCategory);
+        this.projectData.catgroups[categoryGroupIndex].categories[categoryIndex] = cat_data;
       },
       (error) => {
 
@@ -176,8 +192,12 @@ export class QuestionsComponent implements OnInit {
   }
   deleteCategoryD(cat_data) {
     this.projectService.deleteCategory(cat_data.id).subscribe(
-      () => {
-        this.getStagesData();
+      (data) => {
+        const currentCategoryGrp = this.projectData.catgroups.find(x => x.catgroup_id === cat_data.catgroup_id);
+        const categoryGroupIndex = this.projectData.catgroups.indexOf(currentCategoryGrp);
+        const currentCategory = this.projectData.catgroups[categoryGroupIndex].categories.find(x => x.id === cat_data.id);
+        const categoryIndex = this.projectData.catgroups[categoryGroupIndex].categories.indexOf(currentCategory);
+        this.projectData.catgroups[categoryGroupIndex].categories.splice(categoryIndex, 1);
       },
       (error) => {
       }
@@ -186,12 +206,12 @@ export class QuestionsComponent implements OnInit {
   //  end category related functions
 
   // questions related functions
-  openQuestionsDialog(action, obj) {
-    console.log(obj);
+  openQuestionsDialog(action, obj, opt) {
     obj.action = action;
-    // if (this.currentCategory.questions && this.currentCategory.questions.length === 0) {
-    //   obj.parentid = '';
-    // }
+    if (opt) {
+      obj.cat_id = opt.cat_id;
+      obj.catgroup_id = opt.catgroup_id;
+    }
     const dialogRef = this.dialog.open(CreateQuestionsComponent, {
       width: '650px',
       data: obj
@@ -212,24 +232,41 @@ export class QuestionsComponent implements OnInit {
   addQuestionsData(que_data) {
     const parent = que_data.parentid ? this.currentCategory.questions.find(x => x.id === que_data.parentid) : undefined;
     // const id = que_data.parentid === undefined || '' ? 1 : parent && parent.qlevel ? parent.qlevel + 1 : 2;
-    const request = {
-      question: que_data.question,
-      parent_id: que_data.parentid ? que_data.parentid : '',
-      answer_opt: que_data.answer_opt,
-      tooltip: que_data.tooltip,
-      category_id: this.currentCategory.id,
-      project_id: this.projectId,
-      qlevel: que_data.parentid === '' ? 1 : parent && parent.qlevel ? parseInt(parent.qlevel.toString(), 10) + 1 : 2,
-      weightage: que_data.weightage,
-      score: que_data.score
-    };
-    // console.log(request);
-    this.projectService.addQuestionsData(request).subscribe(
-      (response: any) => {
-        this.getStagesData();
-      },
-      (error) => { }
-    );
+    setTimeout(() => {
+      const request = {
+        question: que_data.question,
+        parent_id: que_data.parentid ? que_data.parentid : '',
+        answer_opt: que_data.answer_opt,
+        tooltip: que_data.tooltip,
+        category_id: this.currentCategory.id,
+        project_id: this.projectId,
+        qlevel: que_data.parentid === '' ? 1 : parent && parent.qlevel ? parseInt(parent.qlevel.toString(), 10) + 1 : 2,
+        weightage: que_data.weightage,
+        score: que_data.score
+      };
+      // console.log(request);
+      this.projectService.addQuestionsData(request).subscribe(
+        (response: any) => {
+          // this.getStagesData();
+          const newQuestion = {
+            id: response.question_id,
+            parentid: request.parent_id,
+            question: request.question,
+            qlevel: request.qlevel,
+            answer_opt: request.answer_opt,
+            weightage: request.weightage,
+            score: request.score,
+            tooltip: request.tooltip
+          };
+          const currentCategoryGrp = this.projectData.catgroups.find(x => x.catgroup_id === que_data.catgroup_id);
+          const categoryGroupIndex = this.projectData.catgroups.indexOf(currentCategoryGrp);
+          const currentCategory = this.projectData.catgroups[categoryGroupIndex].categories.find(x => x.id === que_data.cat_id);
+          const categoryIndex = this.projectData.catgroups[categoryGroupIndex].categories.indexOf(currentCategory);
+          this.projectData.catgroups[categoryGroupIndex].categories[categoryIndex].questions.push(newQuestion);
+        },
+        (error) => { }
+      );
+      }, 600);
   }
 
   deleteQuestionData(que_data) {
@@ -251,8 +288,14 @@ export class QuestionsComponent implements OnInit {
     };
     this.projectService.editQuestionsData(data).subscribe(
       () => {
-        this.getStagesData();
-       },
+        const currentCategoryGrp = this.projectData.catgroups.find(x => x.catgroup_id === que_data.catgroup_id);
+        const categoryGroupIndex = this.projectData.catgroups.indexOf(currentCategoryGrp);
+        const currentCategory = this.projectData.catgroups[categoryGroupIndex].categories.find(x => x.id === que_data.cat_id);
+        const categoryIndex = this.projectData.catgroups[categoryGroupIndex].categories.indexOf(currentCategory);
+        const currentQuestion = currentCategory.questions.find(x => x.id === que_data.id);
+        const currentQuestionIndex = currentCategory.questions.indexOf(currentQuestion);
+        this.projectData.catgroups[categoryGroupIndex].categories[categoryIndex].questions[currentQuestionIndex] = que_data;
+      },
       (error) => { }
     );
   }
@@ -300,7 +343,6 @@ export class QuestionsComponent implements OnInit {
         } else {
           this.dataOfCategory.push(category);
         }
-        this.currentCategory = category;
       }
     });
   }
@@ -346,10 +388,8 @@ export class QuestionsComponent implements OnInit {
     );
   }
 
-
-  setCurrentCategory(category: Category) {
+  setCurrentCategory(category) {
     this.currentCategory = category;
-    // console.log(category);
   }
 
 }

@@ -14,42 +14,44 @@
       <mat-accordion>
         <ng-container *ngFor="let catgrp of projectData?.catgroups;let k = index">
           <div class="parentcategory">
-          <b>{{k+1}}. {{catgrp.name}} </b>
+            <b>{{k+1}}. {{catgrp.name}} </b>
           </div>
-        <ng-container *ngFor="let p of catgrp?.categories;let i = index">
-          <mat-expansion-panel (opened)="setCurrentCategory(p)">
-            <mat-expansion-panel-header>
-              <mat-panel-title>
-                <b>{{i+1}}. {{p.name}} </b>
-              </mat-panel-title>
-              <!-- <mat-icon style="margin-right: 20px; color: green" *ngIf="p.status" aria-hidden="false" aria-label="Example home icon" matTooltip="Answer is submitted for this category"
+          <ng-container *ngFor="let p of catgrp?.categories;let i = index">
+            <mat-expansion-panel [expanded]="i === 0 && k === 0" (opened)="setCurrentCategory(p)">
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  <b>{{i+1}}. {{p.name}} </b>
+                </mat-panel-title>
+                <!-- <mat-icon style="margin-right: 20px; color: green" *ngIf="p.status" aria-hidden="false" aria-label="Example home icon" matTooltip="Answer is submitted for this category"
               matTooltipClass="tooltip-blue" matTooltipPosition="above">done</mat-icon> -->
-              <img style="margin-right: 20px;width:25px" *ngIf="p.status" src="{{projectService.getImagepath()}}/Group 142.svg" matTooltip="Answer is submitted for this category"
-              matTooltipClass="tooltip-blue" matTooltipPosition="above">
-            </mat-expansion-panel-header>
-            <div class="catque" *ngFor="let l1 of p.questions | mainQuestions;let i = index">
-              <p>{{i+1}}. {{l1.question}}
-                <i *ngIf="l1.tooltip !== null" class="material-icons" [matTooltip]="l1.tooltip"
-                  matTooltipClass="tooltip-blue" matTooltipPosition="right">
-                  info
-                </i>
-                <!-- <span class="score">Score : {{l1.score}}</span> -->
-              </p>
+                <img style="margin-right: 20px;width:25px" *ngIf="p.status"
+                  src="{{projectService.getImagepath()}}/Group 142.svg"
+                  matTooltip="Answer is submitted for this category" matTooltipClass="tooltip-blue"
+                  matTooltipPosition="above">
+              </mat-expansion-panel-header>
+              <div class="catque" *ngFor="let l1 of p.questions | mainQuestions;let i = index">
+                <p>{{i+1}}. {{l1.question}}
+                  <i *ngIf="l1.tooltip !== null" class="material-icons" [matTooltip]="l1.tooltip"
+                    matTooltipClass="tooltip-blue" matTooltipPosition="right">
+                    info
+                  </i>
+                  <!-- <span class="score">Score : {{l1.score}}</span> -->
+                </p>
 
-              <div class="optionss">
-                <mat-radio-group aria-labelledby="example-radio-group-label" class="example-radio-group"
-                  [(ngModel)]="l1.selectedOption">
-                  <mat-radio-button class="example-radio-button" *ngFor="let option of options;" [value]="option.qId"
-                    (change)="onRadioOptionChangeLevel2(l1.id, option.qId)">
+                <div class="optionss">
+                  <mat-radio-group aria-labelledby="example-radio-group-label" class="example-radio-group"
+                    [(ngModel)]="l1.selectedOption">
+                    <mat-radio-button class="example-radio-button" *ngFor="let option of options;" [value]="option.qId"
+                      (change)="onRadioOptionChangeLevel2(l1.id, option.qId)">
 
-                    {{option.ans}}
-                  </mat-radio-button>
-                </mat-radio-group>
+                      {{option.ans}}
+                    </mat-radio-button>
+                  </mat-radio-group>
+                </div>
               </div>
-            </div>
-          </mat-expansion-panel>
-        </ng-container>
-        <mat-divider></mat-divider>
+            </mat-expansion-panel>
+          </ng-container>
+          <mat-divider></mat-divider>
         </ng-container>
       </mat-accordion>
     </mat-nav-list>
@@ -70,48 +72,48 @@
           <h4>Sub Business: {{projectBasic?.sub_bu_name}}</h4>
         </div>
       </div> -->
-      
       <div class="stages">
         <div *ngFor="let stage of projectBasic?.stages">
-        <span class="underline underline--stars" [ngClass]="{'active': selectedItem == item}" (click)="getProjectData({ stage_id: stage.id})">{{stage.name}}</span>
+          <span class="underline underline--stars" [ngClass]="currentStageId === stage.id ? 'active' : ''"
+            (click)="getProjectData(stage.id)">{{stage.name}}</span>
         </div>
       </div>
-      <hr/>
+      <hr />
     </div>
-      <div class="aside-content" *ngFor="let l2 of questiondatalevel2">
-        <p>{{l2.question}} <i *ngIf="l2.tooltip !== null" class="material-icons" [matTooltip]="l2.tooltip"
-            matTooltipClass="tooltip-blue" matTooltipPosition="right">
-            info
-          </i>
-          <!-- <span class="score">Score : {{l2.score}}</span> -->
-        </p>
-        <div class="optionss">
-          <mat-radio-group aria-labelledby="example-radio-group-label" class="example-radio-group"
-            [(ngModel)]="l2.selectedOption">
-            <mat-radio-button class="example-radio-button" *ngFor="let option of options;" [value]="option.qId"
-              (change)="onRadioOptionChangeLevel3(l2.id, option.qId)">
+    <div class="aside-content" *ngFor="let l2 of questiondatalevel2">
+      <p>{{l2.question}} <i *ngIf="l2.tooltip !== null" class="material-icons" [matTooltip]="l2.tooltip"
+          matTooltipClass="tooltip-blue" matTooltipPosition="right">
+          info
+        </i>
+        <!-- <span class="score">Score : {{l2.score}}</span> -->
+      </p>
+      <div class="optionss">
+        <mat-radio-group aria-labelledby="example-radio-group-label" class="example-radio-group"
+          [(ngModel)]="l2.selectedOption">
+          <mat-radio-button class="example-radio-button" *ngFor="let option of options;" [value]="option.qId"
+            (change)="onRadioOptionChangeLevel3(l2.id, option.qId)">
 
-              {{option.ans}}
-            </mat-radio-button>
-          </mat-radio-group>
-          <div class="comment">
-            <mat-form-field appearance="outline">
-              <mat-label>Add Comment</mat-label>
-              <textarea matInput placeholder="Comment" [(ngModel)]="l2.comment"></textarea>
-            </mat-form-field>
-            <mat-card>
-              <form [formGroup]="form">
-                <input type="file" mat-raised-button color="primary" class="input-file" name="filedata"
-                  (change)="onChange($event)">
-                <button (click)="onSubmit(l2.id)" mat-raised-button color="primary">
-                  <mat-icon>cloud_upload</mat-icon>
-                  Upload File
-                </button>
-              </form>
-              <a href="https://dev-checklist.regalix.com{{l2.document}}">{{l2.document}}</a>
-            </mat-card>
-          </div>
-          <!-- <button mat-raised-button color="primary" [matMenuTriggerFor]="menu">Upload Document</button>
+            {{option.ans}}
+          </mat-radio-button>
+        </mat-radio-group>
+        <div class="comment">
+          <mat-form-field appearance="outline">
+            <mat-label>Add Comment</mat-label>
+            <textarea matInput placeholder="Comment" [(ngModel)]="l2.comment"></textarea>
+          </mat-form-field>
+          <mat-card>
+            <form [formGroup]="form">
+              <input type="file" mat-raised-button color="primary" class="input-file" name="filedata"
+                (change)="onChange($event)">
+              <button (click)="onSubmit(l2.id)" mat-raised-button color="primary">
+                <mat-icon>cloud_upload</mat-icon>
+                Upload File
+              </button>
+            </form>
+            <a href="https://dev-checklist.regalix.com{{l2.document}}">{{l2.document}}</a>
+          </mat-card>
+        </div>
+        <!-- <button mat-raised-button color="primary" [matMenuTriggerFor]="menu">Upload Document</button>
             <mat-menu #menu="matMenu">
               <button mat-menu-item (click)="openDocModel('Comment' , {})">Add Comment</button>
               <mat-divider></mat-divider>
@@ -121,8 +123,9 @@
               <mat-divider></mat-divider>
               <button mat-menu-item (click)="openDocModel('Link', {})">Add Link</button>
             </mat-menu> -->
-        </div>
-        <ng-container *ngIf="l2.selectedOption">
+      </div>
+      <ng-container *ngIf="l2.selectedOption">
+        <ng-container *ngIf="currentCategory.questions">
           <div class="aside-content l3"
             *ngFor="let l3 of currentCategory.questions | subQuestions: l2.id : l2.selectedOption">
             <p>{{l3.question}} <i *ngIf="l3.tooltip !== null" class="material-icons" [matTooltip]="l3.tooltip"
@@ -167,14 +170,16 @@
             </div>
           </div>
         </ng-container>
+      </ng-container>
 
-        <mat-divider></mat-divider>
-      </div>
-      <!-- {{questiondatalevel3 | json}} -->
+      <mat-divider></mat-divider>
+    </div>
+    <!-- {{questiondatalevel3 | json}} -->
 
-      <div class="btn-save">
-        <button mat-raised-button color="primary" *ngIf="!currentCategory.status" (click)="postUserResponseData()">Submit {{currentCategory.name}} Response</button>
-      </div>
-<!-- {{currentCategory | json}} -->
+    <div class="btn-save" *ngIf="currentCategory">
+      <button mat-raised-button color="primary" *ngIf="!currentCategory.status" (click)="postUserResponseData()">Submit
+        {{currentCategory.name}} Response</button>
+    </div>
+    <!-- {{currentCategory | json}} -->
   </mat-sidenav-content>
 </mat-sidenav-container>

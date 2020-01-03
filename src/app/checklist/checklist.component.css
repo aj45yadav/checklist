@@ -120,6 +120,10 @@
   background-image: url("../../assets/img/diamond2.png");
   color: white;
 }
+.active {
+  background-image: url("../../assets/img/diamond2.png");
+  color: white;
+}
 /* .underline--stars:hover {
 color: #3F51B5;
 } */

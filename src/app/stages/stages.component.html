@@ -28,6 +28,9 @@
 
     </div>
     </div>
+    <mat-card *ngIf="projectStages?.stages?.length == 0" style="text-align: center">
+      <h4>There is no any Stages for this Project</h4>
+    </mat-card>
     <ng-container *ngFor="let stage of projectStages?.stages;let i = index">
     <mat-card>
      {{i+1}}. {{stage.name}}
@@ -48,4 +51,5 @@
       </mat-card-actions>
     </mat-card>
     </ng-container>
+
 </div>

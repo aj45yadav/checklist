@@ -19,7 +19,7 @@ export class StagesComponent implements OnInit {
     this.projectId = this.activatedRoute.snapshot.params['stageId'];
     this.getStages();
   }
-  openStageDialog(action , obj) {
+  openStageDialog(action, obj) {
     obj.action = action;
     const dialogRef = this.dialog.open(StageDialogComponent, {
       width: '650px',
@@ -43,7 +43,7 @@ export class StagesComponent implements OnInit {
     this.projectService.getStages(request).subscribe(
       (data: any) => {
         this.projectStages = data;
-        // console.log(this.stages);
+        console.log(this.projectStages);
         this.loading = false;
       },
       (error) => {
@@ -58,8 +58,12 @@ export class StagesComponent implements OnInit {
       name: stage.name
     };
     this.projectService.addStages(request).subscribe(
-      (data) => {
-        this.projectStages.push(request);
+      (data: any) => {
+        const newStage = {
+          id: data.stage_id,
+          name: stage.name
+        };
+        this.projectStages.stages.push(newStage);
         this.loading = false;
       },
       (error) => {
@@ -75,7 +79,10 @@ export class StagesComponent implements OnInit {
     };
     this.projectService.editStage(request).subscribe(
       (data) => {
-        this.getStages();
+        // this.getStages();
+        const currentStage = this.projectStages.stages.find(x => x.id === stage.id);
+        const stageIndex = this.projectStages.stages.indexOf(currentStage);
+        this.projectStages.stages[stageIndex] = stage;
       },
       (error) => {
         console.log(error);
@@ -84,8 +91,10 @@ export class StagesComponent implements OnInit {
   }
   deleteStage(stage) {
     this.projectService.deleteStage(stage.id).subscribe(
-      () => {
-        this.getStages();
+      (data) => {
+        const currentStage = this.projectStages.stages.find(x => x.id === stage.id);
+        const stageIndex = this.projectStages.stages.indexOf(currentStage);
+        this.projectStages.stages.splice(stageIndex, 1);
       },
       (error) => {
         console.log(error);

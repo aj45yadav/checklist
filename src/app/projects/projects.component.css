@@ -17,7 +17,8 @@ flex-wrap: wrap;
 }
 .p-list mat-card {
     width: 260px;
-    height: 260px;
+    /* height: 260px; */
+    height: auto;
     margin: 10px;
 }
 .q-info {
@@ -34,4 +35,7 @@ padding: 0px;
 }
 mat-card-content {
     margin: 50px 0 50px 0;
+}
+.mat-card-actions .mat-button, .mat-card-actions .mat-raised-button {
+    margin: 5px 8px;
 }

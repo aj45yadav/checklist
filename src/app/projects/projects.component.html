@@ -13,7 +13,7 @@
     </div>
   </div>
   <div class="p-list">
-    <ng-container *ngFor="let p of dataSourcee">
+    <ng-container *ngFor="let p of dataSource">
       <mat-card>
         <div class="p-header">
           <mat-card-title>
@@ -42,15 +42,19 @@
               Category: {{p.category}}
             </h4>
           </div>
-          <!-- <div>Created By: {{p.creator}}</div> -->
         </mat-card-content>
         <mat-card-actions>
-          <!-- <button mat-raised-button color="primary" (click)="openDialog('Status', p)">
-            <mat-icon>check</mat-icon><span *ngIf="p.status">Active</span><span *ngIf="!p.status">Inactive</span>
-          </button> -->
+
+          <a mat-raised-button color="primary" target="_blank" routerLink="/project/{{p.id}}/checklist" target="_blank" *ngIf="p.review_ready">
+            <mat-icon>pageview</mat-icon> Review
+          </a>
+
           <a mat-raised-button color="primary" target="_blank" routerLink="/project/{{p.id}}/checklist" target="_blank">
             <mat-icon>visibility</mat-icon> Preview
-           </a>
+          </a>
+          <!-- <a mat-raised-button color="primary" target="_blank" [routerLink]="['/project/', p.id, 'checklist']" [queryParams] = "{checklist: 'preview'}" target="_blank">
+            <mat-icon>visibility</mat-icon> Preview
+          </a> -->
           <button mat-raised-button color="primary" (click)="shareProjectModel(p.id)">
             <mat-icon>share</mat-icon>Share
           </button>
