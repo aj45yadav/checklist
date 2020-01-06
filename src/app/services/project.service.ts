@@ -32,7 +32,7 @@ export class ProjectService {
       this.Users.next([]);
     }
   }
-checkForToke() {
+checkForToken() {
   const token = this.cookieService.get('token');
   if (token) {
     return true;

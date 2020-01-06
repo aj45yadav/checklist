@@ -17,7 +17,7 @@ export class LoginComponent implements OnInit {
   constructor(public authentication: SocialLoginService, public route: Router,
      public authService: AuthService, public projectService: ProjectService) { }
   ngOnInit() {
-   const token = this.projectService.checkForToke();
+   const token = this.projectService.checkForToken();
    if (token) {
      this.route.navigate(['/projects']);
    } else {

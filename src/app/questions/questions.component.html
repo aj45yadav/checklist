@@ -66,7 +66,7 @@
         </div>
       </div>
       <mat-card *ngIf="catgrp?.categories?.length == 0" style="text-align: center">
-        <h4>There is no any Category For this Parent Category</h4>
+        <h4>No Category For this Parent Category</h4>
       </mat-card>
       <ng-container *ngFor="let p of catgrp?.categories;let i = index">
         <!-- <mat-expansion-panel [expanded]="k==0 && i==0" (opened)="setCurrentCategory(p)"> -->

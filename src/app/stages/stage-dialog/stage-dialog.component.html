@@ -27,7 +27,8 @@
       <span class="mdc-chip__text">Cancel</span>
     </button>
     <button class="mdc-chip" [mat-dialog-close]="data" (click)="doAction()" [disabled]="!stageData.name">
-      <mat-icon>add_circle</mat-icon>
+      <mat-icon *ngIf="action == 'Delete'">delete</mat-icon>
+      <mat-icon *ngIf="action != 'Delete'">add_circle_outline</mat-icon>
       <span class="mdc-chip__text">{{action}} Stage</span>
     </button>
   </div>
