@@ -11,6 +11,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LoginComponent } from './login/login.component';
 import {LocationStrategy, HashLocationStrategy} from '@angular/common';
 import { CookieService } from 'ngx-cookie-service';
+
 // social login imports
 import {
   SocialLoginModule,
@@ -19,7 +20,8 @@ import {
   FacebookLoginProvider,
   LinkedinLoginProvider
 } from 'ng-social-login';
-import { HttpClientModule } from '@angular/common/http';
+
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { HeaderComponent } from './shared/header/header.component';
 import { QuestionsComponent } from './questions/questions.component';
 import { CreateCategoryComponent } from './questions/create-category/create-category.component';
@@ -38,18 +40,20 @@ import { TestServiceService } from './services/test-service.service';
 import { ProjectsComponent } from './projects/projects.component';
 import { AuthService } from './services/auth.service';
 import { ProjectService } from './services/project.service';
-// import { Checklist2Component } from './checklist2/checklist2.component';
 import { ShareProjectComponent } from './projects/share-project/share-project.component';
 import { DocTypeContentComponent } from './checklist/doc-type-content/doc-type-content.component';
 import { StagesComponent } from './stages/stages.component';
 import { StageDialogComponent } from './stages/stage-dialog/stage-dialog.component';
 import { CatGrpDialogComponent } from './questions/cat-grp-dialog/cat-grp-dialog.component';
-import { ChecklistNewComponent } from './checklist-new/checklist-new.component';
+import { CheklistQuestionsComponent } from './checklist/cheklist-questions/cheklist-questions.component';
+import { AuthInterceptorService } from './guards/auth-interceptor.service';
+import { NgxSpinnerModule } from 'ngx-spinner';
 
 const CONFIG = new AuthServiceConfig([
+  // provide google Id to do client side authentications
   {
     id: GoogleLoginProvider.PROVIDER_ID,
-    provider: new GoogleLoginProvider('653219154305-bfmhmsosk2oe5jdot8afa790v4il24eu.apps.googleusercontent.com')
+    provider: new GoogleLoginProvider('Google-OAuth-Client-Id')
   },
   {
     id: FacebookLoginProvider.PROVIDER_ID,
@@ -87,13 +91,12 @@ export function provideConfig() {
     MainQuestionsPipe,
     TestDialogComponent,
     ProjectsComponent,
-    // Checklist2Component,
     ShareProjectComponent,
     DocTypeContentComponent,
     StagesComponent,
     StageDialogComponent,
     CatGrpDialogComponent,
-    ChecklistNewComponent,
+    CheklistQuestionsComponent,
   ],
   imports: [
     BrowserModule,
@@ -104,11 +107,17 @@ export function provideConfig() {
     MaterialModule,
     HttpClientModule,
     SocialLoginModule,
+    NgxSpinnerModule,
   ],
   entryComponents: [TestDialogComponent, CreateCategoryComponent, CreateQuestionsComponent,
      ExistingCategoryComponent, BusinessComponent, ShareProjectComponent, DocTypeContentComponent, StageDialogComponent,
       CatGrpDialogComponent],
   providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptorService,
+      multi: true,
+    },
     {provide: LocationStrategy, useClass: HashLocationStrategy},
     {
       provide: AuthServiceConfig,

@@ -11,6 +11,7 @@ import { Constants } from '../constants';
 import { ExistingCategoryComponent } from './existing-category/existing-category.component';
 import { ProjectService } from '../services/project.service';
 import { CatGrpDialogComponent } from './cat-grp-dialog/cat-grp-dialog.component';
+import { NgxSpinnerService } from 'ngx-spinner';
 @Component({
   selector: 'app-questions',
   templateUrl: './questions.component.html',
@@ -50,12 +51,13 @@ export class QuestionsComponent implements OnInit {
 
     this.projectId = this.activatedRoute.snapshot.params['stageId'];
     this.stageId = this.activatedRoute.snapshot.params['id'];
+    // console.log(this.stageId);
     this.getProjectData();
     this.getStagesData();
   }
 
   constructor(public activatedRoute: ActivatedRoute, public buService: BuService, public dialog: MatDialog,
-    public projectService: ProjectService, public router: Router) { }
+    public projectService: ProjectService, public router: Router, private spinner: NgxSpinnerService) { }
   // category Group add, edit and delete
   categoryGrpDialog(action, obj) {
     obj.action = action;
@@ -236,13 +238,13 @@ export class QuestionsComponent implements OnInit {
       const request = {
         question: que_data.question,
         parent_id: que_data.parentid ? que_data.parentid : '',
-        answer_opt: que_data.answer_opt,
-        tooltip: que_data.tooltip,
+        answer_opt: que_data.answer_opt ? que_data.answer_opt : null,
+        tooltip: que_data.tooltip ? que_data.tooltip : null,
         category_id: this.currentCategory.id,
         project_id: this.projectId,
         qlevel: que_data.parentid === '' ? 1 : parent && parent.qlevel ? parseInt(parent.qlevel.toString(), 10) + 1 : 2,
-        weightage: que_data.weightage,
-        score: que_data.score
+        weightage: que_data.weightage ? que_data.weightage : null,
+        score: que_data.score ? que_data.score : null
       };
       // console.log(request);
       this.projectService.addQuestionsData(request).subscribe(
@@ -332,7 +334,7 @@ export class QuestionsComponent implements OnInit {
     }
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log(result);
+      // console.log(result);
       if (result && result.name) {
         const category = result;
         category.id = result.id ? result.id : this.buService.generateId();
@@ -355,7 +357,7 @@ export class QuestionsComponent implements OnInit {
 
 
   getProjectData() {
-    this.loading = true;
+    this.spinner.show();
     const request = {
       project_id: this.projectId
     };
@@ -363,10 +365,10 @@ export class QuestionsComponent implements OnInit {
       (data: any) => {
         this.projectBasic = data;
         // console.log(this.stages);
-        this.loading = false;
+        this.spinner.hide();
       },
       (error) => {
-        this.loading = false;
+        this.spinner.hide();
       }
     );
   }

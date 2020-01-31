@@ -1,29 +1,26 @@
 <mat-sidenav-container class="side-container">
   <mat-sidenav mode="side" opened>
     <mat-nav-list>
+      <mat-divider></mat-divider>
       <div class="projectname">
         {{projectBasic?.project_name}}
       </div>
-      <mat-divider></mat-divider>
+      <!-- <mat-divider></mat-divider> -->
       <div class="projectDescription">
-        <!-- <h4>Business Unit: {{projectBasic?.bu_name}}</h4>
-        <h4>Sub Business: {{projectBasic?.sub_bu_name}}</h4> -->
-        <strong>{{projectBasic?.desc}}</strong>
+        {{projectBasic?.desc}}
       </div>
       <mat-divider></mat-divider>
       <mat-accordion>
         <ng-container *ngFor="let catgrp of projectData?.catgroups;let k = index">
           <div class="parentcategory">
-            <b>{{k+1}}. {{catgrp.name}} </b>
+            <b> {{k+1}}. {{catgrp.name}} </b>
           </div>
           <ng-container *ngFor="let p of catgrp?.categories;let i = index">
             <mat-expansion-panel [expanded]="i === 0 && k === 0" (opened)="setCurrentCategory(p)">
               <mat-expansion-panel-header>
                 <mat-panel-title>
-                  <b>{{i+1}}. {{p.name}} </b>
+                  <b>{{k+1}}.{{i+1}} - {{p.name}} </b>
                 </mat-panel-title>
-                <!-- <mat-icon style="margin-right: 20px; color: green" *ngIf="p.status" aria-hidden="false" aria-label="Example home icon" matTooltip="Answer is submitted for this category"
-              matTooltipClass="tooltip-blue" matTooltipPosition="above">done</mat-icon> -->
                 <img style="margin-right: 20px;width:25px" *ngIf="p.status"
                   src="{{projectService.getImagepath()}}/Group 142.svg"
                   matTooltip="Answer is submitted for this category" matTooltipClass="tooltip-blue"
@@ -42,7 +39,7 @@
                   <mat-radio-group aria-labelledby="example-radio-group-label" class="example-radio-group"
                     [(ngModel)]="l1.selectedOption">
                     <mat-radio-button class="example-radio-button" *ngFor="let option of options;" [value]="option.qId"
-                      (change)="onRadioOptionChangeLevel2(l1.id, option.qId)">
+                      (click)="onRadioOptionClickLevel2(l1.id, option.qId)">
 
                       {{option.ans}}
                     </mat-radio-button>
@@ -57,129 +54,162 @@
     </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content>
-    <div class="main-content">
-      <!-- {{projectData | json}} -->
-      <!-- {{questiondatalevel2 | json}} -->
+    <!-- <div class="main-content">
 
-      <!-- <div class="project-info">
-        <div class="project-name">
-          <h4>Project: {{projectBasic?.project_name}}</h4>
-        </div>
-        <div class="unit">
-          <h4>Business Unit: {{projectBasic?.bu_name}}</h4>
-        </div>
-        <div class="sub-unit">
-          <h4>Sub Business: {{projectBasic?.sub_bu_name}}</h4>
-        </div>
-      </div> -->
       <div class="stages">
         <div *ngFor="let stage of projectBasic?.stages">
-          <span class="underline underline--stars" [ngClass]="currentStageId === stage.id ? 'active' : ''"
-            (click)="getProjectData(stage.id)">{{stage.name}}</span>
+          <span class="underline underline--stars" [matTooltip]="getToolTipInfo(stage)"
+          matTooltipClass="tooltip-blue" matTooltipPosition="above" [ngStyle]="{'background-image': getImageUrl(stage), 'color': getColor(stage)}" 
+            [ngClass]="currentStageId === stage.id ? 'active' : ''"
+            (click)="getProjectData(stage.id, stage.name, stage.active, stage.review)">{{stage.name}}</span>
         </div>
       </div>
       <hr />
-    </div>
-    <div class="aside-content" *ngFor="let l2 of questiondatalevel2">
-      <p>{{l2.question}} <i *ngIf="l2.tooltip !== null" class="material-icons" [matTooltip]="l2.tooltip"
-          matTooltipClass="tooltip-blue" matTooltipPosition="right">
-          info
-        </i>
-        <!-- <span class="score">Score : {{l2.score}}</span> -->
-      </p>
-      <div class="optionss">
-        <mat-radio-group aria-labelledby="example-radio-group-label" class="example-radio-group"
-          [(ngModel)]="l2.selectedOption">
-          <mat-radio-button class="example-radio-button" *ngFor="let option of options;" [value]="option.qId"
-            (change)="onRadioOptionChangeLevel3(l2.id, option.qId)">
-
-            {{option.ans}}
-          </mat-radio-button>
-        </mat-radio-group>
-        <div class="comment">
-          <mat-form-field appearance="outline">
-            <mat-label>Add Comment</mat-label>
-            <textarea matInput placeholder="Comment" [(ngModel)]="l2.comment"></textarea>
-          </mat-form-field>
-          <mat-card>
-            <form [formGroup]="form">
-              <input type="file" mat-raised-button color="primary" class="input-file" name="filedata"
-                (change)="onChange($event)">
-              <button (click)="onSubmit(l2.id)" mat-raised-button color="primary">
-                <mat-icon>cloud_upload</mat-icon>
-                Upload File
-              </button>
-            </form>
-            <a href="https://dev-checklist.regalix.com{{l2.document}}">{{l2.document}}</a>
-          </mat-card>
-        </div>
-        <!-- <button mat-raised-button color="primary" [matMenuTriggerFor]="menu">Upload Document</button>
-            <mat-menu #menu="matMenu">
-              <button mat-menu-item (click)="openDocModel('Comment' , {})">Add Comment</button>
-              <mat-divider></mat-divider>
-              <button mat-menu-item (click)="openDocModel('Docx', {})">Upload Docx File</button>
-              <mat-divider></mat-divider>
-              <button mat-menu-item (click)="openDocModel('PDF', {})">Upload PDF</button>
-              <mat-divider></mat-divider>
-              <button mat-menu-item (click)="openDocModel('Link', {})">Add Link</button>
-            </mat-menu> -->
-      </div>
-      <ng-container *ngIf="l2.selectedOption">
-        <ng-container *ngIf="currentCategory.questions">
-          <div class="aside-content l3"
-            *ngFor="let l3 of currentCategory.questions | subQuestions: l2.id : l2.selectedOption">
-            <p>{{l3.question}} <i *ngIf="l3.tooltip !== null" class="material-icons" [matTooltip]="l3.tooltip"
+    </div> -->
+    <!-- <div class="whiteline"></div> -->
+    <mat-tab-group (selectedTabChange)="onTabChange($event)">
+      <mat-tab label={{stage.name}} *ngFor="let stage of projectBasic?.stages">
+        <ng-template mat-tab-label>
+          <!-- <span class="underline underline--stars" [matTooltip]="getToolTipInfo(stage)"
+          matTooltipClass="tooltip-blue" matTooltipPosition="above" [ngStyle]="{'background-image': getImageUrl(stage), 'color': getColor(stage)}" 
+            [ngClass]="currentStageId === stage.id ? 'active' : ''">
+            {{stage.name}}
+          </span> -->
+          <div class="underline underline--stars" [matTooltip]="getToolTipInfo(stage)" matTooltipClass="tooltip-blue"
+            matTooltipPosition="above" [ngStyle]="{'color': getColor(stage)}"
+            [ngClass]="currentStageId === stage.id ? 'active' : ''">
+            <div>
+              {{stage.name}}
+            </div>
+            <mat-icon>lens</mat-icon>
+          </div>
+        </ng-template>
+        <!-- {{currentCategory | json}} -->
+          <div class="aside-content" *ngFor="let l2 of questiondatalevel2">
+            <p>{{l2.question}} <i *ngIf="l2.tooltip !== null" class="material-icons" [matTooltip]="l2.tooltip"
                 matTooltipClass="tooltip-blue" matTooltipPosition="right">
                 info
               </i>
-              <!-- <span class="score">Score : {{l3.score}}</span> -->
+              <!-- <span class="score">Score : {{l2.score}}</span> -->
             </p>
             <div class="optionss">
-              <mat-radio-group aria-labelledby="example-radio-group-label" class="example-radio-group"
-                [(ngModel)]="l3.selectedOption">
+              <div [ngStyle]="{'cursor':query === 'review' ? 'not-allowed' : '' }"> 
+                <mat-radio-group aria-labelledby="example-radio-group-label" class="example-radio-group"
+                [(ngModel)]="l2.selectedOption" [class.disabled]="query == 'review'">
                 <mat-radio-button class="example-radio-button" *ngFor="let option of options;" [value]="option.qId"
-                  (change)="onRadioOptionChangeLevel3(l3.id, option.qId)">
+                  (change)="onRadioOptionChangeLevel3(l2.id, option.qId)">
 
                   {{option.ans}}
                 </mat-radio-button>
               </mat-radio-group>
+              </div>
+
               <div class="comment">
-                <mat-form-field appearance="outline">
+                <div [ngStyle]="{'cursor':query === 'review' ? 'not-allowed' : ''}">
+                <mat-form-field appearance="outline" [class.disabled]="query == 'review'">
                   <mat-label>Add Comment</mat-label>
-                  <textarea matInput placeholder="Comment" [(ngModel)]="l3.comment"></textarea>
+                  <textarea matInput placeholder="Comment" [(ngModel)]="l2.comment"></textarea>
                 </mat-form-field>
-                <mat-card>
+                </div>
+                <mat-card *ngIf="!currentCategory.status">
                   <form [formGroup]="form">
                     <input type="file" mat-raised-button color="primary" class="input-file" name="filedata"
                       (change)="onChange($event)">
-                    <button (click)="onSubmit(l3.id)" mat-raised-button color="primary">Upload File</button>
+                    <button (click)="onSubmit(l2.id)" mat-raised-button color="primary">
+                      <mat-icon>cloud_upload</mat-icon>
+                      Upload File
+                    </button>
                   </form>
-                  <a href="https://dev-checklist.regalix.com/{{l3.document}}">{{l3.document}}</a>
+                </mat-card>
+                <mat-card *ngIf="currentCategory.status" style="height: 50px; width:300px">
+                  <div *ngIf="l2.document !== null">
+                    Uploaded File Link <br /><br />
+                    <a href="https://dev-checklist.regalix.com{{l2.document}}" target="_blank">{{l2.document}}</a>
+                  </div>
+
+                  <div *ngIf="l2.document === null">
+                    File is not uploaded for this question
+                  </div>
+
                 </mat-card>
               </div>
-              <!-- <button mat-raised-button color="primary" [matMenuTriggerFor]="menu">Upload Document</button>
-            <mat-menu #menu="matMenu">
-              <button mat-menu-item (click)="openDocModel('Comment' , {})">Add Comment</button>
-              <mat-divider></mat-divider>
-              <button mat-menu-item (click)="openDocModel('Docx', {})">Upload Docx File</button>
-              <mat-divider></mat-divider>
-              <button mat-menu-item (click)="openDocModel('PDF', {})">Upload PDF</button>
-              <mat-divider></mat-divider>
-              <button mat-menu-item (click)="openDocModel('Link', {})">Add Link</button>
-            </mat-menu> -->
             </div>
+            <ng-container *ngIf="l2.selectedOption">
+              <ng-container *ngIf="currentCategory.questions">
+                <div class="aside-content l3"
+                  *ngFor="let l3 of currentCategory.questions | subQuestions: l2.id : l2.selectedOption">
+                  <p>{{l3.question}} <i *ngIf="l3.tooltip !== null" class="material-icons" [matTooltip]="l3.tooltip"
+                      matTooltipClass="tooltip-blue" matTooltipPosition="right">
+                      info
+                    </i>
+                    <!-- <span class="score">Score : {{l3.score}}</span> -->
+                  </p>
+                  <div class="optionss">
+                    <div [ngStyle]="{'cursor':query === 'review' ? 'not-allowed' : ''}">
+                    <mat-radio-group aria-labelledby="example-radio-group-label" class="example-radio-group"
+                      [(ngModel)]="l3.selectedOption" [class.disabled]="query == 'review'">
+                      <mat-radio-button class="example-radio-button" *ngFor="let option of options;"
+                        [value]="option.qId" (change)="onRadioOptionChangeLevel3(l3.id, option.qId)">
+
+                        {{option.ans}}
+                      </mat-radio-button>
+                    </mat-radio-group>
+                    </div>
+                    <div class="comment">
+                      <div [ngStyle]="{'cursor':query === 'review' ? 'not-allowed' : ''}">
+                      <mat-form-field appearance="outline" [class.disabled]="query == 'review'">
+                        <mat-label>Add Comment</mat-label>
+                        <textarea matInput placeholder="Comment" [(ngModel)]="l3.comment"></textarea>
+                      </mat-form-field>
+                      </div>
+                      <mat-card *ngIf="!currentCategory.status">
+                        <form [formGroup]="form">
+                          <input type="file" mat-raised-button color="primary" class="input-file" name="filedata"
+                            (change)="onChange($event)">
+                          <button (click)="onSubmit(l3.id)" mat-raised-button color="primary">
+                            <mat-icon>cloud_upload</mat-icon>
+                            Upload File
+                          </button>
+                        </form>
+                      </mat-card>
+                      <mat-card *ngIf="currentCategory.status" style="height: 50px; width:300px">
+                        <div *ngIf="l3.document !== null">
+                          Upload File Link <br /> <br/>
+                          <a href="https://dev-checklist.regalix.com/{{l3.document}}"
+                            target="_blank">{{l3.document}}</a>
+                        </div>
+                        <div *ngIf="l3.document === null">
+                          File is not uploaded this questions
+                        </div>
+                      </mat-card>
+                    </div>
+                  </div>
+                </div>
+              </ng-container>
+            </ng-container>
+
+            <mat-divider></mat-divider>
+          </div>
+        <ng-container *ngIf="query !== 'review'">
+          <ng-container *ngIf="currentStatus">
+            <div class="btn-save" *ngIf="currentCategory">
+              <button mat-raised-button color="primary" *ngIf="!currentCategory.status"
+                (click)="postUserResponseData()">Submit
+                {{currentCategory.name}} Response</button>
+
+            </div>
+          </ng-container>
+        </ng-container>
+
+        <ng-container *ngIf="query == 'review' && role === '1'">
+          <div class="btn-save" *ngIf="currentStatus && reviewStage">
+            <button mat-raised-button color="primary" (click)="postReview()">
+              Submit Review of {{currentStageName}} </button>
           </div>
         </ng-container>
-      </ng-container>
+      </mat-tab>
+    </mat-tab-group>
 
-      <mat-divider></mat-divider>
-    </div>
-    <!-- {{questiondatalevel3 | json}} -->
 
-    <div class="btn-save" *ngIf="currentCategory">
-      <button mat-raised-button color="primary" *ngIf="!currentCategory.status" (click)="postUserResponseData()">Submit
-        {{currentCategory.name}} Response</button>
-    </div>
-    <!-- {{currentCategory | json}} -->
   </mat-sidenav-content>
 </mat-sidenav-container>

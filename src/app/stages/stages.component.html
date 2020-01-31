@@ -1,5 +1,8 @@
-<mat-spinner class="loader" *ngIf="loading"></mat-spinner>
+<ngx-spinner bdColor="rgba(152, 152, 250)" [fullScreen]="false" type="ball-clip-rotate-multiple" size="medium">
+  <p class="loading" style="color: white;">Please Wait..</p>
+</ngx-spinner>
 <div class="main-content">
+<mat-card style="padding: 0px">
   <div class="project-info">
     <div class="project-name">
       <h4>Project: {{projectStages?.project_name}} </h4>
@@ -11,10 +14,10 @@
       <h4>Sub Business: {{projectStages?.sub_bu_name}}</h4>
     </div>
   </div>
-
+</mat-card>
   <div class="add-category">
     <a class="mdc-chip" routerLink="/projects">
-      <mat-icon>reply
+      <mat-icon>keyboard_return
       </mat-icon>
       <span class="mdc-chip__text"> Return to Projects</span>
     </a>

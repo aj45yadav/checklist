@@ -14,6 +14,7 @@
 .p-list {
 display: flex;
 flex-wrap: wrap;
+/* justify-content: space-between; */
 }
 .p-list mat-card {
     width: 260px;
@@ -28,14 +29,32 @@ flex-wrap: wrap;
 .p-header {
     display: flex;
     justify-content: space-between;
+    align-items: flex-start;
 }
 .p-header .mat-button {
 min-width: 0px;
 padding: 0px;
 }
 mat-card-content {
-    margin: 50px 0 50px 0;
+    margin: 25px 0 25px 0;
 }
 .mat-card-actions .mat-button, .mat-card-actions .mat-raised-button {
     margin: 5px 8px;
 }
+mat-card-title.ellipsis {
+    white-space: nowrap; 
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .btn-grp {
+      display: flex;
+  }
+  /* .mat-mini-fab {
+    width: 35px;
+    height: 35px;
+  } */
+  /* .mat-mini-fab .mat-button-wrapper {
+    padding: 7px 0;
+    display: inline-block;
+    line-height: 22px
+  } */

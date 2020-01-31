@@ -1,27 +1,8 @@
-<!-- <div style="text-align:center">
-  <h1>
-    Welcome to {{ title }}!
-  </h1>
-  <div class="sing-btngrp">
-  <img width="300" alt="company-logo" src="{{projectService.getImagepath()}}/logo.png">
-  <div class="socina-btn">
-
-  <a href="/login/google-oauth2/?next=/login/"><button> Sign With Google</button></a>
-</div>
-<div *ngIf="errors?.non_field_errors">
-  <p *ngFor="let loginErros of errors?.non_field_errors">{{ loginErros }}</p>
-</div>
-</div>
-</div> -->
-
-<div class="background-img">
+<div class="background-img" [ngStyle]="{'background-image': getImageUrl()}">
 </div>
   <div class="login-content">
-    <!-- <div class="product-logo">
-      <img src="../../mom/assets/img/mom_logo.png" alt="product-logo">
-    </div> -->
-    <img src="{{projectService.getImagepath()}}/logo.png" alt="company-logo" />
+    <img class="company-logo" src="{{projectService.getImagepath()}}/logo.png" alt="company-logo" />
     <p>Checklist</p>
-    <a style="text-decoration: none;" href="/login/google-oauth2/?next=/login/"> <button class="login-btn">Sign In With Google</button></a>
+    <a style="text-decoration: none;" href="/login/google-oauth2/?next=/login/"> <button class="login-btn"> <img src="{{projectService.getImagepath()}}/goggle-icn.png"><span> Sign In With Google </span></button></a>
   
   </div>

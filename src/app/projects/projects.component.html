@@ -1,66 +1,120 @@
-<mat-spinner class="loader" *ngIf="loading"></mat-spinner>
+<!-- <mat-spinner class="loader" *ngIf="loading"></mat-spinner> -->
+
+<ngx-spinner bdColor="rgba(152, 152, 250)" [fullScreen]="false" type="ball-clip-rotate-multiple" size="medium">
+  <p class="loading" style="color: white;">Please Wait..</p>
+</ngx-spinner>
 
 <div class="page-container">
   <div class="project">
     <div class="p-heading">
       Projects
     </div>
-    <div>
-      <button mat-raised-button color="primary" (click)="openDialog('Add', {})">
+    <div *ngIf="role == 1">
+      <button mat-raised-button color="primary" (click)="openDialog('Add', {})" matTooltip="Add new project"
+        matTooltipClass="tooltip-blue" matTooltipPosition="above">
         <mat-icon>add_circle_outline</mat-icon>
         Add Project
       </button>
     </div>
   </div>
-  <div class="p-list">
+
+  <mat-card *ngIf="dataSource?.length == 0" style="text-align: center">
+    <h4>There is no any project</h4>
+  </mat-card>
+
+
+  <div class="p-list" *ngIf="dataSource">
     <ng-container *ngFor="let p of dataSource">
-      <mat-card>
+      <mat-card *ngIf="role === '1'">
         <div class="p-header">
-          <mat-card-title>
+          <mat-card-title [matTooltip]="p.name" matTooltipClass="tooltip-blue"
+            matTooltipPosition="above">
             {{p.name}}
           </mat-card-title>
+          <mat-icon (click)="openDialog('Publish', p)" *ngIf="!p.published"  style="color: #FFC200; cursor: pointer;"
+            matTooltip="Poject is in Editing Mode"
+            matTooltipClass="tooltip-blue" matTooltipPosition="above">check_circle</mat-icon>
+          <mat-icon (click)="openDialog('Draft', p)" *ngIf="p.published" style="color: #70e070; cursor: pointer;"
+            matTooltip="Poject is Published to users"
+            matTooltipClass="tooltip-blue" matTooltipPosition="above">check_circle</mat-icon>
           <mat-menu #menu="matMenu">
-            <button mat-menu-item routerLink="/project/{{p.id}}/stages">Stages</button>
-            <mat-divider></mat-divider>
-            <button mat-menu-item (click)="openDialog('Update', p)">Edit</button>
+            <button mat-menu-item routerLink="/project/{{p.id}}/stages">Add Stages</button>
+            <!-- <mat-divider></mat-divider>
+            <button mat-menu-item (click)="openDialog('Update', p)">Edit</button> -->
             <mat-divider></mat-divider>
             <button mat-menu-item (click)="openDialog('Delete', p)">Delete</button>
             <mat-divider></mat-divider>
+            <button mat-menu-item *ngIf="!p.published" (click)="openDialog('Publish', p)">Publish</button>
+            <button mat-menu-item *ngIf="p.published" (click)="openDialog('Draft', p)"> Draft </button>
             <!-- <button mat-menu-item (click)="shareProjectModel(p.id)">Share</button> -->
-            <a mat-menu-item routerLink="/checklist/{{p.id}}" target="_blank">Preview</a>
+            <!-- <a mat-menu-item routerLink="/project/{{p.id}}/checklist" >Preview</a> -->
           </mat-menu>
-          <button mat-button color="primary" [matMenuTriggerFor]="menu">
-            <mat-icon>view_list</mat-icon>
-          </button>
+          <div class="btn-grp">
+            <button (click)="openDialog('Update', p)" mat-button color="primary" style="margin-right: 5px;"
+              matTooltip="Edit This Project" matTooltipClass="tooltip-blue" matTooltipPosition="above">
+              <mat-icon>edit</mat-icon>
+            </button>
+            <button mat-button color="primary" [matMenuTriggerFor]="menu" matTooltip="Menus"
+              matTooltipClass="tooltip-blue" matTooltipPosition="above">
+              <mat-icon>view_list</mat-icon>
+            </button>
+          </div>
         </div>
         <mat-card-content>
           <div class="q-info">
             <h4>
-              Stages: {{p.stages}}
+              Stages: {{p.stage_count}}
             </h4>
-            <h4>
+            <!-- <h4>
               Category: {{p.category}}
-            </h4>
+            </h4> -->
           </div>
         </mat-card-content>
         <mat-card-actions>
+          <!-- <button mat-raised-button color="primary" matTooltip="Poject is in draft click here to publish this project to related users" matTooltipClass="tooltip-blue" matTooltipPosition="above">
+            <mat-icon>highlight_off</mat-icon>Draft
+          </button> -->
 
-          <a mat-raised-button color="primary" target="_blank" routerLink="/project/{{p.id}}/checklist" target="_blank" *ngIf="p.review_ready">
+          <button mat-raised-button color="primary" (click)="shareProjectModel(p.id)" [disabled]="!p.published"
+            matTooltip="Share this project via mail" matTooltipClass="tooltip-blue" matTooltipPosition="above">
+            <mat-icon>share</mat-icon>Share
+          </button>
+
+          <a mat-raised-button color="primary" target="_blank" [routerLink]="['/project/', p.id, 'project-preview']"
+            [queryParams]="{checklist: 'preview'}" matTooltip="Click here to view questions structure"
+            matTooltipClass="tooltip-blue" matTooltipPosition="above">
+            <mat-icon>visibility</mat-icon> Preview
+          </a>
+
+          <a mat-raised-button color="primary" target="_blank" [routerLink]="['/project/', p.id, 'checklist']"
+            [queryParams]="{checklist: 'review'}" *ngIf="p.review_ready" matTooltip="Review user's response"
+            matTooltipClass="tooltip-blue" matTooltipPosition="above">
             <mat-icon>pageview</mat-icon> Review
           </a>
 
-          <a mat-raised-button color="primary" target="_blank" routerLink="/project/{{p.id}}/checklist" target="_blank">
-            <mat-icon>visibility</mat-icon> Preview
-          </a>
-          <!-- <a mat-raised-button color="primary" target="_blank" [routerLink]="['/project/', p.id, 'checklist']" [queryParams] = "{checklist: 'preview'}" target="_blank">
-            <mat-icon>visibility</mat-icon> Preview
-          </a> -->
-          <button mat-raised-button color="primary" (click)="shareProjectModel(p.id)">
-            <mat-icon>share</mat-icon>Share
-          </button>
+
         </mat-card-actions>
 
       </mat-card>
+
+      <!-- normal-user-views -->
+      <a style="text-decoration: none;" routerLink="/project/{{p.id}}/checklist" target="_blank">
+      <mat-card *ngIf="role !== '1' && p.published" style="cursor: pointer;">
+        <div class="p-header">
+          <mat-card-title class="ellipsis" [matTooltip]="p.name" matTooltipClass="tooltip-blue"
+            matTooltipPosition="above">
+            {{p.name}}
+          </mat-card-title>
+        </div>
+        <mat-card-content>
+          <div class="q-info">
+            <h4>
+              Stages: {{p.stage_count}}
+            </h4>
+          </div>
+        </mat-card-content>
+      </mat-card>
+      </a>
     </ng-container>
   </div>
 </div>

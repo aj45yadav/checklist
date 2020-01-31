@@ -5,9 +5,9 @@
 </mat-card-header>
 
 <mat-dialog-content class="mat-typography">
-<form #buForm="ngForm">
-  <mat-card *ngIf="action == 'Add' || action == 'Update'">
-      
+  <form #buForm="ngForm">
+    <mat-card *ngIf="action == 'Add' || action == 'Update'">
+
       <div class="form-field">
         <div class="input-fields">
           <!-- <mat-form-field appearance="outline">
@@ -17,7 +17,7 @@
               <mat-option value="Non Google">Non Google</mat-option>
             </mat-select>
           </mat-form-field> -->
-          <input  type="hidden" *ngIf="action == 'Update'" name="project_id" [(ngModel)]="emitedData.id">
+          <input type="hidden" *ngIf="action == 'Update'" name="project_id" [(ngModel)]="emitedData.id">
           <mat-form-field appearance="outline">
             <mat-label>Select Business Unit</mat-label>
             <mat-select placeholder="Business" name="bu_id" [(ngModel)]="emitedData.bu_id"
@@ -45,34 +45,46 @@
           </mat-form-field>
 
           <mat-form-field appearance="outline">
-              <mat-label>Description</mat-label>
-              <textarea matInput placeholder="Add Description" name="desc" #description [(ngModel)]="emitedData.desc" required></textarea>
-              <mat-error>Description is required</mat-error>
-              <mat-hint align="end">{{description.value?.length || 0}}</mat-hint>
-            </mat-form-field>
+            <mat-label>Description</mat-label>
+            <textarea matInput placeholder="Add Description" name="desc" #description [(ngModel)]="emitedData.desc"
+              required></textarea>
+            <mat-error>Description is required</mat-error>
+            <mat-hint align="end">{{description.value?.length || 0}}</mat-hint>
+          </mat-form-field>
         </div>
       </div>
 
-  </mat-card>
+    </mat-card>
 
-  <mat-card *ngIf="action == 'Delete'">
-    Are you sure to delete this <b>{{emitedData.name}}</b> ?
-  </mat-card>
+    <mat-card *ngIf="action == 'Delete'">
+      Are you sure to delete this <b>{{emitedData.name}}</b> ?
+    </mat-card>
 
-  <mat-card *ngIf="action == 'Status'">
-    Change Status
-  </mat-card>
-  <div class="mdc-chip-set">
+    <mat-card *ngIf="action == 'Status'">
+      Change Status
+    </mat-card>
 
-    <button type="button" class="mdc-chip" style="background-color: #F44336" (click)="closeDialog()">
-      <mat-icon>cancel</mat-icon>
-      <span class="mdc-chip__text">Cancel</span>
-    </button>
-    <button class="mdc-chip"  (click)="doAction()" [disabled]="!emitedData.bu_id || !emitedData.sub_bu_id || !emitedData.name || !emitedData.desc">
-      <mat-icon *ngIf="action == 'Delete'">delete</mat-icon>
-      <mat-icon *ngIf="action != 'Delete'">add_circle_outline</mat-icon>
-      <span class="mdc-chip__text">{{action}} Project</span>
-    </button>
-  </div>
-</form>
+    <mat-card *ngIf="action == 'Publish'">
+      <b>{{emitedData.name}}</b> is in Editing mode.Are you sure to Publish this <b>{{emitedData.name}}</b> to users ?
+    </mat-card>
+
+    <mat-card *ngIf="action == 'Draft'">
+      <b>{{emitedData.name}}</b> is Published to user.Are you sure to Put this <b>{{emitedData.name}}</b> in Editing
+      Mode ?
+    </mat-card>
+
+    <div class="mdc-chip-set">
+
+      <button type="button" class="mdc-chip" style="background-color: #F44336" (click)="closeDialog()">
+        <mat-icon>cancel</mat-icon>
+        <span class="mdc-chip__text">Cancel</span>
+      </button>
+      <button class="mdc-chip" (click)="doAction()"
+        [disabled]="!emitedData.bu_id || !emitedData.sub_bu_id || !emitedData.name || !emitedData.desc">
+        <mat-icon *ngIf="action == 'Delete'">delete</mat-icon>
+        <mat-icon *ngIf="action != 'Delete'">add_circle_outline</mat-icon>
+        <span class="mdc-chip__text">{{action}} Project</span>
+      </button>
+    </div>
+  </form>
 </mat-dialog-content>

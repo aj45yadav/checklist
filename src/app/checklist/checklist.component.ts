@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component, OnInit, isDevMode } from '@angular/core';
+import { ActivatedRoute, Params, ParamMap } from '@angular/router';
 import { FormGroup, FormControl, Validators, NgForm, FormBuilder } from '@angular/forms';
 import { Observable, from } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
@@ -16,12 +16,10 @@ export class ChecklistComponent implements OnInit {
   options = Constants.responses;
   projectId: number;
   stageId: number;
-  addQuestionForm = false;
   questiondatalevel2: Question[] = [] as Question[];
   questiondatalevel3: Question[] = [] as Question[];
   currentCategory: Category = {} as Category;
   currentCategoryResponse: UserResponse[] = [] as UserResponse[];
-  myControl = new FormControl();
   projectBasic;
   projectData;
   DJANGO_SERVER = 'https://dev-checklist.regalix.com/';
@@ -29,16 +27,41 @@ export class ChecklistComponent implements OnInit {
   response;
   fileUrl;
   currentStageId;
-
+  currentStageName;
+  currentStatus;
+  reviewStage;
+  toolTipInfo;
+  query: string;
+  userRole;
+  role;
   ngOnInit() {
+    this.projectService.cast.subscribe(
+      data => {
+        this.userRole = JSON.parse(data);
+        if (this.userRole) {
+          this.role = this.userRole.logged_user.role;
+        }
+      },
+      error => {
+      }
+    );
+
     this.stageId = this.activatedRoute.snapshot.params['stageId'];
     this.projectId = this.activatedRoute.snapshot.params['id'];
     // this.firstStageId = this.
+    // console.log(this.stageId);
 
     this.getStageData();
     this.form = this.formBuilder.group({
       filedata: ['']
     });
+
+    this.activatedRoute.queryParamMap.subscribe(
+      (params: ParamMap) => {
+        this.query = params.get('checklist');
+        // console.log(this.query);
+      }
+    );
   }
   constructor(public activatedRoute: ActivatedRoute, public dialog: MatDialog,
     public projectService: ProjectService, public formBuilder: FormBuilder) { }
@@ -75,6 +98,9 @@ export class ChecklistComponent implements OnInit {
         this.projectBasic = data;
         // console.log(this.stages);
         this.currentStageId = data.stages[0].id;
+        this.currentStageName = data.stages[0].name;
+        this.currentStatus = data.stages[0].active;
+        this.reviewStage = data.stages[0].review;
         this.getProjectData();
       },
       (error) => {
@@ -82,18 +108,21 @@ export class ChecklistComponent implements OnInit {
       }
     );
   }
-  getProjectData(stageId?: any) {
-       const request = {
-        stage_id: stageId ? stageId : this.currentStageId
-      };
-      if (stageId) {
-        this.currentStageId =  stageId;
-      }
+  getProjectData(stageId?: any, name?: any, active?: any, review?: any) {
+    const request = {
+      stage_id: stageId ? stageId : this.currentStageId
+    };
+    if (stageId) {
+      this.currentStageId = stageId;
+      this.currentStageName = name;
+      this.currentStatus = active;
+      this.reviewStage = review;
+    }
     this.projectService.getStageData(request).subscribe(
       (data: any) => {
         this.projectData = data;
         this.questiondatalevel2 = [];
-        const firstCategory = data.catgroups[0].categories[0];
+        const firstCategory = data.catgroups[0] ? data.catgroups[0].categories[0] : undefined;
         if (firstCategory && firstCategory.status) {
           firstCategory.questions.forEach(question => {
             if (question.qlevel === '2') {
@@ -104,18 +133,16 @@ export class ChecklistComponent implements OnInit {
       });
   }
 
-  onRadioOptionChangeLevel2(parent_question_id, selected_option) {
+  onRadioOptionClickLevel2(parent_question_id, selected_option) {
     // tslint:disable-next-line:max-line-length
-    this.questiondatalevel2 = this.currentCategory.questions.filter(x => x.parentid === parent_question_id && (x.answer_opt === selected_option || x.answer_opt === "3") && x.qlevel === '2');
-    // tslint:disable-next-line:max-line-length
-    // this.questiondatalevel2 = this.currentCategory.questions.filter(x => x.parentid === parent_question_id && x.answer_opt === selected_option || x.answer_opt === "3");
+    this.questiondatalevel2 = this.currentCategory.questions.filter(x => x.parentid === parent_question_id && (x.answer_opt === selected_option || x.answer_opt === '3') && x.qlevel === '2');
+    // console.log(this.questiondatalevel2);
   }
 
   onRadioOptionChangeLevel3(parent_question_id, selected_option) {
     // tslint:disable-next-line:max-line-length
-    this.questiondatalevel3 = this.currentCategory.questions.filter(x => x.parentid === parent_question_id && (x.answer_opt === selected_option || x.answer_opt === "3") && x.qlevel === '3');
-    // tslint:disable-next-line:max-line-length
-    // this.questiondatalevel2 = this.currentCategory.questions.filter(x => x.parentid === parent_question_id && x.answer_opt === selected_option || x.answer_opt === "3");
+    this.questiondatalevel3 = this.currentCategory.questions.filter(x => x.parentid === parent_question_id && (x.answer_opt === selected_option || x.answer_opt === '3') && x.qlevel === '3');
+    // console.log(this.questiondatalevel3);
   }
 
   setCurrentCategory(category: Category) {
@@ -132,7 +159,7 @@ export class ChecklistComponent implements OnInit {
       };
       this.currentCategoryResponse.push(qResp);
     });
-    // console.log(category);
+    console.log(this.currentCategoryResponse);
   }
   postUserResponseData() {
     this.currentCategory.questions.forEach((question: any) => {
@@ -140,7 +167,50 @@ export class ChecklistComponent implements OnInit {
       qResp.selectedOption = question.selectedOption;
       qResp.comment = question.comment;
     });
-    // console.log(this.currentCategoryResponse);
+
+    const parentQuestions = this.currentCategory.questions.filter(x => x.parentid === '' || x.qlevel === '1');
+    parentQuestions.forEach(parent => {
+      const parent_from_resp = this.currentCategoryResponse.filter(x => x.questionId === parent.id)[0];
+      const childern = this.currentCategory.questions.filter(x => x.parentid.toString() === parent.id.toString());
+      childern.forEach((child: any) => {
+        const child_from_resp = this.currentCategoryResponse.filter(x => x.questionId === child.id)[0];
+        if (parent_from_resp && (child.answer_opt === parent_from_resp.selectedOption || child.answer_opt === '3')) {
+          child_from_resp.selectedOption = child.selectedOption;
+        } else {
+          child_from_resp.selectedOption = undefined;
+        }
+      });
+    });
+    console.log(this.currentCategoryResponse);
+
+    // for level 2
+    // this.currentCategory.questions.filter(x => x.parentid === '' || x.qlevel === '1').forEach((question: any) => {
+    //   const parentResp = this.currentCategoryResponse.filter(x => x.questionId === question.id)[0];
+    //   const childern = this.currentCategory.questions.filter(x => x.parentid === question.id);
+    //   childern.forEach(child => {
+    //     const qResp2 = this.currentCategoryResponse.filter(x => x.questionId === child.id)[0];
+    //     if (qResp2.selectedOption === parentResp.selectedOption) {
+    //       qResp2.selectedOption = question.selected_option;
+    //     } else {
+    //       qResp2.selectedOption = undefined;
+    //     }
+    //   });
+    // });
+
+    // for level 3
+    // this.currentCategory.questions.filter(x => x.qlevel === '2').forEach((question: any) => {
+    //   const parentResp = this.currentCategoryResponse.filter(x => x.questionId === question.id)[0];
+    //   const childern = this.currentCategory.questions.filter(x => x.parentid === question.id);
+    //   childern.forEach(child => {
+    //     const qResp2 = this.currentCategoryResponse.filter(x => x.questionId === child.id)[0];
+    //     if (qResp2.selectedOption === parentResp.selectedOption) {
+    //       qResp2.selectedOption = question.selected_option;
+    //     } else {
+    //       qResp2.selectedOption = undefined;
+    //     }
+    //   });
+    // });
+
     this.projectService.postUserResponse(this.currentCategoryResponse).subscribe(
       () => {
         this.getStageData();
@@ -165,6 +235,75 @@ export class ChecklistComponent implements OnInit {
 
       }
     });
+  }
+
+  getImageUrl(stage) {
+    // console.log(val);
+    if (!stage) {
+      return;
+    }
+    if (isDevMode()) {
+      if (stage.active) {
+        return 'url(\'../../assets/img/diamond2.png\')';
+      } else if (!stage.active && !stage.completed) {
+        return 'url(\'../../assets/img/diamond.png\')';
+      } else if (stage.completed) {
+        return 'url(\'../../assets/img/diamond3.png\')';
+      }
+    } else {
+      if (stage.active) {
+        return 'url(\'/static/assets/img/diamond2.png\')';
+      } else if (!stage.active && !stage.completed) {
+        return 'url(\'/static/assets/img/diamond.png\')';
+      } else if (stage.completed) {
+        return 'url(\'/static/assets/img/diamond3.png\')';
+      }
+    }
+  }
+  getColor(stage) {
+    if (!stage) {
+      return;
+    }
+    if (stage.active) {
+      return 'white';
+    } else if (!stage.active && !stage.completed) {
+      return 'black';
+    } else if (stage.completed) {
+      return '#00EFD1';
+    }
+  }
+  getToolTipInfo(stage) {
+    if (!stage) {
+      return;
+    }
+    if (stage.active) {
+      return this.toolTipInfo = 'Active Stage Ready for answer';
+    } else if (!stage.active && !stage.completed) {
+      return this.toolTipInfo = 'You can answer only when this stage will be active';
+    } else if (stage.completed) {
+      return this.toolTipInfo = 'Review is Completed';
+    }
+  }
+
+  onTabChange(event) {
+    const stage = this.projectBasic.stages[event.index];
+    if (stage.name === event.tab.textLabel) {
+      this.getProjectData(stage.id, stage.name, stage.active, stage.review);
+    }
+  }
+
+  postReview(stageId?: any) {
+    const request = {
+      project_id: this.stageId,
+      stage_id: stageId ? stageId : this.currentStageId
+    };
+    // console.log(request);
+    this.projectService.reviewStage(request).subscribe(
+      () => {
+        this.getStageData();
+      },
+      (error) => { }
+    );
   }
   addDocxFile(docx_data) { }
   addLink(link_data) { }

@@ -1,7 +1,7 @@
 import { Component, OnInit, isDevMode } from '@angular/core';
 import { Router } from '@angular/router';
-import { SocialLoginService } from 'src/app/services/social-login.service';
 import { ProjectService } from 'src/app/services/project.service';
+import { CookieService } from 'ngx-cookie-service';
 
 @Component({
   selector: 'app-header',
@@ -12,7 +12,8 @@ export class HeaderComponent implements OnInit {
   userBasicData;
   userInfo;
   apiBaseUrl: string;
-  constructor(public authentication: SocialLoginService, public router: Router, public projectServices: ProjectService) {
+  constructor(public router: Router, public projectServices: ProjectService,
+     private cookieService: CookieService) {
     if (isDevMode()) {
       this.apiBaseUrl = 'https://dev-checklist.regalix.com/';
     } else {
@@ -24,8 +25,9 @@ export class HeaderComponent implements OnInit {
     this.getUerBasicDetails();
   }
   logOut() {
-    this.authentication.signOut();
+    // this.authentication.signOut();
     // this.router.navigate(['/']);
+    this.cookieService.deleteAll();
     window.location.href = this.apiBaseUrl + 'logout/';
   }
   getUerBasicDetails() {

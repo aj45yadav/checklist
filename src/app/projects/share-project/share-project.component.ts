@@ -20,7 +20,7 @@ export class ShareProjectComponent implements OnInit {
     this.projectService.cast.subscribe(
       data => {
         this.userListD = JSON.parse(data).users;
-        console.log(JSON.parse(data).users);
+        // console.log(JSON.parse(data).users);
       },
       error => {
         // console.log(error);

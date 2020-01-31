@@ -78,3 +78,27 @@ mat-form-field {
 .mdc-chip:disabled {
     cursor: not-allowed;
 }
+mat-sidenav-content .mat-tab-labels {
+    background-color: #8B97A3;
+    font-size: 16px;
+    color: black;
+    height: 80px;
+    display: flex;
+    justify-content: space-around;
+  }
+  mat-sidenav-content .mat-tab-label {
+    font-size: 16px;
+    color: black;
+    height: 80px;
+    opacity: 1;
+    /* display: flex;
+    justify-content: flex-start; */
+  }
+  mat-sidenav-content .mat-tab-group.mat-primary .mat-ink-bar, .mat-tab-nav-bar.mat-primary .mat-ink-bar {
+    background-color: white;
+}
+app-projects .mat-mini-fab .mat-button-wrapper {
+    padding: 0px 0;
+    display: inline-block;
+    line-height: 0;
+}

@@ -1,70 +1,67 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
 
-import { MatDialog, MatTable } from '@angular/material';
-import { TestDialogComponent } from './test-dialog/test-dialog.component';
-
-export interface UsersData {
+export interface UserData {
+  id: string;
   name: string;
-  id: number;
+  progress: string;
+  color: string;
 }
 
-const ELEMENT_DATA: UsersData[] = [
-  // { id: 1560608769632, name: 'Artificial Intelligence' },
-  // { id: 1560608796014, name: 'Machine Learning' },
-  // { id: 1560608787815, name: 'Robotic Process Automation' },
-  // { id: 1560608805101, name: 'Blockchain' }
+/** Constants used to fill up our data base. */
+const COLORS: string[] = [
+  'maroon', 'red', 'orange', 'yellow', 'olive', 'green', 'purple', 'fuchsia', 'lime', 'teal',
+  'aqua', 'blue', 'navy', 'black', 'gray'
+];
+const NAMES: string[] = [
+  'Maia', 'Asher', 'Olivia', 'Atticus', 'Amelia', 'Jack', 'Charlotte', 'Theodore', 'Isla', 'Oliver',
+  'Isabella', 'Jasper', 'Cora', 'Levi', 'Violet', 'Arthur', 'Mia', 'Thomas', 'Elizabeth'
 ];
 @Component({
   selector: 'app-testcomponent',
   templateUrl: './testcomponent.component.html',
   styleUrls: ['./testcomponent.component.css']
 })
-export class TestcomponentComponent {
-  displayedColumns: string[] = ['slno', 'id', 'name', 'action'];
-  dataSource = ELEMENT_DATA;
+export class TestcomponentComponent implements OnInit {
+  displayedColumns: string[] = ['id', 'name', 'progress', 'color'];
+  dataSource: MatTableDataSource<UserData>;
 
-  @ViewChild(MatTable, {}) table: MatTable<any>;
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
+  @ViewChild(MatSort, { static: true }) sort: MatSort;
 
-  constructor(public dialog: MatDialog) { }
+  constructor() {
+    // Create 100 users
+    const users = Array.from({ length: 100 }, (_, k) => createNewUser(k + 1));
 
-  openDialog(action, obj) {
-    obj.action = action;
-    const dialogRef = this.dialog.open(TestDialogComponent, {
-      width: '250px',
-      data: obj
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (result.event === 'Add') {
-        this.addRowData(result.data);
-      } else if (result.event === 'Update') {
-        this.updateRowData(result.data);
-      } else if (result.event === 'Delete') {
-        this.deleteRowData(result.data);
-      }
-    });
+    // Assign the data to the data source for the table to render
+    this.dataSource = new MatTableDataSource(users);
   }
 
-  addRowData(row_obj) {
-    let d = new Date();
-    this.dataSource.push({
-      id: d.getTime(),
-      name: row_obj.name
-    });
-    this.table.renderRows();
+  ngOnInit() {
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
+  }
 
+  applyFilter(filterValue: string) {
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
   }
-  updateRowData(row_obj) {
-    this.dataSource = this.dataSource.filter((value, key) => {
-      if (value.id === row_obj.id) {
-        value.name = row_obj.name;
-      }
-      return true;
-    });
-  }
-  deleteRowData(row_obj) {
-    this.dataSource = this.dataSource.filter((value, key) => {
-      return value.id !== row_obj.id;
-    });
-  }
+}
+
+/** Builds and returns a new User. */
+function createNewUser(id: number): UserData {
+  const name = NAMES[Math.round(Math.random() * (NAMES.length - 1))] + ' ' +
+    NAMES[Math.round(Math.random() * (NAMES.length - 1))].charAt(0) + '.';
+
+  return {
+    id: id.toString(),
+    name: name,
+    progress: Math.round(Math.random() * 100).toString(),
+    color: COLORS[Math.round(Math.random() * (COLORS.length - 1))]
+  };
 }

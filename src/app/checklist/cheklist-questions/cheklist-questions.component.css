@@ -1,0 +1,158 @@
+.side-container {
+  position: absolute;
+  top: 90px;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #eee;
+}
+mat-sidenav {
+  width: 400px  
+}
+
+.project-info {
+  display: flex;
+  justify-content: space-around;
+  margin: 10px 0 0 0;
+  border-bottom: 1px solid;
+}
+
+.mat-accordion .mat-expansion-panel {
+  margin: 10px 0 10px 0;
+}
+
+.mat-radio-button ~ .mat-radio-button {
+  margin-left: 16px;
+}
+.aside-content {
+  margin: 20px;
+}
+.optionss {
+  margin: 10px;
+}
+p .material-icons {
+  margin-left: 20px;
+  vertical-align: middle;
+  cursor: pointer;
+}
+.tooltip-blue {
+  background: #3F51B5;
+}
+.catque {
+  border-top: 1px solid;
+}
+.catque:last-child {
+  border-bottom: 1px solid;
+}
+
+
+.btn-save button {
+  float: right;
+}
+.mat-form-field { 
+  margin: 20px 20px 20px 0;
+  width: 400px;
+}
+mat-radio-group {
+  margin: 20px 0 20px 0;
+}
+.mat-raised-button.mat-primary {
+  margin: 20px;
+}
+.comment {
+display: flex;
+}
+.input-file {
+color: #fff;
+background-color: #232527;
+border-color: #232527;
+font-size: 15px;
+border-radius: 2px;
+}
+.subQues {
+display: flex;
+/* align-items: center; */
+margin: 0px 20px 0px 20px;
+cursor: pointer;
+}
+.aside-content.l3 {
+margin: 0 0 0 45px;
+}
+.score {
+float: right;
+font-weight: 600;
+}
+.parentcategory {
+padding: 24px 24px 0 24px;
+font-size: 18px;
+color: #607D8B;
+}
+.projectname {
+padding: 0 24px;
+font-size: 32px;
+font-weight: 600;
+color: #56288B;
+/* text-decoration: underline;
+line-height: 78px; */
+/* text-align: center; */
+}
+.projectDescription {
+/* padding: 24px 24px; */
+padding: 4px 24px;
+/* text-align: center; */
+}
+.stages {
+display: flex;
+justify-content: space-around;
+cursor: pointer;
+}
+/* .stages:hover {
+color: #3F51B5;
+} */
+.underline {
+background-repeat: no-repeat;
+}
+
+.underline--stars {
+/* background-image: url("../../assets/img/diamond.png"); */
+background-position: bottom;
+background-size: 20px 20px;
+padding:  0px 0 20px 0;
+cursor: pointer;
+line-height: 30px;
+}
+.underline--stars:hover {
+/* background-image: url("../../assets/img/diamond2.png"); */
+color: white;
+}
+.active {
+/* background-image: url("../../assets/img/diamond2.png"); */
+/* color: white; */
+/* border-bottom: 2px solid; */
+}
+/* .underline--stars:hover {
+color: #3F51B5;
+} */
+.main-content {
+background-color: #8B97A3;
+padding: 20px 0 20px 0;
+}
+.main-content:hover {
+background-color: #67696b;
+}
+hr {
+display: block;
+height: 1px;
+border: 0;
+border-top: 1.2px solid #4c4a4ac7;
+padding: 0;
+}
+.color {
+color: white;
+}
+.mat-divider {
+border-top-width: 2px;
+}
+.mat-list-base {
+padding-top: 0px;
+}

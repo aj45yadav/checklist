@@ -3,6 +3,7 @@ import { ProjectService } from '../services/project.service';
 import { MatDialog } from '@angular/material';
 import { StageDialogComponent } from './stage-dialog/stage-dialog.component';
 import { ActivatedRoute } from '@angular/router';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-stages',
@@ -13,7 +14,8 @@ export class StagesComponent implements OnInit {
   loading: boolean;
   projectId: number;
   projectStages;
-  constructor(public projectService: ProjectService, public dialog: MatDialog, public activatedRoute: ActivatedRoute) { }
+  constructor(public projectService: ProjectService, public dialog: MatDialog, public activatedRoute: ActivatedRoute,
+     private spinner: NgxSpinnerService) { }
 
   ngOnInit() {
     this.projectId = this.activatedRoute.snapshot.params['stageId'];
@@ -36,18 +38,19 @@ export class StagesComponent implements OnInit {
     });
   }
   getStages() {
-    this.loading = true;
+    this.spinner.show();
     const request = {
       project_id: this.projectId
     };
     this.projectService.getStages(request).subscribe(
       (data: any) => {
         this.projectStages = data;
-        console.log(this.projectStages);
-        this.loading = false;
+        // console.log(this.projectStages);
+        this.spinner.hide();
       },
       (error) => {
         this.loading = false;
+        this.spinner.hide();
       }
     );
   }

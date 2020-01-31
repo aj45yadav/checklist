@@ -10,11 +10,9 @@ import { ProjectService } from './services/project.service';
 })
 export class AppComponent implements OnInit {
   title = 'angular';
-  // userBasicData;
   constructor(public route: Router, public cookieService: CookieService, public projectServices: ProjectService) {
   }
   ngOnInit() {
-    // this.getUerBasicDetails();
   }
 
   hideHeader() {
@@ -22,11 +20,4 @@ export class AppComponent implements OnInit {
       'hide': this.route.url === '/',
     };
   }
-  // getUerBasicDetails() {
-  //   this.projectServices.getUserDeatails().subscribe(
-  //     (data) => {
-  //       this.userBasicData = data;
-  //     }
-  //   );
-  // }
 }

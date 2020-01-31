@@ -1,0 +1,107 @@
+<mat-sidenav-container class="side-container">
+  <mat-sidenav mode="side" opened>
+    <mat-nav-list>
+      <mat-divider></mat-divider>
+      <div class="projectname">
+        {{projectBasic?.project_name}}
+      </div>
+      <!-- <mat-divider></mat-divider> -->
+      <div class="projectDescription">
+        {{projectBasic?.desc}}
+      </div>
+      <mat-divider></mat-divider>
+      <mat-accordion>
+        <ng-container *ngFor="let catgrp of projectData?.catgroups;let k = index">
+          <div class="parentcategory">
+            <b> {{k+1}}. {{catgrp.name}} </b>
+          </div>
+          <ng-container *ngFor="let p of catgrp?.categories;let i = index">
+            <mat-expansion-panel [expanded]="i === 0 && k === 0" (opened)="setCurrentCategory(p)">
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  <b>{{k+1}}.{{i+1}} - {{p.name}} </b>
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <div class="catque" *ngFor="let l1 of p.questions | mainQuestions;let i = index">
+                <p>{{i+1}}. {{l1.question}}
+                  <i *ngIf="l1.tooltip !== null" class="material-icons" [matTooltip]="l1.tooltip"
+                    matTooltipClass="tooltip-blue" matTooltipPosition="right">
+                    info
+                  </i>
+                  <!-- <span class="score">Score : {{l1.score}}</span> -->
+                </p>
+
+                <div class="optionss">
+                  <mat-radio-group aria-labelledby="example-radio-group-label" class="example-radio-group"
+                    [(ngModel)]="l1.selectedOption">
+                    <mat-radio-button class="example-radio-button" *ngFor="let option of options;" [value]="option.qId"
+                      (change)="onRadioOptionChangeLevel2(l1.id, option.qId)">
+
+                      {{option.ans}}
+                    </mat-radio-button>
+                  </mat-radio-group>
+                </div>
+              </div>
+            </mat-expansion-panel>
+          </ng-container>
+          <mat-divider></mat-divider>
+        </ng-container>
+      </mat-accordion>
+    </mat-nav-list>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <mat-tab-group (selectedTabChange)="onTabChange($event)">
+      <mat-tab label={{stage.name}} *ngFor="let stage of projectBasic?.stages">
+        <ng-template mat-tab-label>
+          <span class="underline underline--stars" [ngStyle]="{'background-image': getImageUrl()}">{{stage.name}}</span>
+        </ng-template>
+
+        <div class="aside-content" *ngFor="let l2 of questiondatalevel2">
+          <p>{{l2.question}} <i *ngIf="l2.tooltip !== null" class="material-icons" [matTooltip]="l2.tooltip"
+              matTooltipClass="tooltip-blue" matTooltipPosition="right">
+              info
+            </i>
+            <!-- <span class="score">Score : {{l2.score}}</span> -->
+          </p>
+          <div class="optionss">
+            <mat-radio-group aria-labelledby="example-radio-group-label" class="example-radio-group"
+              [(ngModel)]="l2.selectedOption">
+              <mat-radio-button class="example-radio-button" *ngFor="let option of options;" [value]="option.qId"
+                (change)="onRadioOptionChangeLevel3(l2.id, option.qId)">
+
+                {{option.ans}}
+              </mat-radio-button>
+            </mat-radio-group>
+          </div>
+          <ng-container *ngIf="l2.selectedOption">
+            <ng-container *ngIf="currentCategory.questions">
+              <div class="aside-content l3"
+                *ngFor="let l3 of currentCategory.questions | subQuestions: l2.id : l2.selectedOption">
+                <p>{{l3.question}} <i *ngIf="l3.tooltip !== null" class="material-icons" [matTooltip]="l3.tooltip"
+                    matTooltipClass="tooltip-blue" matTooltipPosition="right">
+                    info
+                  </i>
+                  <!-- <span class="score">Score : {{l3.score}}</span> -->
+                </p>
+                <div class="optionss">
+                  <mat-radio-group aria-labelledby="example-radio-group-label" class="example-radio-group"
+                    [(ngModel)]="l3.selectedOption">
+                    <mat-radio-button class="example-radio-button" *ngFor="let option of options;" [value]="option.qId"
+                      (change)="onRadioOptionChangeLevel3(l3.id, option.qId)">
+
+                      {{option.ans}}
+                    </mat-radio-button>
+                  </mat-radio-group>
+                </div>
+              </div>
+            </ng-container>
+          </ng-container>
+
+          <mat-divider></mat-divider>
+        </div>
+      </mat-tab>
+    </mat-tab-group>
+
+
+  </mat-sidenav-content>
+</mat-sidenav-container>

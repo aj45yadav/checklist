@@ -2,7 +2,7 @@
     display: flex;
     justify-content: space-around;
     margin: 10px 0 0 0;
-    border-bottom: 1px solid;
+    /* border-bottom: 1px solid; */
   }
 
   mat-panel-description mat-card {
@@ -113,13 +113,8 @@ mat-card mat-card.level2 {
  .mat-card-actions {
      padding: 0;
  }
- .mat-divider {
-    margin: 20px 0 0 0;
-    border-top-width: 1.27px;
-    border-top-color: #463434;
+ .cat-grp {
+     font-size: 16px;
  }
-.p-title {
-    display: flex;
-    justify-content: space-between;
-    color: #0e5578;
-}
+
+

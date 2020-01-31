@@ -17,7 +17,7 @@
     left: 0;
     width: 70%;
     height: 100%;
-    background-image: url('../../assets/img/login-img.jpg');
+    /* background-image: url('../../assets/img/login-img.jpg'); */
     background-repeat: no-repeat;
     background-size: 100% 100%;
 }
@@ -33,7 +33,7 @@
   text-align: center;
   margin-bottom: 30px;
 }
- img {
+ img.company-logo {
   width: 100px;
   display: inline-block;
   vertical-align: middle;
@@ -59,7 +59,8 @@
   background-color: #000;
 }
 .login-btn {
-  display: block;
+  display: flex;
+  justify-content: center;
   margin: 10% 2% 10% 0%;
   width: 260px;
   height: 45px;
@@ -69,12 +70,12 @@
   font-weight: 600;
   font-style: normal;
   font-size: 16px;
-  line-height: 16px;
+  line-height: 24px;
   color: #282828;
   cursor: pointer;
   box-shadow: 0 0 10px 0 rgba(0,0,0,.55);
 }
-.login-btn::before {
+/* .login-btn::before {
   content: '';
   position: absolute;
   left: 18px;
@@ -85,7 +86,7 @@
   background-image: url(../../assets/img/goggle-icn.png);
   background-size: 100% 100%;
   background-repeat: no-repeat;
-}
+} */
 
 
 /* media query */

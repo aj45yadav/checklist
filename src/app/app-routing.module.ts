@@ -11,10 +11,9 @@ import { CategoryLibraryComponent } from './category-library/category-library.co
 import { AdminComponent } from './layouts/admin/admin.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { ProjectsComponent } from './projects/projects.component';
-// import { Checklist2Component } from './checklist2/checklist2.component';
 import { AuthGuard } from './guards/auth.guard';
 import { StagesComponent } from './stages/stages.component';
-import { ChecklistNewComponent } from './checklist-new/checklist-new.component';
+import { CheklistQuestionsComponent } from './checklist/cheklist-questions/cheklist-questions.component';
 
 const routes: Routes = [
   {
@@ -25,80 +24,60 @@ const routes: Routes = [
     path: 'project/:stageId', children: [
       {
         path: 'checklist',
-        component: ChecklistComponent, canActivate: [AuthGuard]
+        component: ChecklistComponent,
+      },
+      {
+        path: 'project-preview',
+        component: CheklistQuestionsComponent,
       },
       {
         path: 'checklist/:id',
-        component: ChecklistComponent, canActivate: [AuthGuard]
+        component: ChecklistComponent,
       },
-      // {
-      //   path: 'checklistt/:id',
-      //   component: ChecklistComponent, canActivate: [AuthGuard]
-      // },
     ]
-  },
-
-  // {
-  //   path: 'checklist2/:id',
-  //   component: Checklist2Component, canActivate: [AuthGuard]
-  // },
-  {
-    path: 'checklist-new',
-    component: ChecklistNewComponent
   },
   {
     path: 'testcomponent',
-    component: TestcomponentComponent, canActivate: [AuthGuard]
+    component: TestcomponentComponent
   },
   {
     path: '',
     component: AdminComponent, children: [
-      // {
-      //   path: 'business-unit',
-      //   component: BusinessComponent
-      // },
       {
         path: 'questions/:id',
-        component: QuestionsComponent, canActivate: [AuthGuard]
+        component: QuestionsComponent,
       },
       {
         path: 'dashboard',
-        component: DashboardComponent, canActivate: [AuthGuard]
+        component: DashboardComponent,
       },
       {
         path: 'project-report',
-        component: ProjectReportsComponent, canActivate: [AuthGuard]
+        component: ProjectReportsComponent,
       },
       {
         path: 'category-library',
-        component: CategoryLibraryComponent, canActivate: [AuthGuard]
+        component: CategoryLibraryComponent,
       },
       {
         path: 'projects',
-        component: ProjectsComponent, canActivate: [AuthGuard]
+        component: ProjectsComponent
       },
       {
         path: 'project/:stageId', children: [
-          // {
-          //   path: 'questions',
-          //   component: QuestionsComponent, canActivate: [AuthGuard]
-          // },
           {
             path: 'stages',
-            component: StagesComponent, canActivate: [AuthGuard],
+            component: StagesComponent,
           },
           {
             path: 'stage/:id', children: [
               {
                 path: 'questions',
-                component: QuestionsComponent, canActivate: [AuthGuard]
+                component: QuestionsComponent,
               }
             ]
           },
-          // {
-          //   path: 'checklist/:id',
-          //   component: ChecklistComponent, canActivate: [AuthGuard]
-          // },
+
         ]
       }
     ]

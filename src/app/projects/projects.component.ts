@@ -5,7 +5,8 @@ import { BuData } from '../services/bu.service';
 import { ProjectData, ProjectService } from '../services/project.service';
 import { CookieService } from 'ngx-cookie-service';
 import { ShareProjectComponent } from './share-project/share-project.component';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute, Params } from '@angular/router';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 export interface ProjectData {
   id: number;
@@ -23,12 +24,24 @@ export interface ProjectData {
 export class ProjectsComponent implements OnInit {
   loading: boolean;
   dataSource;
+  userRole;
+  role;
   @ViewChild(MatTable, {}) table: MatTable<any>;
   constructor(public dialog: MatDialog, public projectService: ProjectService, public cookieService: CookieService,
-     public router: Router) { }
+    public router: Router, public activeRoute: ActivatedRoute, private spinner: NgxSpinnerService) { }
 
   ngOnInit() {
     this.getProjectList();
+    this.projectService.cast.subscribe(
+      data => {
+        this.userRole = JSON.parse(data);
+        if (this.userRole) {
+          this.role = this.userRole.logged_user.role;
+        }
+      },
+      error => {
+      }
+    );
   }
 
   openDialog(action, obj) {
@@ -45,8 +58,10 @@ export class ProjectsComponent implements OnInit {
         this.editProject(result.data);
       } else if (result.event === 'Delete') {
         this.deleteProjectt(result.data, result.id);
-      } else if (result.event === 'Share') {
-      } else if (result.event === 'Status') {
+      } else if (result.event === 'Draft') {
+        this.changeDraftToPublished(result.data);
+      } else if (result.event === 'Publish') {
+        this.changeDraftToPublished(result.data);
       }
     });
   }
@@ -92,14 +107,17 @@ export class ProjectsComponent implements OnInit {
   }
 
   getProjectList() {
-    this.loading = true;
+    // this.loading = true;
+    this.spinner.show();
     this.projectService.getProjectList().subscribe(
       (data) => {
         this.dataSource = data;
-        this.loading = false;
+        // this.loading = false;
+        this.spinner.hide();
       },
       (error) => {
-        this.loading = false;
+        this.spinner.hide();
+        // this.loading = false;
       }
     );
   }
@@ -131,13 +149,29 @@ export class ProjectsComponent implements OnInit {
           subject: result.data.subject,
           message: result.data.message
         };
-        console.log(data);
+        // console.log(data);
         this.projectService.sharedProjectViaMail(data).subscribe(
           () => { },
           (error) => { }
         );
       }
     });
+  }
+  changeDraftToPublished(project_Data) {
+    const request = {
+      project_id: project_Data.id,
+      published: project_Data.published,
+    };
+    this.projectService.publishProject(request).subscribe(
+      (data: any) => {
+        const currentProject = this.dataSource.find(x => x.id === project_Data.id);
+        const projectIndex = this.dataSource.indexOf(currentProject);
+        this.dataSource[projectIndex] = project_Data;
+        console.log(project_Data);
+        this.getProjectList();
+      },
+      (error) => {}
+    );
   }
 
 }
